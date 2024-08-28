@@ -1,5 +1,6 @@
 package mx.acg.zazil
 
+import ProfileScreen
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -32,7 +33,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             ZazilTheme {
-                LoginScreen()
+                //LoginScreen()
+                ProfileScreen()
             }
         }
     }
