@@ -165,29 +165,6 @@ fun LoginScreen() {
             }
 
             Spacer(modifier = Modifier.height(8.dp))
-
-            Button(
-                onClick = { /* Lógica de inicio de sesión con Outlook */ },
-                modifier = Modifier.fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFFC7C5))
-            ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(), // Asegura que ocupe el ancho completo
-                    horizontalArrangement = Arrangement.SpaceBetween, // Distribuye el espacio entre los elementos
-                    verticalAlignment = Alignment.CenterVertically // Centra verticalmente el texto y el ícono
-                ) {
-                    // Texto alineado a la izquierda
-                    Text(text = "Outlook", color = Color.Black)
-
-                    // Ícono alineado a la derecha
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_outlook), // El ícono de Outlook
-                        contentDescription = "Outlook Icon",
-                        modifier = Modifier.size(24.dp), // Tamaño del ícono
-                        tint = Color.Unspecified // Mantiene los colores originales del ícono
-                    )
-                }
-            }
         }
     }
 }
