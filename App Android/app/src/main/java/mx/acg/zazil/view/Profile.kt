@@ -24,11 +24,11 @@ import mx.acg.zazil.R
 fun ProfileScreen(modifier: Modifier = Modifier) {
     Box(
         modifier = modifier
-            .fillMaxSize()  // Asegúrate de usar fillMaxSize para ocupar todo el espacio disponible
+            .fillMaxSize()  // Ocupa la pantalla completa
     ) {
         // Imagen de fondo
         Image(
-            painter = painterResource(id = R.drawable.background_profile), // Reemplaza con tu imagen de fondo
+            painter = painterResource(id = R.drawable.background_profile),
             contentDescription = "Fondo superior",
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop  // Ajusta la imagen al tamaño de la pantalla
@@ -44,7 +44,7 @@ fun ProfileScreen(modifier: Modifier = Modifier) {
             // Espacio vacío inicial para darle distancia al contenido superior
             Spacer(modifier = Modifier.height(80.dp))
 
-            // Texto "Perfil
+            // Texto "Perfil"
             Text(
                 text = "Mi perfil",
                 fontSize = 36.sp,
