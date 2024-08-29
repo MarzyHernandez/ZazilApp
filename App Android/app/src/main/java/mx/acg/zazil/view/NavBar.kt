@@ -11,6 +11,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.res.painterResource
+import androidx.navigation.NavHostController
 import mx.acg.zazil.R
 
 /**
@@ -20,7 +21,7 @@ import mx.acg.zazil.R
  * @param [modifier] Modificador que permite personalizar la disposición y el estilo del Composable.
  */
 @Composable
-fun NavBar(modifier: Modifier = Modifier) {
+fun NavBar(navController: NavHostController, modifier: Modifier = Modifier) {
     // Barra de navegación fija
     Row(
         modifier = modifier  // Usa el modifier que se pasa como parámetro
@@ -34,28 +35,28 @@ fun NavBar(modifier: Modifier = Modifier) {
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        IconButton(onClick = { /* Acción del icono Home */ }) {
+        IconButton(onClick = { navController.navigate("home") }) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_home_w),
                 contentDescription = "Home",
                 tint = Color.White
             )
         }
-        IconButton(onClick = { /* Acción del icono Carrito */ }) {
+        IconButton(onClick = { navController.navigate("carrito") }) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_cart_w),
                 contentDescription = "Carrito",
                 tint = Color.White
             )
         }
-        IconButton(onClick = { /* Acción del icono Perfil */ }) {
+        IconButton(onClick = { navController.navigate("perfil") }) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_profile_w),
                 contentDescription = "Perfil",
                 tint = Color.White
             )
         }
-        IconButton(onClick = { /* Acción del icono Configuración */ }) {
+        IconButton(onClick = { navController.navigate("configuracion") }) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_settings_w),
                 contentDescription = "Configuración",
