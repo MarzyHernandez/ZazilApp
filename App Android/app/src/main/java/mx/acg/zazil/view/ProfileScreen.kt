@@ -1,3 +1,5 @@
+package mx.acg.zazil.view
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -18,6 +20,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.res.painterResource
+import androidx.navigation.compose.rememberNavController
 import mx.acg.zazil.R
 import mx.acg.zazil.view.NavBar
 import mx.acg.zazil.view.ProfileForm
@@ -118,11 +121,6 @@ fun ProfileScreen(modifier: Modifier = Modifier) {
 
             Spacer(modifier = Modifier.height(16.dp))  // Asegura un espaciado adecuado al final del contenido
         }
-        // Barra de navegación
-        NavBar(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-        )
     }
 }
 
