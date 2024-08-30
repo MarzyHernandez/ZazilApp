@@ -184,7 +184,7 @@
                   <div class="header-profile-actions">
                     <a href="profile.html">Profile</a>
                     <a href="account-settings.html">Settings</a>
-                    <a href="login.html">Logout</a>
+                    <a href="#" id="logout">Logout</a>
                   </div>
                 </div>
               </li>
@@ -779,6 +779,57 @@
 
     <!-- Main Js Required -->
     <script src="assets/js/main.js"></script>
+
+    <!-- Firebase SDK -->
+  <script type="module">
+    // Firebase SDK imports
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js';
+    import { getAuth, signOut } from 'https://www.gstatic.com/firebasejs/9.1.3/firebase-auth.js';
+    import { getFirestore } from 'https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js';
+  
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyAPsN8iGJ76KidjxAjNv0MoZKpnj3baVJk",
+      authDomain: "zazil-d7927.firebaseapp.com",
+      projectId: "zazil-d7927",
+      storageBucket: "zazil-d7927.appspot.com",
+      messagingSenderId: "393200556788",
+      appId: "1:393200556788:web:e91667ef737f283bce1ca1",
+      measurementId: "G-X3CFS9HGSC"
+    };
+  
+    // Firebase initialization
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+  
+    // Verificar si el usuario ha iniciado sesión
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        // Usuario está autenticado
+        console.log('User is authenticated:', user.email);
+        // Aquí puedes cargar el contenido de la página principal o ejecutar lógica adicional
+      } else {
+        // Usuario no está autenticado, redirigir al login
+        window.location.href = 'login.html'; // Cambia 'login.html' por la ruta correcta a tu página de inicio de sesión
+      }
+    });
+  
+    // Agregar event listener para el botón de logout
+    document.getElementById('logout').addEventListener('click', (e) => {
+      e.preventDefault(); // Evitar el comportamiento por defecto del enlace
+  
+      signOut(auth).then(() => {
+        // Cierre de sesión exitoso, redirigir al login
+        window.location.href = 'login.html';
+      }).catch((error) => {
+        // Manejar errores
+        console.error('Error signing out:', error);
+      });
+    });
+  
+    // Aquí puedes agregar tu lógica adicional para usuarios autenticados
+  </script>
 
   </body>
 
