@@ -109,9 +109,7 @@
         const auth = getAuth(app);
 
         // Authentication function
-        async function login(event) {
-            event.preventDefault(); // Prevenir el comportamiento por defecto del formulario
-
+        async function login() {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
 
@@ -135,6 +133,13 @@
 
         // Login button event listener
         document.getElementById('login-button').addEventListener('click', login);
+
+        // Enter key event listener for password field
+        document.getElementById('password').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                login();
+            }
+        });
     </script>
 </body>
 
