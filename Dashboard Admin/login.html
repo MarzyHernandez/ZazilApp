@@ -1,7 +1,7 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="es">
 
-  <head>
+<head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -28,21 +28,18 @@
 
     <!-- Main css -->
     <link rel="stylesheet" href="assets/css/main.min.css">
+</head>
 
+<body>
 
-  </head>
-
-  <body>
-
-
-    <!-- Container startss -->
+    <!-- Container starts -->
     <div class="container">
       <div class="row">
         <div class="col-sm-12">
 
           <div class="login-container">
             <!-- Login box start -->
-            <form action="index.html">
+            <form action="#">
               <div class="login-box">
                 <div class="login-form">
                   <a href="index.html" class="login-logo">
@@ -52,23 +49,24 @@
                     <h2 style="color: #EBB7A7;">Bienvenido</h2> <br />Por favor, inicia sesión con tu cuenta de administrador
                   </div>
                   <div class="mb-3">
-                    <label class="form-label" for="uname">Usuario</label>
-                    <input type="text" id="uname" class="form-control">
+                    <label class="form-label" for="email">Usuario</label>
+                    <input type="text" id="email" class="form-control">
                   </div>
                   <div class="mb-3">
                     <div class="d-flex justify-content-between">
-                      <label class="form-label" for="pwd">Contraseña</label>
-                      <a href="forgot-password.html" id="pwd" class="btn-link ml-auto" style="color: #E17F61;">Olividé mi contraseña?</a>
+                      <label class="form-label" for="password">Contraseña</label>
+                      <a href="forgot-password.html" class="btn-link ml-auto" style="color: #E17F61;">Olvidé mi contraseña?</a>
                     </div>
-                    <input type="password" class="form-control">
+                    <input type="password" id="password" class="form-control">
                   </div>
                   <div class="login-form-actions">
-                    <button type="submit" class="btn"> <span class="icon"> <i class="bi bi-arrow-right-circle"></i>
-                      </span>
-                      Iniciar Sesión</button>
+                    <button type="button" class="btn" id="login-button">
+                        <span class="icon">
+                            <i class="bi bi-arrow-right-circle"></i>
+                        </span>
+                        Iniciar Sesión
+                    </button>
                   </div>
-                  
-                  
                 </div>
               </div>
             </form>
@@ -80,22 +78,64 @@
     </div>
     <!-- Container ends -->
 
-    <!-- *************
-			************ Required JavaScript Files *************
-		************* -->
     <!-- Required jQuery first, then Bootstrap Bundle JS -->
     <script src="assets/js/jquery.min.js"></script>
     <script src="assets/js/bootstrap.bundle.min.js"></script>
     <script src="assets/js/modernizr.js"></script>
     <script src="assets/js/moment.js"></script>
 
-    <!-- *************
-			************ Vendor Js Files *************
-		************* -->
-
     <!-- Main Js Required -->
     <script src="assets/js/main.js"></script>
 
-  </body>
+    <!-- Include Firebase SDK -->
+    <script type="module">
+        // Firebase modules
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js';
+        import { getAuth, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/9.1.3/firebase-auth.js';
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAPsN8iGJ76KidjxAjNv0MoZKpnj3baVJk",
+            authDomain: "zazil-d7927.firebaseapp.com",
+            projectId: "zazil-d7927",
+            storageBucket: "zazil-d7927.appspot.com",
+            messagingSenderId: "393200556788",
+            appId: "1:393200556788:web:e91667ef737f283bce1ca1",
+            measurementId: "G-X3CFS9HGSC"
+        };
+
+        // Firebase initialization
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // Authentication function
+        async function login(event) {
+            event.preventDefault(); // Prevenir el comportamiento por defecto del formulario
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                // Redirect to index.html
+                window.location.href = 'index.html';
+            } catch (error) {
+                console.error('Error during login', error);
+                alert('Login failed: ' + error.message);
+            }
+        }
+
+        // Check if user is already authenticated
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                // Redirect to index.html
+                window.location.href = 'index.html';
+            }
+        });
+
+        // Login button event listener
+        document.getElementById('login-button').addEventListener('click', login);
+    </script>
+</body>
 
 </html>
