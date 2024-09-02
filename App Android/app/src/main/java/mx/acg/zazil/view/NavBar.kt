@@ -35,17 +35,24 @@ fun NavBar(navController: NavHostController, modifier: Modifier = Modifier) {
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        IconButton(onClick = { navController.navigate("home") }) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_home_w),
-                contentDescription = "Home",
-                tint = Color.White
-            )
-        }
         IconButton(onClick = { navController.navigate("carrito") }) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_cart_w),
                 contentDescription = "Carrito",
+                tint = Color.White
+            )
+        }
+        IconButton(onClick = { navController.navigate("chat") }) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_chat_w),
+                contentDescription = "Chat",
+                tint = Color.White
+            )
+        }
+        IconButton(onClick = { navController.navigate("home") }) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_home_w),
+                contentDescription = "Home",
                 tint = Color.White
             )
         }

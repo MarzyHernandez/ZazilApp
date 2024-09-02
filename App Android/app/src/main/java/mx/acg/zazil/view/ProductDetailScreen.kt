@@ -143,11 +143,5 @@ fun ProductDetailScreen(modifier: Modifier = Modifier) {
                 color = Color.Black
             )
         }
-
-        // Barra de navegación fija al fondo
-        NavBar(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-        )
     }
 }
