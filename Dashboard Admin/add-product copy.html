@@ -248,7 +248,6 @@
                         <div class="card-border">
                           <div class="card-border-title">Product Images</div>
                           <div class="card-border-body">
-                      
                             <!-- Dropzone section -->
                             <div id="dropzone" class="dropzone-dark">
                               <form id="image-upload-form" class="dropzone needsclick dz-clickable">
@@ -258,7 +257,6 @@
                                 </div>
                               </form>
                             </div>
-                      
                           </div>
                         </div>
                       </div>
@@ -270,6 +268,7 @@
                         </div>
                       </div>
                       
+                      <!-- Container for showing messages and image links -->
                       <div id="message"></div>
 
                   </div>
@@ -366,7 +365,8 @@
 
             const data = await response.json();
             if (response.ok) {
-              message.innerHTML += `<p style="color:green;">Image ${file.name} uploaded successfully!</p>`;
+              const imageUrl = data.secure_url;  // Get the public URL from Cloudinary's response
+              message.innerHTML += `<p style="color:green;">Image ${file.name} uploaded successfully!<br>Image URL: <a href="${imageUrl}" target="_blank">${imageUrl}</a></p>`;
             } else {
               message.innerHTML += `<p style="color:red;">Error uploading ${file.name}: ${data.error.message}</p>`;
             }
