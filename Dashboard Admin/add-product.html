@@ -79,26 +79,16 @@
         <div class="sidebar-menu">
           <div class="sidebarMenuScroll">
             <ul>
-              <li class="sidebar-dropdown">
-                <a href="#">
+            <li class="sidebar">
+                <a href="index.html">
                   <i class="bi bi-house"></i>
                   <span class="menu-text">Dashboard</span>
                 </a>
-                <div class="sidebar-submenu">
-                  <ul>
-                    <li>
-                      <a href="index.html">Ventas</a>
-                    </li>
-                    <li>
-                      <a href="social.html">Social</a>
-                    </li>
-                  </ul>
-                </div>
               </li>
               <li class="sidebar-dropdown active">
                 <a href="#">
                   <i class="bi bi-handbag"></i>
-                  <span class="menu-text">Productos</span>
+                  <span class="menu-text">Ventas</span>
                 </a>
                 <div class="sidebar-submenu">
                   <ul>
@@ -109,32 +99,22 @@
                       <a href="products.html">Productos</a>
                     </li>
                     <li>
-                      <a href="customers.html">Clientes</a>
+                      <a href="add-product.html" class="current-page">Añadir Productos</a>
                     </li>
                     <li>
-                      <a href="add-product.html" class="current-page">Añadir Producto</a>
+                      <a href="add-post.html">Añadir Publicación</a>
                     </li>
                     <li>
-                      <a href="reviews.html">Reseñas</a>
+                      <a href="add-faq.html">Añadir Pregunta <br> <center>Frecuente</center></a>
                     </li>
                   </ul>
                 </div>
               </li>
-              <li class="sidebar-dropdown">
-                <a href="#">
+              <li class="sidebar">
+                <a href="calendar-google.html">
                   <i class="bi bi-calendar4"></i>
                   <span class="menu-text">Calendarios</span>
                 </a>
-                <div class="sidebar-submenu">
-                  <ul>
-                    <li>
-                      <a href="calendar-google.html">Calendario Google</a>
-                    </li>
-                    <li>
-                      <a href="calendar-list-view.html">Vista Lista</a>
-                    </li>
-                  </ul>
-                </div>
               </li>
             </ul>
           </div>
@@ -203,137 +183,101 @@
           <!-- Content wrapper start -->
           <div class="content-wrapper">
 
-            <!-- Row start -->
-            <div class="row gx-3">
-              <div class="col-sm-12 col-12">
-                <div class="card">
-                  <div class="card-header">
-                    <div class="card-title">Product Information</div>
-                  </div>
-                  <div class="card-body">
+            <!-- Formulario de producto -->
+            <div class="content-wrapper">
+                <div class="row gx-3">
+                    <div>
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">Información del producto</div>
+                            </div>
+                            <div class="card-body">
+    
+                                <div class="row gx-3">
+                                 <div>
+                                  <div class="card-border">
+                                    <div class="card-border-title">Información general</div>
+                                    <div class="card-border-body">
+                                      <div class="row gx-3">
+                                        <!-- <form id="product-form"> -->
+                                            <div class="col-sm-6 col-12">
+                                              <div class="mb-3">
+                                                <label class="form-label" for="nombre">Nombre:</label>
+                                                <input class="form-control" type="text" id="nombre" name="nombre" placeholder="Escriba el nombre del producto aquí">
+                                              </div>
+                                            </div>
+                                            <div class="col-sm-6 col-12">
+                                              <div class="mb-3">
+                                                <label class="form-label" for="descripcion">Descripción:</label>
+                                                <input class="form-control" type="text" id="descripcion" name="descripcion" placeholder="Escriba la descripción del producto aquí">
+                                              </div>
+                                            </div>
 
-                    <div class="row gx-3">
-                      <div class="col-sm-6 col-12">
-                        <div class="card-border">
-                          <div class="card-border-title">General Information</div>
-                          <div class="card-border-body">
+                                            <div class="col-sm-6 col-12">
+                                              <div class="mb-3">
+                                                <label class="form-label" for="categoria">Categoría:</label>
+                                                <select class="form-control" id="categoria" name="categoria">
+                                                  <option value="opcion1">Opción 1</option>
+                                                  <option value="opcion2">Opción 2</option>
+                                                  <option value="opcion3">Opción 3</option>
+                                                  <!-- Agrega más opciones según sea necesario -->
+                                                </select>
+                                              </div>
+                                            </div>
 
-                            <div class="row gx-3">
-                              <div class="col-sm-6 col-12">
-                                <div class="mb-3">
-                                  <label class="form-label">Product Name <span class="text-red">*</span></label>
-                                  <input type="text" class="form-control" placeholder="Enter Product Name">
-                                </div>
-                              </div>
-                              <div class="col-sm-6 col-12">
-                                <div class="mb-3">
-                                  <label class="form-label">Product Category <span class="text-red">*</span></label>
-                                  <select class="form-control">
-                                    <option value="Select Product Category">Select Product Category</option>
-                                    <option value="Mobiles">Mobiles</option>
-                                    <option value="Books">Books</option>
-                                    <option value="Games">Games</option>
-                                  </select>
-                                </div>
-                              </div>
-                              <div class="col-sm-6 col-12">
-                                <div class="mb-3">
-                                  <label class="form-label">Product Price <span class="text-red">*</span></label>
-                                  <input type="text" class="form-control" placeholder="Enter Product Price">
-                                </div>
-                              </div>
-                              <div class="col-sm-6 col-12">
-                                <div class=" mb-3">
-                                  <label class="form-label">Product Discount</label>
-                                  <div class="input-group">
-                                    <input type="text" class="form-control" placeholder="Set Product Discount">
-                                    <span class="input-group-text">%</span>
+                                            <div class="col-sm-6 col-12">
+                                              <div class="mb-3">
+                                                <label class="form-label" for="precio_normal">Precio Normal:</label>
+                                                <input class="form-control" type="number" id="precio_normal" name="precio_normal">
+                                              </div>
+                                            </div>
+
+                                            <div class="col-sm-6 col-12">
+                                              <div class="mb-3">
+                                                <label class="form-label" for="precio_rebajado">Precio Rebajado:</label>
+                                                <input class="form-control" type="number" id="precio_rebajado" name="precio_rebajado">
+                                              </div>
+                                            </div>
+
+                                            <div class="col-sm-6 col-12">
+                                              <div class="mb-3">
+                                                <label class="form-label" for="cantidad">Cantidad:</label>
+                                                <input class="form-control" type="number" id="cantidad" name="cantidad">
+                                              </div>
+                                            </div>
+                                        <!--</form>-->
+                                    </div>
                                   </div>
+                                 </div>
+                                 </div>
+
+                                 <div id="dropzone" class="dropzone-dark">
+                                  <div class="dz-message needsclick">
+                                    <form id="image-upload-form" class="dropzone needsclick dz-clickable">
+                                      <!-- Aquí va el área de Dropzone -->
+                                    </form>
+                                  </div>
+                                 </div>
+
+                                  <div class="col-sm-12 col-12">
+                                    <div class="custom-btn-group flex-end">
+                                      <button id="addProductButton" class="btn btn-success">Añadir Producto</button>
+                                    </div>
+                                  </div>
+                                  
+                                      <div id="message"></div>
+    
+                                   
+                               
+  
                                 </div>
-                              </div>
-                              <div class="col-sm-12 col-12">
-                                <div class="mb-0">
-                                  <label class="form-label">Product Description <span class="text-red">*</span></label>
-                                  <textarea rows="4" class="form-control"
-                                    placeholder="Enter Product Description"></textarea>
-                                </div>
-                              </div>
                             </div>
-
-                          </div>
                         </div>
-                      </div>
-                      <div class="col-sm-6 col-12">
-                        <div class="card-border">
-                          <div class="card-border-title">Meta Data</div>
-                          <div class="card-border-body">
-
-                            <div class="row gx-3">
-                              <div class="col-sm-6 col-12">
-                                <div class="mb-3">
-                                  <label class="form-label">Meta Title <span class="text-red">*</span></label>
-                                  <input type="text" class="form-control" placeholder="Enter Meta Title">
-                                </div>
-                              </div>
-                              <div class="col-sm-6 col-12">
-                                <div class="mb-3">
-                                  <label class="form-label">Meta Name <span class="text-red">*</span></label>
-                                  <input type="text" class="form-control" placeholder="Enter Meta Name">
-                                </div>
-                              </div>
-                              <div class="col-sm-12 col-12">
-                                <div class="mb-3">
-                                  <label class="form-label">Meta Tags <span class="text-red">*</span></label>
-                                  <input type="text" class="form-control" placeholder="Enter Meta Tags">
-                                </div>
-                              </div>
-                              <div class="col-sm-12 col-12">
-                                <div class="mb-0">
-                                  <label class="form-label">Meta Description <span class="text-red">*</span></label>
-                                  <textarea rows="4" class="form-control"
-                                    placeholder="Enter Meta Description"></textarea>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-sm-12 col-12">
-                        <div class="card-border">
-                          <div class="card-border-title">Product Images</div>
-                          <div class="card-border-body">
-
-                            <div id="dropzone" class="dropzone-dark">
-                              <form action="/upload" class="dropzone needsclick dz-clickable" id="demo-upload">
-
-                                <div class="dz-message needsclick">
-                                  <button type="button" class="dz-button">Drop files here or click to
-                                    upload.</button><br>
-                                  <span class="note needsclick">(This is just a demo dropzone. Selected files are
-                                    <strong>not</strong> actually uploaded.)</span>
-                                </div>
-
-                              </form>
-                            </div>
-
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-sm-12 col-12">
-                        <div class="custom-btn-group flex-end">
-                          <button type="button" class="btn btn-light">Cancel</button>
-                          <a href="products.html" class="btn btn-success">Add Product</a>
-                        </div>
-                      </div>
                     </div>
-
-                  </div>
                 </div>
-              </div>
             </div>
-            <!-- Row end -->
-
-          </div>
+    
+        </div>
           <!-- Content wrapper end -->
 
           
@@ -371,7 +315,135 @@
 
     <!-- Main Js Required -->
     <script src="assets/js/main.js"></script>
+    
 
+
+
+      <!-- JS de Dropzone y Cloudinary -->
+      <script src="https://upload.cloudinary.com/global/all.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js"></script>
+  
+      <!-- Script personalizado -->
+      <script>
+// Deshabilitar el descubrimiento automático de Dropzone
+Dropzone.autoDiscover = false;
+
+const uploadedFiles = [];  // Array para mantener los archivos subidos
+
+// Inicializar Dropzone
+const myDropzone = new Dropzone("#image-upload-form", {
+  url: "#",  // Estamos manejando la carga manualmente
+  autoProcessQueue: false,  // Prevenir carga automática
+  acceptedFiles: "image/*",  // Solo imágenes permitidas
+  init: function() {
+    this.on("addedfile", function(file) {
+      uploadedFiles.push(file);  // Añadir archivo al array cuando se selecciona
+    });
+  }
+});
+
+// Esperar a que el DOM esté completamente cargado
+document.addEventListener('DOMContentLoaded', () => {
+  const submitButton = document.getElementById('addProductButton');
+  const message = document.getElementById('message');
+
+  if (!submitButton || !message) {
+    console.error('Submit button or message element not found!');
+    return;
+  }
+
+  submitButton.addEventListener('click', async (event) => {
+    event.preventDefault();
+
+    if (uploadedFiles.length === 0) {
+      alert('Please select an image file first!');
+      return;
+    }
+
+    message.innerHTML = '';  // Limpiar mensajes previos
+
+    let imageUrl = '';  // Variable para la URL de la imagen
+
+    // Subir la imagen a Cloudinary
+    const file = uploadedFiles[0];
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', 'xvgd3zza');  // Tu preset de carga en Cloudinary
+
+    try {
+      const response = await fetch('https://api.cloudinary.com/v1_1/dasr1gzxt/image/upload', {
+        method: 'POST',
+        body: formData
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        imageUrl = data.secure_url;  // Obtener la URL pública de Cloudinary
+        message.innerHTML += `<p style="color:green;">Image uploaded successfully!<br>Image URL: <a href="${imageUrl}" target="_blank">${imageUrl}</a></p>`;
+
+        // Crear objeto con los datos del producto
+        const nombreElement = document.getElementById('nombre');
+        const descripcionElement = document.getElementById('descripcion');
+        const categoriaElement = document.getElementById('categoria');
+        const precioNormalElement = document.getElementById('precio_normal');
+        const precioRebajadoElement = document.getElementById('precio_rebajado');
+        const cantidadElement = document.getElementById('cantidad');
+
+        if (!nombreElement || !descripcionElement || !categoriaElement || !precioNormalElement || !precioRebajadoElement || !cantidadElement) {
+          console.error('Form elements not found!');
+          return;
+        }
+
+        const nombre = nombreElement.value || '';
+        const descripcion = descripcionElement.value || '';
+        const id_categoria = categoriaElement.value;
+        const precio_normal = parseFloat(precioNormalElement.value) || 0;
+        const precio_rebajado = parseFloat(precioRebajadoElement.value) || 0;
+        const cantidad = parseInt(cantidadElement.value, 10) || 0;
+
+        const productData = {
+          descripcion: descripcion,
+          id_categoria: id_categoria,
+          imagen: imageUrl,  // Usar la URL generada para la imagen
+          precio_normal: precio_normal,
+          cantidad: cantidad,
+          nombre: nombre,
+          precio_rebajado: precio_rebajado
+        };
+
+        // Enviar datos del producto al servidor
+        const productResponse = await fetch('https://addproduct-dztx2pd2na-uc.a.run.app', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(productData)  // Convertir objeto a JSON
+        });
+
+        const result = await productResponse.json();
+
+        if (!productResponse.ok) {
+          throw new Error(result.message || 'Error en el servidor');
+        }
+
+        message.innerHTML += `<p style="color:green;">Producto añadido: ${result.message}</p>`;
+      } else {
+        message.innerHTML += `<p style="color:red;">Error uploading image: ${data.error.message}</p>`;
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      message.innerHTML += `<p style="color:red;">Failed to upload image. Error: ${error.message}</p>`;
+    }
+
+    // Limpiar el array de archivos subidos después de la carga
+    uploadedFiles.length = 0;
+  });
+});
+
+</script>
+
+      
+      
   </body>
 
 </html>
