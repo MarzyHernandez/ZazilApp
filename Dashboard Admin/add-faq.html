@@ -18,111 +18,85 @@
     <link rel="shortcut icon" href="assets/images/logo_zazil.png">
 
     <!-- Title -->
-    <title>Zazil Añadir Producto</title>
+    <title>Zazil Agregar FAQ</title>
 
-    <!-- *************
-			************ Common Css Files *************
-		************ -->
-
-    <!-- Animated css -->
+    <!-- Common Css Files -->
     <link rel="stylesheet" href="assets/css/animate.css">
-
-    <!-- Bootstrap font icons css -->
     <link rel="stylesheet" href="assets/fonts/bootstrap/bootstrap-icons.css">
-
-    <!-- Main css -->
     <link rel="stylesheet" href="assets/css/main.min.css">
 
-
-    <!-- *************
-			************ Vendor Css Files *************
-		************ -->
-
-    <!-- Scrollbar CSS -->
+    <!-- Vendor Css Files -->
     <link rel="stylesheet" href="assets/vendor/overlay-scroll/OverlayScrollbars.min.css">
 
-    <!-- Uploader CSS -->
-    <link rel="stylesheet" href="assets/vendor/dropzone/dropzone.min.css" />
+      <!-- Uploader CSS -->
+      <link rel="stylesheet" href="assets/vendor/dropzone/dropzone.min.css" />
 
   </head>
 
   <body>
 
-    <!-- Loading wrapper start -->
-    <!-- <div id="loading-wrapper">
-			<div class="spinner">
-                <div class="line1"></div>
-				<div class="line2"></div>
-				<div class="line3"></div>
-				<div class="line4"></div>
-				<div class="line5"></div>
-				<div class="line6"></div>
-            </div>
-		</div> -->
-    <!-- Loading wrapper end -->
+   
 
     <!-- Page wrapper start -->
     <div class="page-wrapper">
 
       <!-- Sidebar wrapper start -->
       <nav class="sidebar-wrapper">
-
         <!-- Sidebar brand starts -->
         <div class="sidebar-brand">
-          <a href="index.html" class="logo">
-            <img src="assets/images/logo_zazil.png"/>
-          </a>
+            <a href="index.html" class="logo">
+                <img src="assets/images/logo_zazil.png"/>
+            </a>
         </div>
         <!-- Sidebar brand starts -->
 
         <!-- Sidebar menu starts -->
         <div class="sidebar-menu">
-          <div class="sidebarMenuScroll">
-            <ul>
-            <li class="sidebar">
-                <a href="index.html">
-                  <i class="bi bi-house"></i>
-                  <span class="menu-text">Dashboard</span>
-                </a>
-              </li>
-              <li class="sidebar-dropdown active">
-                <a href="#">
-                  <i class="bi bi-handbag"></i>
-                  <span class="menu-text">Ventas</span>
-                </a>
-                <div class="sidebar-submenu">
-                  <ul>
-                    <li>
-                      <a href="orders.html">Historial Compras</a>
+            <div class="sidebarMenuScroll">
+                <ul>
+                    <li class="sidebar-dropdown">
+                        <a href="index.html">
+                            <i class="bi bi-house"></i>
+                            <span class="menu-text">Dashboard</span>
+                        </a>
                     </li>
-                    <li>
-                      <a href="products.html">Productos</a>
+                    <li class="sidebar-dropdown active">
+                        <a href="#">
+                            <i class="bi bi-handbag"></i>
+                            <span class="menu-text">Ventas</span>
+                        </a>
+                        <div class="sidebar-submenu">
+                            <ul>
+                                <li>
+                                    <a href="orders.html">Historial Compras</a>
+                                </li>
+                                <li>
+                                    <a href="products.html" >Productos</a>
+                                </li>
+                                <li>
+                                    <a href="add-product.html">Añadir Productos</a>
+                                </li>
+                                <li>
+                                    <a href="add-post.html">Añadir Publicación</a>
+                                </li>
+                                <li>
+                                    <a href="add-faq.html" class="current-page">Añadir Pregunta <br> <center>Frecuente</center></a>
+                                </li>
+                            </ul>
+                        </div>
                     </li>
-                    <li>
-                      <a href="add-product.html">Añadir Productos</a>
+                    <li class="sidebar">
+                        <a href="calendar-google.html">
+                            <i class="bi bi-calendar4"></i>
+                            <span class="menu-text">Calendarios</span>
+                        </a>
                     </li>
-                    <li>
-                      <a href="add-post.html">Añadir Publicación</a>
-                    </li>
-                    <li>
-                      <a href="add-faq.html" class="current-page">Añadir Pregunta <br> <center>Frecuente</center></a>
-                    </li>
-                  </ul>
-                </div>
-              </li>
-              <li class="sidebar">
-                <a href="calendar-google.html">
-                  <i class="bi bi-calendar4"></i>
-                  <span class="menu-text">Calendarios</span>
-                </a>
-              </li>
-            </ul>
-          </div>
+                </ul>
+            </div>
         </div>
         <!-- Sidebar menu ends -->
-
-      </nav>
-      <!-- Sidebar wrapper end -->
+    </nav>
+    <!-- Sidebar wrapper end -->
 
       <!-- *************
 				************ Main container start *************
@@ -162,9 +136,7 @@
                 </a>
                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="userSettings">
                   <div class="header-profile-actions">
-                    <a href="profile.html">Profile</a>
-                    <a href="account-settings.html">Settings</a>
-                    <a href="login.html">Logout</a>
+                    <a href="login.html">Cerrar sesión</a>
                   </div>
                 </div>
               </li>
@@ -178,58 +150,80 @@
         <!-- Page header ends -->
 
         <!-- Content wrapper scroll start -->
-        <div>
+        <div >
 
           <!-- Content wrapper start -->
-          <div class="content-wrapper">
+          <div >
 
             <!-- Row start -->
-            <div>
-              <div>
+            <div class="row gx-3">
+              <div class="col-sm-6 col-12">
+
+                <!-- Card start -->
                 <div class="card">
                   <div class="card-header">
-                    <div class="card-title">Contenido</div>
+                    <div class="card-title">Agregar Pregunta Frecuente</div>
                   </div>
                   <div class="card-body">
 
-                    <div>
-                      <div>
-                        <div class="card-border">
-                          <div class="card-border-title">Añadir pregunta frecuente</div>
-                          <div class="card-border-body">
-
-                            <div >
-                              <div class="col-sm-6 col-12">
-                                <div class="mb-3">
-                                  <label class="form-label">Pregunta <span class="text-red">*</span></label>
-                                  <input type="text" class="form-control" placeholder="Escriba aquí la pregunta frecuente">
-                                </div>
-                              </div>
-                              
-                              <div class="col-sm-12 col-6">
-                                <div class="mb-0">
-                                  <label class="form-label">Respuesta <span class="text-red">*</span></label>
-                                  <textarea rows="14" class="form-control"
-                                    placeholder="Escriba la respuesta a la pregunta"></textarea>
-                                </div>
-                              </div>
-                            </div>
-
-                          </div>
+                    <!-- Row start -->
+                    <div class="row gx-3">
+                      <div class="col-xxl-12">
+                        <div class="mb-3">
+                          <label class="form-label">Pregunta</label>
+                          <input type="text" class="form-control" id="inputPregunta" placeholder="Escriba la pregunta aquí">
                         </div>
                       </div>
-                     
-                     
-                      <div class="col-sm-12 col-12">
-                        <div class="custom-btn-group flex-end">
-                          <button type="button" class="btn btn-light">Cancelar</button>
-                          <a href="products.html" class="btn btn-success">Añadir pregunta</a>
+                      
+                      <div class="col-xxl-12">
+                        <div class="mb-3">
+                          <label class="form-label">Respuesta</label>
+                          <textarea class="form-control" id="inputRespuesta" placeholder="Enter Message"
+                            rows="17"></textarea>
                         </div>
                       </div>
                     </div>
+                    <!-- Row end -->
+
+                    <!-- Form actions footer start -->
+                    <div class="form-actions-footer">
+                      <button class="btn btn-success" id="submitPregunta">Submit</button>
+                    </div>
+                    <!-- Form actions footer end -->
 
                   </div>
                 </div>
+                <!-- Card end -->
+
+              </div>
+              
+            
+              <div class="col-sm-6 col-12">
+                <!-- Card start -->
+                <div class="card" style="max-height: 659px; overflow-y: auto;">
+                  <div class="card-header">
+                    <div class="card-title">Preguntas visibles en App Zazil</div>
+                  </div>
+                  <div class="card-body">
+                    <!-- Row start -->
+                    <div class="row gx-3" >
+                    
+                        <div class="card">
+                         
+                          <div class="card-body">
+                            <!-- Contenedor para las tarjetas de preguntas -->
+                            <div class="faq-container">
+                                <!-- Las tarjetas se insertarán aquí -->
+                            </div>
+                        </div>
+                       
+                      
+                    <!-- Row end -->
+
+                  </div>
+                </div>
+                <!-- Card end -->
+
               </div>
             </div>
             <!-- Row end -->
@@ -237,7 +231,11 @@
           </div>
           <!-- Content wrapper end -->
 
-          
+          <!-- App Footer start -->
+          <div class="app-footer">
+            <span>© Todas Brillamos 2024</span>
+          </div>
+          <!-- App footer end -->
 
         </div>
         <!-- Content wrapper scroll end -->
@@ -250,28 +248,169 @@
     </div>
     <!-- Page wrapper end -->
 
-    <!-- *************
-			************ Required JavaScript Files *************
-		************* -->
-    <!-- Required jQuery first, then Bootstrap Bundle JS -->
-    <script src="assets/js/jquery.min.js"></script>
-    <script src="assets/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/js/modernizr.js"></script>
-    <script src="assets/js/moment.js"></script>
+ 
+        <!-- JavaScript Files -->
+        <script src="assets/js/jquery.min.js"></script>
+        <script src="assets/js/bootstrap.bundle.min.js"></script>
+        <script src="assets/js/modernizr.js"></script>
+        <script src="assets/js/moment.js"></script>
+        <script src="assets/vendor/overlay-scroll/jquery.overlayScrollbars.min.js"></script>
+        <script src="assets/vendor/overlay-scroll/custom-scrollbar.js"></script>
+        <script src="assets/js/main.js"></script>
 
-    <!-- *************
-			************ Vendor Js Files *************
-		************* -->
 
-    <!-- Overlay Scroll JS -->
-    <script src="assets/vendor/overlay-scroll/jquery.overlayScrollbars.min.js"></script>
-    <script src="assets/vendor/overlay-scroll/custom-scrollbar.js"></script>
-
+ 
     <!-- Dropzone JS -->
     <script src="assets/vendor/dropzone/dropzone.min.js"></script>
 
+    <script src="assets/js/jquery.min.js"></script>
+
+    <!-- Then OverlayScrollbars -->
+    <script src="assets/vendor/overlay-scroll/jquery.overlayScrollbars.min.js"></script>
+
     <!-- Main Js Required -->
     <script src="assets/js/main.js"></script>
+
+    <!-- Custom Script for FAQ -->
+    <script>
+      // Función para obtener las FAQs
+      function getFAQs() {
+        fetch('https://getallfaq-dztx2pd2na-uc.a.run.app/')
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Error al obtener los FAQs: ' + response.status);
+            }
+            return response.json();
+          })
+          .then(data => {
+            mostrarPreguntas(data);
+          })
+          .catch(error => {
+            console.error('Error:', error);
+            alert('No se pudieron obtener las preguntas frecuentes. Inténtelo más tarde.');
+          });
+      }
+    
+      // Función para mostrar las preguntas en tarjetas
+      function mostrarPreguntas(preguntas) {
+        const contenedorPreguntas = document.querySelector('.faq-container');
+        contenedorPreguntas.innerHTML = '';
+    
+        preguntas.forEach(pregunta => {
+          const card = document.createElement('div');
+          card.classList.add('card');
+          card.id = `faq-${pregunta.id}`;
+    
+          card.innerHTML = `
+            <div style="padding: 3%;">
+              <h5>${pregunta.pregunta}</h5>
+              <p>${pregunta.respuesta}</p>
+            </div>
+            <button type="button" class="btn btn-danger delete-button" style="margin:3%" data-id="${pregunta.id}">
+              <span class="icon">
+                <i class="bi bi-trash"></i>
+              </span>
+            </button>
+          `;
+    
+          const deleteButton = card.querySelector('.delete-button');
+        deleteButton.addEventListener('click', function() {
+          const id = deleteButton.getAttribute('data-id');
+          deleteFAQ(id); // Llamada a la función deleteFAQ con el ID de la pregunta
+        });
+
+    
+          contenedorPreguntas.appendChild(card);
+        });
+      }
+    
+
+  // Función para eliminar una pregunta frecuente mediante DELETE
+function deleteFAQ(id) {
+  const idInt = parseInt(id, 10); // Convertir el ID a entero
+
+  if (isNaN(idInt)) {
+    alert('ID inválido para la eliminación.');
+    return;
+  }
+
+  // Enviar solicitud DELETE al servidor con el ID en el cuerpo
+  fetch(`https://deletefaq-dztx2pd2na-uc.a.run.app/`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json', // Verifica si este encabezado es necesario
+      // 'Authorization': 'Bearer <tu_token>', // Añade un token de autorización si es necesario
+    },
+    body: JSON.stringify({ id: idInt }) // Enviar el ID en el cuerpo
+  })
+  .then(response => {
+    if (!response.ok) {
+      return response.text().then(text => { throw new Error('Error al eliminar la pregunta: ' + text); });
+    }
+    alert('Pregunta eliminada correctamente.');
+    document.getElementById(`faq-${id}`).remove();
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    alert('No se pudo eliminar la pregunta. Inténtelo más tarde.');
+  });
+}
+
+
+
+      // Función para agregar una nueva pregunta frecuente mediante POST
+      function agregarPreguntaFrecuente() {
+        const pregunta = document.getElementById('inputPregunta').value;
+        const respuesta = document.getElementById('inputRespuesta').value;
+    
+        const nuevaPregunta = {
+          pregunta: pregunta,
+          respuesta: respuesta
+        };
+    
+        fetch('https://addfaq-dztx2pd2na-uc.a.run.app/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(nuevaPregunta)
+        })
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Error al agregar la pregunta');
+            }
+            return response.json();
+          })
+          .then(data => {
+            alert('Pregunta agregada correctamente.');
+            getFAQs();
+          })
+          .catch(error => {
+            console.error('Error:', error);
+            alert('No se pudo agregar la pregunta.');
+          });
+      }
+
+        
+          // Llamar a getFAQs() cuando la página cargue
+          window.onload = function() {
+            getFAQs();
+        
+            const submitButton = document.getElementById('submitPregunta');
+            if (submitButton) {
+              submitButton.addEventListener('click', function(event) {
+                event.preventDefault();
+                agregarPreguntaFrecuente();
+              });
+            } else {
+              console.error("El botón submitPregunta no fue encontrado");
+            }
+          };
+    </script>
+    
+    
+    
+
 
   </body>
 
