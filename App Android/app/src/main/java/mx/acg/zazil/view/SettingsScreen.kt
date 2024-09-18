@@ -143,16 +143,18 @@ fun SocialMediaIcon(iconResId: Int) {
     IconButton(onClick = { /* Acción para red social */ }) {
         Box(
             modifier = Modifier
-                .size(50.dp)
+                .size(50.dp) // Ajusta el tamaño de la caja para los íconos
                 .clip(CircleShape)
                 .background(Color(0xFFEBB7A7))
         ) {
-            Icon(
-                painter = painterResource(id = iconResId),
+            Image(
+                painter = painterResource(id = iconResId), // Reemplaza con tu recurso
                 contentDescription = null,
-                tint = Color.Transparent,
-                modifier = Modifier.align(Alignment.Center)
+                modifier = Modifier
+                    .size(50.dp)  // Tamaño de la imagen
+                    .clip(CircleShape)  // Si quieres mantener la forma circular
             )
+
         }
     }
 }
