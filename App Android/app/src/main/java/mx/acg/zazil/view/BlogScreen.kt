@@ -82,13 +82,13 @@ fun BlogScreen(modifier: Modifier = Modifier) {
                 modifier = Modifier.padding(bottom = 16.dp)
             )
 
-            // Ejemplo de dos publicaciones
+            // Ejemplo de publicaciones con dos imágenes
             BlogPost(
                 title = "Título",
                 author = "Dr. Antonio Solís Ortega",
                 timeAgo = "hace una hora",
                 description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce luctus, elit eget consectetur pretium.",
-                imageResId = R.drawable.prod1
+                imageResIds = listOf(R.drawable.prod1, R.drawable.prod1)  // Dos imágenes
             )
 
             Spacer(modifier = Modifier.height(16.dp)) // Espacio entre publicaciones
@@ -98,7 +98,7 @@ fun BlogScreen(modifier: Modifier = Modifier) {
                 author = "Dr. Amanda Castillo Ruiz",
                 timeAgo = "hace un día",
                 description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce luctus, elit eget consectetur pretium.",
-                imageResId = R.drawable.prod1
+                imageResIds = listOf(R.drawable.prod1, R.drawable.scarlett)  // Dos imágenes
             )
         }
     }
@@ -110,7 +110,7 @@ fun BlogPost(
     author: String,
     timeAgo: String,
     description: String,
-    imageResId: Int,
+    imageResIds: List<Int>,  // Lista de imágenes, aseguramos que haya dos
     modifier: Modifier = Modifier
 ) {
     // Tarjeta de la publicación
@@ -120,9 +120,15 @@ fun BlogPost(
             .background(Color.White, shape = RoundedCornerShape(16.dp))
             .padding(16.dp)
     ) {
-        // Título y nombre del autor
-        Text(text = title, fontSize = 16.sp, color = Color(0xFF545454), fontWeight = FontWeight.Bold)
+        // Título con el color personalizado
+        Text(
+            text = title,
+            fontSize = 16.sp,
+            color = Color(0xFFE17F61),  // Aplica el color aquí
+            fontWeight = FontWeight.Bold
+        )
         Spacer(modifier = Modifier.height(4.dp))
+
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -130,7 +136,9 @@ fun BlogPost(
             Image(
                 painter = painterResource(id = R.drawable.scarlett),  // Icono del perfil del autor
                 contentDescription = "Imagen del autor",
-                modifier = Modifier.size(40.dp)
+                modifier = Modifier
+                    .size(40.dp)
+                    .clip(CircleShape)  // Hacemos la imagen redonda
             )
             Spacer(modifier = Modifier.width(8.dp))
             Column {
@@ -146,16 +154,26 @@ fun BlogPost(
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        // Imagen del contenido de la publicación
-        Image(
-            painter = painterResource(id = imageResId),
-            contentDescription = "Imagen de la publicación",
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(8.dp)) // Bordes redondeados para la imagen
-        )
+        // Imágenes del contenido de la publicación
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            // Aseguramos que siempre se muestren dos imágenes
+            imageResIds.take(2).forEach { imageResId ->
+                Image(
+                    painter = painterResource(id = imageResId),
+                    contentDescription = "Imagen de la publicación",
+                    modifier = Modifier
+                        .weight(1f)
+                        .clip(RoundedCornerShape(8.dp))  // Bordes redondeados
+                        .aspectRatio(1.5f)  // Relación de aspecto uniforme
+                )
+            }
+        }
     }
 }
+
 
 @Preview(showBackground = true)
 @Composable
