@@ -27,7 +27,7 @@ interface PostApi {
 object PostRetrofitInstance {
     val postApi: PostApi by lazy {
         Retrofit.Builder()
-            .baseUrl("https://your-api-url.com/")  // Cambia a tu URL de la API
+            .baseUrl("https://getallpost-dztx2pd2na-uc.a.run.app/")  // Cambia a tu URL de la API
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(PostApi::class.java)

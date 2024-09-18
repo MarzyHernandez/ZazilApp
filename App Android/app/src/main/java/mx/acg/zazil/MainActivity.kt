@@ -16,6 +16,7 @@ import mx.acg.zazil.view.LoginScreen
 import mx.acg.zazil.view.NavBar
 import mx.acg.zazil.view.ProductDetailScreen
 import mx.acg.zazil.view.ProfileScreen
+import mx.acg.zazil.view.SettingsScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,14 +33,11 @@ class MainActivity : ComponentActivity() {
                         startDestination = "catalog",
                         modifier = Modifier.padding(innerPadding) // Usa el padding que recibe Scaffold
                     ) {
-                        composable("productDetail/{productId}") { backStackEntry ->
-                            val productId = backStackEntry.arguments?.getString("productId")?.toIntOrNull() ?: -1
-                            ProductDetailScreen(productId = productId)
-                        }
+                        composable("carrito") { }
                         composable("chat") { BlogScreen() }
                         composable("catalog") { CatalogScreen(navController = navController) }  // Pasa el NavController
                         composable("perfil") { ProfileScreen() }
-                        composable("configuracion"){}
+                        composable("configuracion"){ SettingsScreen() }
                     }
                 }
             }
