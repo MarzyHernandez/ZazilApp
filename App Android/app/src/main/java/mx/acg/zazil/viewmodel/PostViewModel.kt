@@ -9,22 +9,19 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import mx.acg.zazil.model.Post
 import mx.acg.zazil.model.PostRetrofitInstance
-import mx.acg.zazil.model.RetrofitInstance
 
 class PostViewModel : ViewModel() {
-    // Lista de todos los posts
-    private val _posts = MutableLiveData<List<Post>>()
+    private val _posts = MutableLiveData<List<Post>>() // Lista de todos los posts
     val posts: LiveData<List<Post>> get() = _posts
 
-    // Post seleccionado
-    private val _selectedPost = MutableLiveData<Post?>()
+    private val _selectedPost = MutableLiveData<Post?>() // Post seleccionado
     val selectedPost: LiveData<Post?> get() = _selectedPost
 
     // Método para cargar la lista de posts
     fun loadPosts() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val postList = PostRetrofitInstance.postApi.getPosts()  // Llamada a la API para obtener todos los posts
+                val postList = PostRetrofitInstance.postApi.getPosts()
                 _posts.postValue(postList)
                 Log.d("PostViewModel", "Posts cargados: ${postList.size}")
             } catch (e: Exception) {

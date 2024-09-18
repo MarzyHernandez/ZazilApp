@@ -9,22 +9,38 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.rememberImagePainter
 import mx.acg.zazil.R
-import androidx.compose.ui.tooling.preview.Preview
+import mx.acg.zazil.viewmodel.PostViewModel
 
 @Composable
-fun BlogScreen(modifier: Modifier = Modifier) {
+fun BlogScreen(
+    postViewModel: PostViewModel = viewModel()  // Usamos el ViewModel
+) {
+    // Obtenemos el estado actual de los posts desde el ViewModel
+    val posts by postViewModel.posts.observeAsState(initial = emptyList())
+
+    // Cargamos los posts al inicio
+    LaunchedEffect(Unit) {
+        postViewModel.loadPosts()
+    }
+
     // Pantalla desplazable con encabezado
     Box(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFFEFEEEE))
             .verticalScroll(rememberScrollState())  // Hacer la pantalla desplazable
@@ -82,24 +98,17 @@ fun BlogScreen(modifier: Modifier = Modifier) {
                 modifier = Modifier.padding(bottom = 16.dp)
             )
 
-            // Ejemplo de publicaciones con dos imágenes
-            BlogPost(
-                title = "Título",
-                author = "Dr. Antonio Solís Ortega",
-                timeAgo = "hace una hora",
-                description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce luctus, elit eget consectetur pretium.",
-                imageResIds = listOf(R.drawable.prod1, R.drawable.prod1)  // Dos imágenes
-            )
-
-            Spacer(modifier = Modifier.height(16.dp)) // Espacio entre publicaciones
-
-            BlogPost(
-                title = "Título",
-                author = "Dr. Amanda Castillo Ruiz",
-                timeAgo = "hace un día",
-                description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce luctus, elit eget consectetur pretium.",
-                imageResIds = listOf(R.drawable.prod1, R.drawable.scarlett)  // Dos imágenes
-            )
+            // Mostrar los posts obtenidos de la API
+            posts.forEach { post ->
+                BlogPost(
+                    title = post.titulo,
+                    author = post.autor,
+                    timeAgo = post.fecha.substring(0, 10),  // Solo mostramos la fecha, puedes formatear mejor si lo prefieres
+                    description = post.contenido,
+                    imageUrls = listOf(post.imagen)  // Solo una imagen, en este caso
+                )
+                Spacer(modifier = Modifier.height(16.dp)) // Espacio entre publicaciones
+            }
         }
     }
 }
@@ -110,7 +119,7 @@ fun BlogPost(
     author: String,
     timeAgo: String,
     description: String,
-    imageResIds: List<Int>,  // Lista de imágenes, aseguramos que haya dos
+    imageUrls: List<String>,  // Lista de URLs de imágenes
     modifier: Modifier = Modifier
 ) {
     // Tarjeta de la publicación
@@ -159,11 +168,12 @@ fun BlogPost(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            // Aseguramos que siempre se muestren dos imágenes
-            imageResIds.take(2).forEach { imageResId ->
+            // Mostramos las imágenes desde las URLs
+            imageUrls.forEach { imageUrl ->
                 Image(
-                    painter = painterResource(id = imageResId),
+                    painter = rememberImagePainter(imageUrl),  // Usamos Coil para cargar las imágenes desde URLs
                     contentDescription = "Imagen de la publicación",
+                    contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .weight(1f)
                         .clip(RoundedCornerShape(8.dp))  // Bordes redondeados
@@ -172,11 +182,4 @@ fun BlogPost(
             }
         }
     }
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun BlogScreenPreview() {
-    BlogScreen()
 }
