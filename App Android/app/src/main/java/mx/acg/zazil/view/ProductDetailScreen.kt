@@ -43,9 +43,6 @@ import mx.acg.zazil.R
 
 @Composable
 fun ProductDetailScreen(modifier: Modifier = Modifier) {
-    // Variable de estado para saber si el ícono de "like" ha sido seleccionado
-    var isLiked by remember { mutableStateOf(false) }
-
     Box(
         modifier = modifier
             .fillMaxSize()
