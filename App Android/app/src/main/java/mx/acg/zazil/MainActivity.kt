@@ -35,7 +35,7 @@ class MainActivity : ComponentActivity() {
                         composable("chat") { BlogScreen() }
                         composable("home") { LoginScreen() }
                         composable("perfil") { ProfileScreen() }
-                        composable("configuracion") { //holi }
+                        composable("configuracion"){}
                     }
                 }
             }
