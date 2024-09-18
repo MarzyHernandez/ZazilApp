@@ -11,6 +11,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import mx.acg.zazil.ui.theme.ZazilTheme
 import mx.acg.zazil.view.BlogScreen
+import mx.acg.zazil.view.CatalogScreen
 import mx.acg.zazil.view.LoginScreen
 import mx.acg.zazil.view.NavBar
 import mx.acg.zazil.view.ProductDetailScreen
@@ -28,12 +29,12 @@ class MainActivity : ComponentActivity() {
                 ) { innerPadding ->
                     NavHost(
                         navController = navController,
-                        startDestination = "home",
+                        startDestination = "catalog",
                         modifier = Modifier.padding(innerPadding) // Usa el padding que recibe Scaffold
                     ) {
                         composable("carrito") { ProductDetailScreen() }
                         composable("chat") { BlogScreen() }
-                        composable("home") { LoginScreen() }
+                        composable("catalog") { CatalogScreen() }
                         composable("perfil") { ProfileScreen() }
                         composable("configuracion"){}
                     }

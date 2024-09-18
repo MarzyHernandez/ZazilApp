@@ -16,15 +16,12 @@ import mx.acg.zazil.R
 
 /**
  * Composable que representa una barra de navegación fija en la parte inferior de la pantalla.
- * @author Melissa Mireles Rendón
- * @author Alberto Cebreros González
- * @param [modifier] Modificador que permite personalizar la disposición y el estilo del Composable.
  */
 @Composable
 fun NavBar(navController: NavHostController, modifier: Modifier = Modifier) {
     // Barra de navegación fija
     Row(
-        modifier = modifier  // Usa el modifier que se pasa como parámetro
+        modifier = modifier
             .fillMaxWidth()
             .background(
                 color = Color(0xFFEBB7A7),
@@ -49,7 +46,7 @@ fun NavBar(navController: NavHostController, modifier: Modifier = Modifier) {
                 tint = Color.White
             )
         }
-        IconButton(onClick = { navController.navigate("home") }) {
+        IconButton(onClick = { navController.navigate("catalog") }) { // Home ahora lleva a CatalogScreen
             Icon(
                 painter = painterResource(id = R.drawable.ic_home_w),
                 contentDescription = "Home",
