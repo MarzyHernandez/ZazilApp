@@ -32,7 +32,9 @@ class MainActivity : ComponentActivity() {
                         startDestination = "catalog",
                         modifier = Modifier.padding(innerPadding) // Usa el padding que recibe Scaffold
                     ) {
-                        composable("carrito") { ProductDetailScreen() }
+                        composable("productDetail/{productId}") { backStackEntry ->
+                            val productId = backStackEntry.arguments?.getString("productId")?.toInt() ?: 0
+                            ProductDetailScreen(productId = productId)}
                         composable("chat") { BlogScreen() }
                         composable("catalog") { CatalogScreen() }
                         composable("perfil") { ProfileScreen() }
