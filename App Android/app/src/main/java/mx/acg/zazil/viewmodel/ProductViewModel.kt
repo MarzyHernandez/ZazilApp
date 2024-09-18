@@ -1,41 +1,45 @@
 package mx.acg.zazil.viewmodel
 
+import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import mx.acg.zazil.model.Product
 import mx.acg.zazil.model.RetrofitInstance
-import retrofit2.HttpException
-import java.io.IOException
 
 class ProductViewModel : ViewModel() {
+    private val _products = MutableLiveData<List<Product>>() // Lista de todos los productos
+    val products: LiveData<List<Product>> get() = _products
 
-    // Variable que almacena la lista de productos obtenida de la API
-    var productList: List<Product> = emptyList()
-        private set
+    private val _selectedProduct = MutableLiveData<Product?>() // Producto seleccionado
+    val selectedProduct: LiveData<Product?> get() = _selectedProduct
 
-    // Variable que almacena el producto seleccionado
-    var selectedProduct: Product? = null
-        private set
-
-    // Método para cargar todos los productos desde la API
+    // Método para cargar la lista de productos
     fun loadProducts() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
-                // Llamamos a la API y actualizamos la lista de productos
-                productList = RetrofitInstance.productApi.getProducts()
-            } catch (e: IOException) {
-                // Manejo de errores de red o IO
-                e.printStackTrace()
-            } catch (e: HttpException) {
-                // Manejo de errores HTTP
-                e.printStackTrace()
+                val productList = RetrofitInstance.productApi.getProducts()
+                _products.postValue(productList)
+                Log.d("ProductViewModel", "Productos cargados: ${productList.size}")
+            } catch (e: Exception) {
+                Log.e("ProductViewModel", "Error cargando productos", e)
             }
         }
     }
 
-    // Método para seleccionar un producto por ID
-    fun selectProductById(id: Int) {
-        selectedProduct = productList.find { it.id == id }
+    // Método para cargar un producto específico por ID
+    fun loadProductById(productId: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val product = RetrofitInstance.productDetailApi.getProductById(productId)
+                _selectedProduct.postValue(product)
+                Log.d("ProductViewModel", "Producto cargado: ${product.nombre}")
+            } catch (e: Exception) {
+                Log.e("ProductViewModel", "Error cargando producto por ID", e)
+            }
+        }
     }
 }

@@ -33,10 +33,11 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.padding(innerPadding) // Usa el padding que recibe Scaffold
                     ) {
                         composable("productDetail/{productId}") { backStackEntry ->
-                            val productId = backStackEntry.arguments?.getString("productId")?.toInt() ?: 0
-                            ProductDetailScreen(productId = productId)}
+                            val productId = backStackEntry.arguments?.getString("productId")?.toIntOrNull() ?: -1
+                            ProductDetailScreen(productId = productId)
+                        }
                         composable("chat") { BlogScreen() }
-                        composable("catalog") { CatalogScreen() }
+                        composable("catalog") { CatalogScreen(navController = navController) }  // Pasa el NavController
                         composable("perfil") { ProfileScreen() }
                         composable("configuracion"){}
                     }

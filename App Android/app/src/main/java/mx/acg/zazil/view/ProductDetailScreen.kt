@@ -2,32 +2,23 @@ package mx.acg.zazil.view
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
-import mx.acg.zazil.viewmodel.ProductViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberImagePainter
+import mx.acg.zazil.viewmodel.ProductViewModel
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.runtime.livedata.observeAsState
 
 @Composable
 fun ProductDetailScreen(
@@ -35,16 +26,16 @@ fun ProductDetailScreen(
     productViewModel: ProductViewModel = viewModel(),
     modifier: Modifier = Modifier
 ) {
-    // Llama al ViewModel para seleccionar el producto actual
-    val selectedProduct = productViewModel.selectedProduct
+    // Observa el producto seleccionado
+    val selectedProduct = productViewModel.selectedProduct.observeAsState()
 
-    LaunchedEffect(Unit) {
-        productViewModel.loadProducts() // Carga los productos al iniciar
-        productViewModel.selectProductById(productId) // Selecciona el producto por su ID
+    // Llama al ViewModel para cargar el producto por su ID
+    LaunchedEffect(productId) {
+        productViewModel.loadProductById(productId) // Usa el nuevo endpoint para obtener el producto
     }
 
-    if (selectedProduct != null) {
-        // Aquí puedes utilizar selectedProduct para mostrar los datos en la pantalla
+    // Si el producto está seleccionado, mostrar los detalles
+    selectedProduct.value?.let { product ->
         Box(
             modifier = modifier
                 .fillMaxSize()
@@ -58,7 +49,7 @@ fun ProductDetailScreen(
             ) {
                 // Título del producto
                 Text(
-                    text = selectedProduct.nombre,
+                    text = product.nombre,
                     fontSize = 28.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color(0xFFE17F61)
@@ -68,7 +59,7 @@ fun ProductDetailScreen(
 
                 // Imagen del producto
                 Image(
-                    painter = rememberImagePainter(data = selectedProduct.imagen), // Cargar la imagen desde la URL
+                    painter = rememberImagePainter(data = product.imagen), // Cargar la imagen desde la URL
                     contentDescription = "Imagen del Producto",
                     modifier = Modifier
                         .fillMaxWidth()
@@ -80,7 +71,7 @@ fun ProductDetailScreen(
 
                 // Descripción del producto
                 Text(
-                    text = selectedProduct.descripcion,
+                    text = product.descripcion,
                     fontSize = 16.sp,
                     color = Color(0xFF191919)
                 )
@@ -89,12 +80,13 @@ fun ProductDetailScreen(
 
                 // Precio del producto
                 Text(
-                    text = "$${selectedProduct.precio_normal}",
+                    text = "$${product.precio_normal}",
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color(0xFF191919)
                 )
-                selectedProduct.precio_rebajado?.let {
+
+                product.precio_rebajado?.let {
                     Text(
                         text = "$$it",
                         fontSize = 16.sp,
@@ -105,8 +97,8 @@ fun ProductDetailScreen(
                 }
             }
         }
-    } else {
+    } ?: run {
+        // Muestra un texto de "Cargando producto..." si no se encuentra el producto seleccionado
         Text(text = "Cargando producto...", modifier = Modifier.fillMaxSize())
     }
 }
-

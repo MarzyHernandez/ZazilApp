@@ -3,6 +3,7 @@ package mx.acg.zazil.model
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Query
 
 data class Product(
     val id: Int,
@@ -16,14 +17,25 @@ data class Product(
 )
 
 interface ProductApi {
-    @GET("products")
+    @GET("/") // Obtener todos los productos
     suspend fun getProducts(): List<Product>
+
+    @GET("/") // Obtener un producto por ID
+    suspend fun getProductById(@Query("id") productId: Int): Product
 }
 
 object RetrofitInstance {
     val productApi: ProductApi by lazy {
         Retrofit.Builder()
-            .baseUrl("https://getallproducts-dztx2pd2na-uc.a.run.app/")
+            .baseUrl("https://getallproducts-dztx2pd2na-uc.a.run.app/") // Base URL para obtener todos los productos
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(ProductApi::class.java)
+    }
+
+    val productDetailApi: ProductApi by lazy {
+        Retrofit.Builder()
+            .baseUrl("https://getproductbyid-dztx2pd2na-uc.a.run.app/") // Base URL para obtener producto por ID
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(ProductApi::class.java)
