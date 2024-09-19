@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "3024441242",
+    "project_id": "zazil-app",
+    "storage_bucket": "zazil-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:3024441242:android:0fe12faf87b858e1383423",
+        "android_client_info": {
+          "package_name": "mx.acg.zazil"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "3024441242-avf1n7fb0s0hij3363e348rhc22vqf6n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "mx.acg.zazil",
+            "certificate_hash": "7bf563b23153be21242cd7cbf11ffb0a4cf71cf8"
+          }
+        },
+        {
+          "client_id": "3024441242-in4h94s1di0nh0tqppmg4fj9nah9ri6j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDqpaIdtdLVgarrQPUbNz-xHsr4NlNaImo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "3024441242-in4h94s1di0nh0tqppmg4fj9nah9ri6j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
