@@ -188,7 +188,7 @@ function createProductCard(product) {
                      <div class="product-price">
                                 <span class="disount-price">$${product.precio_rebajado}</span>
                                 <span class="actucal-price">$${product.precio_normal}</span>
-                                <span class="off-price">${((product.precio_normal - product.precio_rebajado) / product.precio_normal * 100).toFixed(2)}% Off</span>
+                                <span class="off-price">-${((product.precio_normal - product.precio_rebajado) / product.precio_normal * 100).toFixed(2)}%</span>
                     </div>
                     <div class="product-description">
                         <span class="product-id">ID: ${product.id}</span><br>
