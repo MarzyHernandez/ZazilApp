@@ -34,7 +34,11 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import mx.acg.zazil.R
+
+import com.google.firebase.auth.FirebaseAuth
+
 
 /**
  * Función que representa la pantalla de inicio de sesión.
@@ -43,11 +47,17 @@ import mx.acg.zazil.R
  */
 
 @Composable
-fun LoginScreen() {
+fun LoginScreen(signInWithGoogle: () -> Unit) {
     val gabaritoFontFamily = FontFamily(Font(R.font.gabarito_regular))
 
+    // Declaramos las variables para email y contraseña
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var errorMessage by remember { mutableStateOf<String?>(null) } // Para manejar errores
+
+    // Inicializar FirebaseAuth
+    val auth = FirebaseAuth.getInstance()
+
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
             painter = painterResource(id = R.drawable.logo),
@@ -111,12 +121,40 @@ fun LoginScreen() {
 
             Spacer(modifier = Modifier.height(16.dp))
 
+            // Botón para iniciar sesión
             Button(
-                onClick = { /* Lógica de inicio de sesión */ },
+                onClick = {
+                    auth.signInWithEmailAndPassword(email, password)
+                        .addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                // El inicio de sesión fue exitoso
+
+                                // log de que es exitoso
+                                println("Inicio de sesión exitoso")
+
+
+                                // REDIRIGIR A LA PANTALLA PRINCIAPL
+                                errorMessage = null
+                            } else {
+                                // Si ocurre un error, mostrar el mensaje
+                                errorMessage = "El usuario y contraseña no coinciden"
+                                println(task.exception?.message)
+                            }
+                        }
+                },
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFEBB7A7))
             ) {
-                Text(text = "Iniciar sesión", color = Color.Black)
+                Text(text = "Iniciar sesión")
+            }
+
+            // Mostrar un mensaje de error si el inicio de sesión falla
+            errorMessage?.let {
+                Text(
+                    text = it,
+                    color = Color.Red,
+                    modifier = Modifier.padding(top = 8.dp)
+                )
             }
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -144,20 +182,18 @@ fun LoginScreen() {
 
             Spacer(modifier = Modifier.height(8.dp))
 
+            // Botón de registro con Google
             Button(
-                onClick = { /* Lógica de registro con Google */ },
+                onClick = { signInWithGoogle() },
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFFC7C5))
             ) {
                 Row(
-                    modifier = Modifier.fillMaxWidth(), // Asegura que ocupe el ancho completo
-                    horizontalArrangement = Arrangement.SpaceBetween, // Distribuye el espacio entre los elementos
-                    verticalAlignment = Alignment.CenterVertically // Centra verticalmente el texto y el ícono
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    // Texto alineado a la izquierda
                     Text(text = "Google", color = Color.Black)
-
-                    // Ícono alineado a la derecha
                     Icon(
                         painter = painterResource(id = R.drawable.ic_google),
                         contentDescription = "Google Icon",
@@ -165,7 +201,6 @@ fun LoginScreen() {
                         tint = Color.Unspecified
                     )
                 }
-
             }
 
             Spacer(modifier = Modifier.height(8.dp))

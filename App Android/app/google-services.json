@@ -14,11 +14,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "3024441242-tt7a38srcianutnl4f6fmtrk66207n18.apps.googleusercontent.com",
+          "client_id": "3024441242-avf1n7fb0s0hij3363e348rhc22vqf6n.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "mx.acg.zazil",
-            "certificate_hash": "da39a3ee5e6b4b0d3255bfef95601890afd80709"
+            "certificate_hash": "7bf563b23153be21242cd7cbf11ffb0a4cf71cf8"
           }
         },
         {
