@@ -6,6 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -24,6 +25,9 @@ import mx.acg.zazil.view.SettingsScreen
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import mx.acg.zazil.view.CarritoScreen
+import mx.acg.zazil.view.CartScreen
+import mx.acg.zazil.view.ProductDetailScreen
 
 
 class MainActivity : ComponentActivity() {
@@ -56,10 +60,24 @@ class MainActivity : ComponentActivity() {
                 ) { innerPadding ->
                     NavHost(
                         navController = navController,
-                        startDestination = "catalog",
+                        startDestination = "login",
                         modifier = Modifier.padding(innerPadding) // Usa el padding que recibe Scaffold
                     ) {
-                        composable("carrito") { }
+                        composable("login") {
+                            LoginScreen(navController = navController, signInWithGoogle = ::signInWithGoogle)  // Pasa el navController y la función de Google Sign-In
+                        }
+
+                        composable("productDetail/{productId}") { backStackEntry ->
+                            val productId = backStackEntry.arguments?.getString("productId")?.toIntOrNull()
+                            if (productId != null) {
+                                ProductDetailScreen(productId = productId)
+                            } else {
+                                // Manejar el error en caso de que el productId sea nulo o inválido
+                                Text("Producto no encontrado")
+                            }
+                        }
+
+                        composable("carrito") { CartScreen() }
                         composable("chat") { BlogScreen() }
                         composable("catalog") { CatalogScreen(navController = navController) }  // Pasa el NavController
                         composable("perfil") { ProfileScreen() }

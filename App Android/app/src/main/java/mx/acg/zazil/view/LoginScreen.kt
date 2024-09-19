@@ -47,7 +47,7 @@ import com.google.firebase.auth.FirebaseAuth
  */
 
 @Composable
-fun LoginScreen(signInWithGoogle: () -> Unit) {
+fun LoginScreen(navController: NavHostController, signInWithGoogle: () -> Unit) {
     val gabaritoFontFamily = FontFamily(Font(R.font.gabarito_regular))
 
     // Declaramos las variables para email y contraseña
@@ -128,17 +128,14 @@ fun LoginScreen(signInWithGoogle: () -> Unit) {
                         .addOnCompleteListener { task ->
                             if (task.isSuccessful) {
                                 // El inicio de sesión fue exitoso
-
-                                // log de que es exitoso
-                                println("Inicio de sesión exitoso")
-
-
-                                // REDIRIGIR A LA PANTALLA PRINCIAPL
                                 errorMessage = null
+
+                                // Navegar a la pantalla principal, por ejemplo "catalog"
+                                navController.navigate("catalog") {
+                                    popUpTo("login") { inclusive = true } // Limpia el historial de navegación
+                                }
                             } else {
-                                // Si ocurre un error, mostrar el mensaje
                                 errorMessage = "El usuario y contraseña no coinciden"
-                                println(task.exception?.message)
                             }
                         }
                 },
