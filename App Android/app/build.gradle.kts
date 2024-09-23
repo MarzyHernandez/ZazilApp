@@ -56,6 +56,7 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-auth"))
     implementation ("com.google.android.gms:play-services-auth:19.2.0")
     implementation ("com.stripe:stripe-android:20.50.1")
+    implementation ("com.google.firebase:firebase-functions-ktx")
 
     implementation(libs.coil)
     implementation(libs.retrofit)
