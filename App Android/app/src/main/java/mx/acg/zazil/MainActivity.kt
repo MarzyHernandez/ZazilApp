@@ -1,5 +1,113 @@
 package mx.acg.zazil
 
+
+import android.content.Intent
+import android.os.Bundle
+import android.util.Log
+import android.widget.Button
+import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.TextView
+import androidx.activity.ComponentActivity
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
+import com.stripe.android.ApiResultCallback
+import com.stripe.android.PaymentIntentResult
+import com.stripe.android.Stripe
+import com.stripe.android.model.ConfirmPaymentIntentParams
+import com.stripe.android.model.StripeIntent
+import mx.acg.zazil.viewmodel.PaymentViewModel
+
+class MainActivity : ComponentActivity() {
+
+    private lateinit var paymentViewModel: PaymentViewModel
+    private lateinit var stripe: Stripe
+
+    private lateinit var stripeActivityResultLauncher: ActivityResultLauncher<Intent>
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // Crear Layout programáticamente
+        val layout = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+        }
+
+        val amountEditText = EditText(this).apply {
+            hint = "Ingrese la cantidad a pagar"
+        }
+
+        val paymentStatusTextView = TextView(this).apply {
+            text = "Estado del pago: Aún no iniciado"
+        }
+
+        val payButton = Button(this).apply {
+            text = "Pagar"
+        }
+
+        layout.addView(amountEditText)
+        layout.addView(payButton)
+        layout.addView(paymentStatusTextView)
+
+        setContentView(layout)
+
+        // Inicializar Stripe
+        stripe = Stripe(
+            applicationContext,
+            "tu_stripe_publishable_key"  // Coloca tu clave pública de Stripe aquí
+        )
+
+        // Inicializar el ViewModel
+        paymentViewModel = ViewModelProvider(this).get(PaymentViewModel::class.java)
+        paymentViewModel.initializeStripe(stripe)
+
+        // Observar cambios en el estado del pago
+        paymentViewModel.paymentStatus.observe(this, { status ->
+            paymentStatusTextView.text = "Estado del pago: $status"
+        })
+
+        // Configurar el ActivityResultLauncher para manejar el resultado del pago
+        stripeActivityResultLauncher = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { result ->
+            val data = result.data
+            if (data != null) {
+                stripe.onPaymentResult(
+                    result.resultCode,
+                    data,
+                    object : ApiResultCallback<PaymentIntentResult> {
+                        override fun onSuccess(result: PaymentIntentResult) {
+                            val paymentIntent = result.intent
+                            if (paymentIntent.status == StripeIntent.Status.Succeeded) {
+                                paymentViewModel.setPaymentStatus("Pago completado")
+                            } else {
+                                paymentViewModel.setPaymentStatus("El pago no se completó")
+                            }
+                        }
+
+                        override fun onError(e: Exception) {
+                            paymentViewModel.setPaymentStatus("Error en el pago: ${e.message}")
+                        }
+                    }
+                )
+            }
+        }
+
+        // Lógica para el botón de pago
+        payButton.setOnClickListener {
+            val amount = amountEditText.text.toString().toIntOrNull()
+            if (amount != null && amount > 0) {
+                paymentViewModel.createPaymentIntent(amount)
+            } else {
+                paymentStatusTextView.text = "Por favor ingrese una cantidad válida"
+            }
+        }
+    }
+}
+
+/*
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -129,3 +237,4 @@ class MainActivity : ComponentActivity() {
         private const val RC_SIGN_IN = 9001  // Puedes usar cualquier valor entero único.
     }
 }
+*/
