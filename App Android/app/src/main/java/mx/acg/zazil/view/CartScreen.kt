@@ -1,6 +1,5 @@
 package mx.acg.zazil.view
 
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -18,6 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import mx.acg.zazil.R
 
 data class CartItem(
@@ -28,7 +28,7 @@ data class CartItem(
 )
 
 @Composable
-fun CartScreen(modifier: Modifier = Modifier) {
+fun CartScreen(navController: NavHostController, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -84,7 +84,7 @@ fun CartScreen(modifier: Modifier = Modifier) {
         Spacer(modifier = Modifier.weight(1f))
 
         // Total y botones de acción
-        CartTotal(total = 1800)
+        CartTotal(navController = navController, total = 1800)
     }
 }
 
@@ -142,7 +142,7 @@ fun CartItemRow(item: CartItem) {
                     painter = painterResource(id = R.drawable.ic_add),
                     contentDescription = "Añadir",
                     modifier = Modifier
-                        .size(35.dp)
+                        .size(40.dp)
                 )
             }
 
@@ -156,7 +156,7 @@ fun CartItemRow(item: CartItem) {
                 Image(
                     painter = painterResource(id = R.drawable.ic_remove),
                     contentDescription = "Quitar",
-                    modifier = Modifier.size(35.dp)
+                    modifier = Modifier.size(40.dp)
                 )
             }
         }
@@ -164,7 +164,7 @@ fun CartItemRow(item: CartItem) {
 }
 
 @Composable
-fun CartTotal(total: Int) {
+fun CartTotal(navController: NavHostController, total: Int) {
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -184,6 +184,7 @@ fun CartTotal(total: Int) {
                 .padding(top = 8.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
+            // Botón para seguir comprando
             Button(
                 onClick = { /* Acción para seguir comprando */ },
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFEE1D6)),
@@ -202,8 +203,9 @@ fun CartTotal(total: Int) {
                 )
             }
 
+            // Botón para finalizar la compra
             Button(
-                onClick = { /* Acción para continuar */ },
+                onClick = {navController.navigate("endShopping")},
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFE17F61)),
                 shape = RoundedCornerShape(10.dp),
                 modifier = Modifier
@@ -221,10 +223,4 @@ fun CartTotal(total: Int) {
             }
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun CartScreenPreview() {
-    CartScreen()
 }

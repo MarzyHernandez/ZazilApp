@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.res.painterResource
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import mx.acg.zazil.R
 import mx.acg.zazil.view.NavBar
@@ -33,7 +34,7 @@ import mx.acg.zazil.view.ProfileForm
  * @param [modifier] Modificador para personalizar la disposición y el estilo del Composable.
  */
 @Composable
-fun ProfileScreen(modifier: Modifier = Modifier) {
+fun ProfileScreen(navController: NavHostController, modifier: Modifier = Modifier) {
     Box(
         modifier = modifier
             .fillMaxSize()  // Ocupa la pantalla completa
@@ -93,7 +94,7 @@ fun ProfileScreen(modifier: Modifier = Modifier) {
 
             // Botón Ver Historial de Compra
             Button(
-                onClick = { /* Acción del botón Ver Historial de Compra */ },
+                onClick = {navController.navigate("myShopping")},
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFEFEEEE)),
                 modifier = Modifier
                     .fillMaxWidth()

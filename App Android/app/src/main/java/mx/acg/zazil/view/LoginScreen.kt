@@ -130,7 +130,7 @@ fun LoginScreen(navController: NavHostController, signInWithGoogle: () -> Unit) 
                                 // El inicio de sesión fue exitoso
                                 errorMessage = null
 
-                                // Navegar a la pantalla principal, por ejemplo "catalog"
+                                // Navegar a la pantalla principal
                                 navController.navigate("catalog") {
                                     popUpTo("login") { inclusive = true } // Limpia el historial de navegación
                                 }

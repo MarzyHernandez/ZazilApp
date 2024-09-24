@@ -27,6 +27,11 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import mx.acg.zazil.view.CarritoScreen
 import mx.acg.zazil.view.CartScreen
+import mx.acg.zazil.view.CartTotal
+import mx.acg.zazil.view.EndShoppingScreen
+import mx.acg.zazil.view.MyShoppingDetailsScreen
+import mx.acg.zazil.view.MyShoppingScreen
+import mx.acg.zazil.view.PaymentScreen
 import mx.acg.zazil.view.ProductDetailScreen
 
 
@@ -67,7 +72,8 @@ class MainActivity : ComponentActivity() {
                             LoginScreen(navController = navController, signInWithGoogle = ::signInWithGoogle)  // Pasa el navController y la función de Google Sign-In
                         }
 
-                        composable("productDetail/{productId}") { backStackEntry ->
+                        composable("productDetail/{productId}") {
+                            backStackEntry ->
                             val productId = backStackEntry.arguments?.getString("productId")?.toIntOrNull()
                             if (productId != null) {
                                 ProductDetailScreen(productId = productId)
@@ -77,11 +83,34 @@ class MainActivity : ComponentActivity() {
                             }
                         }
 
-                        composable("carrito") { CartScreen() }
-                        composable("chat") { BlogScreen() }
-                        composable("catalog") { CatalogScreen(navController = navController) }  // Pasa el NavController
-                        composable("perfil") { ProfileScreen() }
-                        composable("configuracion"){ SettingsScreen() }
+                        composable("chat") {
+                            BlogScreen() }
+
+                        composable("catalog") {
+                            CatalogScreen(navController = navController) }
+
+                        composable("perfil") {
+                            ProfileScreen(navController = navController) }
+
+                        composable("configuracion"){
+                            SettingsScreen() }
+
+                        composable("carrito") {
+                            CartScreen(navController = navController) }
+
+                        composable("myShopping") {
+                            MyShoppingScreen(navController = navController) }
+
+                        composable("shoppingDetails") {
+                            MyShoppingDetailsScreen(navController = navController) }
+
+                        composable("endShopping") {
+                            EndShoppingScreen(navController = navController) }
+
+                        composable("payment") {
+                            PaymentScreen(navController = navController) }
+
+
                     }
                 }
             }
