@@ -73,7 +73,7 @@ class MainActivity : ComponentActivity() {
                         }
 
                         composable("productDetail/{productId}") {
-                            backStackEntry ->
+                                backStackEntry ->
                             val productId = backStackEntry.arguments?.getString("productId")?.toIntOrNull()
                             if (productId != null) {
                                 ProductDetailScreen(productId = productId)
