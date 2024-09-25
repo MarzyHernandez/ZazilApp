@@ -10,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -56,65 +57,78 @@ class MainActivity : ComponentActivity() {
         googleSignInClient = GoogleSignIn.getClient(this, gso)
 
         setContent {
-            //LoginScreen(::signInWithGoogle)
             ZazilTheme {
                 val navController = rememberNavController()
+                val currentBackStackEntry = navController.currentBackStackEntryAsState()
+
+                // Condiciona la visibilidad de la NavBar dependiendo de la ruta actual
+                val showNavBar = currentBackStackEntry.value?.destination?.route != "login"
 
                 Scaffold(
-                    bottomBar = { NavBar(navController) } // Aquí está tu NavBar
+                    bottomBar = {
+                        if (showNavBar) {
+                            NavBar(navController) // Muestra NavBar solo si no estás en la pantalla de login
+                        }
+                    }
                 ) { innerPadding ->
                     NavHost(
                         navController = navController,
                         startDestination = "login",
-                        modifier = Modifier.padding(innerPadding) // Usa el padding que recibe Scaffold
+                        modifier = Modifier.padding(innerPadding)
                     ) {
                         composable("login") {
-                            LoginScreen(navController = navController, signInWithGoogle = ::signInWithGoogle)  // Pasa el navController y la función de Google Sign-In
+                            LoginScreen(navController = navController, signInWithGoogle = ::signInWithGoogle)
                         }
 
-                        composable("productDetail/{productId}") {
-                                backStackEntry ->
+                        composable("productDetail/{productId}") { backStackEntry ->
                             val productId = backStackEntry.arguments?.getString("productId")?.toIntOrNull()
                             if (productId != null) {
                                 ProductDetailScreen(productId = productId)
                             } else {
-                                // Manejar el error en caso de que el productId sea nulo o inválido
                                 Text("Producto no encontrado")
                             }
                         }
 
                         composable("chat") {
-                            BlogScreen() }
+                            BlogScreen()
+                        }
 
                         composable("catalog") {
-                            CatalogScreen(navController = navController) }
+                            CatalogScreen(navController = navController)
+                        }
 
                         composable("perfil") {
-                            ProfileScreen(navController = navController) }
+                            ProfileScreen(navController = navController)
+                        }
 
-                        composable("configuracion"){
-                            SettingsScreen() }
+                        composable("configuracion") {
+                            SettingsScreen()
+                        }
 
                         composable("carrito") {
-                            CartScreen(navController = navController) }
+                            CartScreen(navController = navController)
+                        }
 
                         composable("myShopping") {
-                            MyShoppingScreen(navController = navController) }
+                            MyShoppingScreen(navController = navController)
+                        }
 
                         composable("shoppingDetails") {
-                            MyShoppingDetailsScreen(navController = navController) }
+                            MyShoppingDetailsScreen(navController = navController)
+                        }
 
                         composable("endShopping") {
-                            EndShoppingScreen(navController = navController) }
+                            EndShoppingScreen(navController = navController)
+                        }
 
                         composable("payment") {
-                            PaymentScreen(navController = navController) }
-
-
+                            PaymentScreen(navController = navController)
+                        }
                     }
                 }
             }
         }
+
     }
 
     // Iniciar el flujo de Google Sign-In
