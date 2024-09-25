@@ -57,9 +57,13 @@ dependencies {
     implementation ("com.google.android.gms:play-services-auth:19.2.0")
     implementation ("com.stripe:stripe-android:20.50.1")
 
+
     implementation(libs.coil)
     implementation(libs.retrofit)
     implementation(libs.gson)
+    implementation(libs.okhttp)
+    implementation(libs.okhttp.logging.interceptor)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
