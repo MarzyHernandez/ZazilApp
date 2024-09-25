@@ -102,14 +102,6 @@ fun CatalogScreen(
                 }
             }
 
-            // Header de productos
-            Text(
-                text = "Productos",
-                fontSize = 28.sp,
-                color = Color(0xFFE17F61),
-                modifier = Modifier.padding(start = 8.dp, bottom = 16.dp)
-            )
-
             // Aquí aplicamos el fondo blanco para la sección de productos
             Box(
                 modifier = Modifier
@@ -118,6 +110,12 @@ fun CatalogScreen(
                     .padding(16.dp)
             ) {
                 Column {
+                    Text(
+                        text = "Productos",
+                        fontSize = 28.sp,
+                        color = Color(0xFFE17F61),
+                        modifier = Modifier.padding(start = 8.dp, bottom = 16.dp)
+                    )
                     // Barra de búsqueda
                     OutlinedTextField(
                         value = searchQuery,
