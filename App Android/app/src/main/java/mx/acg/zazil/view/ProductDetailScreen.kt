@@ -31,7 +31,7 @@ import androidx.navigation.NavHostController
 import mx.acg.zazil.R
 
 @Composable
-fun ProductDetailScreen(navController: NavHostController, productId: Int,
+fun ProductDetailScreen(productId: Int,
                         productViewModel: ProductViewModel = viewModel(),
                         modifier: Modifier = Modifier
 ) {
@@ -90,7 +90,7 @@ fun ProductDetailScreen(navController: NavHostController, productId: Int,
             }
             // Botón "Regresar"
             TextButton(
-                onClick = { navController.navigateUp()},
+                onClick = {},
             ) {
                 Text(
                     text = "< Regresar",
