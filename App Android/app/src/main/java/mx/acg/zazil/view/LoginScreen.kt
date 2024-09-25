@@ -75,7 +75,7 @@ fun LoginScreen(navController: NavHostController, signInWithGoogle: () -> Unit) 
             verticalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "Hola!",
+                text = "¡Hola!",
                 fontSize = 32.sp,
                 fontWeight = FontWeight.Bold,
                 fontFamily = gabaritoFontFamily,
