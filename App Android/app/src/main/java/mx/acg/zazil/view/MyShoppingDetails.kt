@@ -42,13 +42,13 @@ fun MyShoppingDetailsScreen(navController: NavHostController, modifier: Modifier
             )
         }
         Column {
-            // Botón "Regresar" fuera del fondo rosa
+            // Botón "Regresar"
             TextButton(
                 onClick = { navController.navigateUp() }, // Navegar hacia atrás
                 modifier = Modifier.padding(
                     start = 16.dp,
                     top = 8.dp
-                ) // Ajusta el padding para darle margen
+                )
             ) {
                 Text(
                     text = "← Regresar",

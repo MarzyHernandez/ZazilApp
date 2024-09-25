@@ -49,7 +49,7 @@ fun MyShoppingScreen(navController: NavHostController, modifier: Modifier = Modi
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 8.dp),
+                    .padding(start = 20.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
@@ -61,7 +61,17 @@ fun MyShoppingScreen(navController: NavHostController, modifier: Modifier = Modi
             }
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        // Botón "Regresar"
+        TextButton(
+            onClick = { /* Acción para regresar */ },
+        ) {
+            Text(
+                text = "< Regresar",
+                fontSize = 14.sp,
+                color = Color.Gray,
+                fontWeight = FontWeight.Bold
+            )
+        }
 
         // Lista de pedidos
         val orderItems = listOf(
