@@ -143,7 +143,7 @@ fun LoginScreen(navController: NavHostController, signInWithGoogle: () -> Unit) 
                                             // Imprimir la respuesta completa en el log
                                             Log.d("LoginScreen", "Respuesta del servidor: ${response.body()}")
 
-                                            userId = user?.userId
+                                            userId = user?.uid
                                             Log.d("LoginScreen", "UserId: $userId")
 
                                             // Navegar a la pantalla de catálogo

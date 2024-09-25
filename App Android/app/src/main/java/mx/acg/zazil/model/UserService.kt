@@ -14,5 +14,5 @@ interface UserService {
 
 // Modelo de respuesta (ajústalo según el JSON de respuesta que recibas)
 data class UserResponse(
-    val userId: String
+    val uid: String
 )
