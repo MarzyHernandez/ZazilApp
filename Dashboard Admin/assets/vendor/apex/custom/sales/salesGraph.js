@@ -30,7 +30,7 @@ var options = {
 	  show: false,
 	},
 	xaxis: {
-	  categories: ['Usa', 'Ind', 'Brz', 'Mex'],
+	  categories: ['Ene', 'Feb', 'Mar', 'Abr'],
 	},
 	yaxis: {
 	  show: false,

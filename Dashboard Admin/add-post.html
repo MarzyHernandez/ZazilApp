@@ -447,7 +447,55 @@
     </script>
     
     
-    
+    <!-- Firebase SDK -->
+  <script type="module">
+    // Firebase SDK imports
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js';
+    import { getAuth, signOut } from 'https://www.gstatic.com/firebasejs/9.1.3/firebase-auth.js';
+    import { getFirestore } from 'https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js';
+
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyA3wgArHQ2TbPMzgKskD-HSMxN1WQfzm_s",
+      authDomain: "zazil-app.firebaseapp.com",
+      projectId: "zazil-app",
+      storageBucket: "zazil-app.appspot.com",
+      messagingSenderId: "3024441242",
+      appId: "1:3024441242:web:45eea9b414efaa37383423"
+    };
+
+    // Firebase initialization
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // Verificar si el usuario ha iniciado sesión
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        // Usuario está autenticado
+        console.log('User is authenticated:', user.email);
+      } else {
+        // Usuario no está autenticado, redirigir al login
+        window.location.href = 'login.html'; // Cambia 'login.html' por la ruta correcta a tu página de inicio de sesión
+      }
+    });
+
+    // Agregar event listener para el botón de logout
+    document.getElementById('logout').addEventListener('click', (e) => {
+      e.preventDefault(); // Evitar el comportamiento por defecto del enlace
+
+      signOut(auth).then(() => {
+        // Cierre de sesión exitoso, redirigir al login
+        window.location.href = 'login.html';
+      }).catch((error) => {
+        // Manejar errores
+        console.error('Error signing out:', error);
+      });
+    });
+
+    // Aquí puedes agregar tu lógica adicional para usuarios autenticados
+  </script>
+
       
       
     </body>
