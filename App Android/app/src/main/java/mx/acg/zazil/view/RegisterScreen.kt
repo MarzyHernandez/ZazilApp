@@ -2,6 +2,8 @@ package mx.acg.zazil.view
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -28,7 +30,8 @@ fun RegisterScreen(navController: NavHostController) {
     var password by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf<String?>(null) }
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(modifier = Modifier
+        .fillMaxSize()) {
         Image(
             painter = painterResource(id = R.drawable.logo),
             contentDescription = "Logo",
@@ -41,7 +44,8 @@ fun RegisterScreen(navController: NavHostController) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(24.dp),
+                .padding(24.dp)
+                .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.Center
         ) {
             Text(
@@ -67,7 +71,10 @@ fun RegisterScreen(navController: NavHostController) {
                     .fillMaxSize()
                     .padding(16.dp)
             ) {
-                Text(text = "Completa tus datos", fontSize = 14.sp, color = Color.Black)
+                Text(
+                    text = "Completa tus datos",
+                    fontSize = 14.sp,
+                    color = Color.Black)
 
                 Spacer(modifier = Modifier.height(16.dp))
 
@@ -116,7 +123,19 @@ fun RegisterScreen(navController: NavHostController) {
                         onCheckedChange = { termsAccepted = it },
                         colors = CheckboxDefaults.colors(checkedColor = Color(0xFFE27F61))
                     )
-                    Text(text = "Acepto Términos y condiciones", color = Color.Gray)
+                    Text(
+                        text = "Acepto",
+                        fontSize = 14.sp,
+                        color = Color.Black)
+
+                    TextButton(onClick = { /* Acción para ir al login */ }) {
+                        Text(
+                            text = "términos y condiciones",
+                            color = Color(0xFFE27F61),
+                            fontSize = 14.sp,
+                            fontFamily = gabaritoFontFamily
+                        )
+                    }
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -133,7 +152,9 @@ fun RegisterScreen(navController: NavHostController) {
                     modifier = Modifier.fillMaxWidth(),
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFEBB7A7))
                 ) {
-                    Text(text = "REGISTRAR")
+                    Text(
+                        text = "REGISTRAR",
+                        color = Color.Black,)
                 }
 
                 errorMessage?.let {
@@ -162,7 +183,7 @@ fun RegisterScreen(navController: NavHostController) {
                             fontFamily = gabaritoFontFamily
                         )
 
-                        TextButton(onClick = { /* Acción para ir al login */ }) {
+                        TextButton(onClick = {navController.navigate("login")}) {
                             Text(
                                 text = "Iniciar sesión",
                                 color = Color(0xFFE27F61),

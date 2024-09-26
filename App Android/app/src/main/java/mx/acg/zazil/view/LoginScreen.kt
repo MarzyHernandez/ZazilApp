@@ -18,13 +18,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import mx.acg.zazil.R
 import mx.acg.zazil.model.UserResponse
 import mx.acg.zazil.model.UserService
@@ -292,7 +289,7 @@ fun LoginScreen(navController: NavHostController, signInWithGoogle: () -> Unit) 
                             fontFamily = gabaritoFontFamily
                         )
 
-                        TextButton(onClick = { navController.navigate("register")}) {
+                        TextButton(onClick = {navController.navigate("register")} ) {
                             Text(
                                 text = "Regístrate",
                                 color = Color(0xFFE27F61),
