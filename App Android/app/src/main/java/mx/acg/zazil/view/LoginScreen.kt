@@ -292,7 +292,7 @@ fun LoginScreen(navController: NavHostController, signInWithGoogle: () -> Unit) 
                             fontFamily = gabaritoFontFamily
                         )
 
-                        TextButton(onClick = { /* Lógica de registro */ }) {
+                        TextButton(onClick = { navController.navigate("register")}) {
                             Text(
                                 text = "Regístrate",
                                 color = Color(0xFFE27F61),
