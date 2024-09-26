@@ -63,12 +63,13 @@ class MainActivity : ComponentActivity() {
                 val currentBackStackEntry = navController.currentBackStackEntryAsState()
 
                 // Condiciona la visibilidad de la NavBar dependiendo de la ruta actual
-                val showNavBar = currentBackStackEntry.value?.destination?.route != "login" || currentBackStackEntry.value?.destination?.route != "register"
+                val currentRoute = currentBackStackEntry.value?.destination?.route
+                val showNavBar = currentRoute != "login" && currentRoute != "register"
 
                 Scaffold(
                     bottomBar = {
                         if (showNavBar) {
-                            NavBar(navController) // Muestra NavBar solo si no estás en la pantalla de login
+                            NavBar(navController) // Muestra NavBar solo si no estás en las pantallas de login o register
                         }
                     }
                 ) { innerPadding ->
