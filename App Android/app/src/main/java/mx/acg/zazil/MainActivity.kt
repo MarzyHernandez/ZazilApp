@@ -34,6 +34,7 @@ import mx.acg.zazil.view.MyShoppingDetailsScreen
 import mx.acg.zazil.view.MyShoppingScreen
 import mx.acg.zazil.view.PaymentScreen
 import mx.acg.zazil.view.ProductDetailScreen
+import mx.acg.zazil.view.RegisterScreen
 
 
 class MainActivity : ComponentActivity() {
@@ -62,12 +63,13 @@ class MainActivity : ComponentActivity() {
                 val currentBackStackEntry = navController.currentBackStackEntryAsState()
 
                 // Condiciona la visibilidad de la NavBar dependiendo de la ruta actual
-                val showNavBar = currentBackStackEntry.value?.destination?.route != "login"
+                val currentRoute = currentBackStackEntry.value?.destination?.route
+                val showNavBar = currentRoute != "login" && currentRoute != "register"
 
                 Scaffold(
                     bottomBar = {
                         if (showNavBar) {
-                            NavBar(navController) // Muestra NavBar solo si no estás en la pantalla de login
+                            NavBar(navController) // Muestra NavBar solo si no estás en las pantallas de login o register
                         }
                     }
                 ) { innerPadding ->
@@ -78,6 +80,10 @@ class MainActivity : ComponentActivity() {
                     ) {
                         composable("login") {
                             LoginScreen(navController = navController, signInWithGoogle = ::signInWithGoogle)
+                        }
+
+                        composable("register") {
+                            RegisterScreen(navController = navController)
                         }
 
                         composable("productDetail/{productId}") { backStackEntry ->
@@ -102,12 +108,22 @@ class MainActivity : ComponentActivity() {
                         }
 
                         composable("configuracion") {
-                            SettingsScreen()
+                            SettingsScreen(navController = navController)
                         }
 
                         composable("carrito") {
-                            CartScreen(navController = navController)
+                            // Obtener el uid del usuario autenticado en Firebase
+                            val currentUser = auth.currentUser
+                            val uid = currentUser?.uid
+
+                            // Pasar el uid al CartScreen
+                            if (uid != null) {
+                                CartScreen(navController = navController, uid = uid)
+                            } else {
+                                Text("No has iniciado sesión")
+                            }
                         }
+
 
                         composable("myShopping") {
                             MyShoppingScreen(navController = navController)
