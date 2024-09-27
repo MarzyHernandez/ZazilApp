@@ -109,7 +109,7 @@ fun ProfileScreen(navController: NavHostController, modifier: Modifier = Modifie
 
             // Botón Q&A
             Button(
-                onClick = { /* Acción del botón Q&A */ },
+                onClick = { navController.navigate("FAQs") },
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFEE1D6)),
                 modifier = Modifier
                     .fillMaxWidth()

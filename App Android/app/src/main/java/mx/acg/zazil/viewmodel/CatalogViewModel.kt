@@ -10,7 +10,6 @@ import mx.acg.zazil.model.RetrofitInstance
 
 class CatalogViewModel : ViewModel() {
 
-    // LiveData para exponer la lista de productos a la vista
     private val _products = MutableLiveData<List<Product>>()
     val products: LiveData<List<Product>> get() = _products
 

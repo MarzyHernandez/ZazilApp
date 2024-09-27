@@ -30,6 +30,7 @@ import mx.acg.zazil.view.CarritoScreen
 import mx.acg.zazil.view.CartScreen
 import mx.acg.zazil.view.CartTotal
 import mx.acg.zazil.view.EndShoppingScreen
+import mx.acg.zazil.view.FAQs
 import mx.acg.zazil.view.MyShoppingDetailsScreen
 import mx.acg.zazil.view.MyShoppingScreen
 import mx.acg.zazil.view.PaymentScreen
@@ -129,6 +130,9 @@ class MainActivity : ComponentActivity() {
                             MyShoppingScreen(navController = navController)
                         }
 
+                        composable("FAQs"){
+                            FAQs(navController = navController)
+                        }
                         composable("shoppingDetails") {
                             MyShoppingDetailsScreen(navController = navController)
                         }
