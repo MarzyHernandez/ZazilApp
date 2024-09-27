@@ -112,8 +112,18 @@ class MainActivity : ComponentActivity() {
                         }
 
                         composable("carrito") {
-                            CartScreen(navController = navController)
+                            // Obtener el uid del usuario autenticado en Firebase
+                            val currentUser = auth.currentUser
+                            val uid = currentUser?.uid
+
+                            // Pasar el uid al CartScreen
+                            if (uid != null) {
+                                CartScreen(navController = navController, uid = uid)
+                            } else {
+                                Text("No has iniciado sesión")
+                            }
                         }
+
 
                         composable("myShopping") {
                             MyShoppingScreen(navController = navController)

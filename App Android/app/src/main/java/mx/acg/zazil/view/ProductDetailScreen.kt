@@ -24,27 +24,30 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberImagePainter
 import mx.acg.zazil.viewmodel.ProductViewModel
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavHostController
 import mx.acg.zazil.R
+import mx.acg.zazil.viewmodel.ProductDetailViewModel
 
 @Composable
-fun ProductDetailScreen(productId: Int,
-                        productViewModel: ProductViewModel = viewModel(),
-                        modifier: Modifier = Modifier
+fun ProductDetailScreen(
+    productId: Int,
+    productDetailViewModel: ProductDetailViewModel = viewModel(),
+    modifier: Modifier = Modifier
 ) {
-    // Observa el producto seleccionado
-    val selectedProduct = productViewModel.selectedProduct.observeAsState()
+    // Observar el producto seleccionado
+    val selectedProduct by productDetailViewModel.selectedProduct.observeAsState()
 
     // Llama al ViewModel para cargar el producto por su ID
     LaunchedEffect(productId) {
-        productViewModel.loadProductById(productId)
+        productDetailViewModel.loadProductById(productId)
     }
 
     // Si el producto está seleccionado, muestra los detalles
-    selectedProduct.value?.let { product ->
+    selectedProduct?.let { product ->
         Column(
             modifier = modifier
                 .fillMaxSize()
@@ -55,9 +58,9 @@ fun ProductDetailScreen(productId: Int,
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clip(RoundedCornerShape(bottomEnd = 16.dp, bottomStart = 16.dp)) // Bordes redondeados solo en la parte inferior
-                    .background(Color(0xFFFEE1D6))  // Color de fondo rosa
-                    .padding(vertical = 16.dp) // Ajuste de padding interno
+                    .clip(RoundedCornerShape(bottomEnd = 16.dp, bottomStart = 16.dp))
+                    .background(Color(0xFFFEE1D6))
+                    .padding(vertical = 16.dp)
             ) {
                 Row(
                     modifier = Modifier
@@ -67,19 +70,19 @@ fun ProductDetailScreen(productId: Int,
                 ) {
                     Box(
                         modifier = Modifier
-                            .size(50.dp) // Tamaño del círculo
-                            .clip(CircleShape) // Forma circular
-                            .background(Color.White) // Fondo blanco del círculo
+                            .size(50.dp)
+                            .clip(CircleShape)
+                            .background(Color.White)
                     ) {
                         Image(
                             painter = painterResource(id = R.drawable.logo),
                             contentDescription = "Logotipo",
                             modifier = Modifier
-                                .size(40.dp) // Tamaño del logo
-                                .align(Alignment.Center) // Centrar el logo dentro del círculo
+                                .size(40.dp)
+                                .align(Alignment.Center)
                         )
                     }
-                    Spacer(modifier = Modifier.width(10.dp)) // Espacio entre el logo y el texto
+                    Spacer(modifier = Modifier.width(10.dp))
                     Text(
                         text = "ZAZIL",
                         fontSize = 24.sp,
@@ -88,10 +91,9 @@ fun ProductDetailScreen(productId: Int,
                     )
                 }
             }
+
             // Botón "Regresar"
-            TextButton(
-                onClick = {},
-            ) {
+            TextButton(onClick = {}) {
                 Text(
                     text = "< Regresar",
                     fontSize = 14.sp,
@@ -159,20 +161,18 @@ fun ProductDetailScreen(productId: Int,
                         .clip(RoundedCornerShape(8.dp))
                 ) {
                     Row(
-                        verticalAlignment = Alignment.CenterVertically, // Alinea el icono y el texto verticalmente
-                        horizontalArrangement = Arrangement.Center // Centra los elementos dentro del botón
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
                     ) {
-                        // Icono del carrito
                         Icon(
-                            painter = painterResource(id = R.drawable.ic_cart_w), // Reemplaza con el recurso del icono de carrito
+                            painter = painterResource(id = R.drawable.ic_cart_w),
                             contentDescription = "Carrito",
-                            tint = Color.White, // Cambia el color del icono
-                            modifier = Modifier.size(20.dp) // Ajusta el tamaño del icono si es necesario
+                            tint = Color.White,
+                            modifier = Modifier.size(20.dp)
                         )
 
-                        Spacer(modifier = Modifier.width(8.dp)) // Espacio entre el icono y el texto
+                        Spacer(modifier = Modifier.width(8.dp))
 
-                        // Texto de agregar al carrito
                         Text(
                             text = "Agregar al carrito",
                             color = Color.White,
@@ -201,8 +201,12 @@ fun ProductDetailScreen(productId: Int,
             )
         }
     } ?: run {
-        // Muestra un texto de "Cargando producto..." si no se encuentra el producto seleccionado
-        Text(text = "Cargando producto...", modifier = Modifier.fillMaxSize())
+        // Muestra un indicador de "Cargando producto..." mientras se obtiene el producto
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            CircularProgressIndicator()
+        }
     }
 }
+
+
 
