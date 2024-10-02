@@ -19,16 +19,27 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import coil.compose.rememberImagePainter
 import mx.acg.zazil.R
-import mx.acg.zazil.model.ShoppingHistory
+import mx.acg.zazil.viewmodel.ShoppingHistoryViewModel
 
 @Composable
-fun MyShoppingScreen(navController: NavHostController, modifier: Modifier = Modifier) {
-    //val shoppingHistory by viewModel.shoppingHistory.observeAsState(initial = emptyList())
-    //val errorMessage by viewModel.errorMessage.observeAsState()
+fun MyShoppingScreen(
+    navController: NavHostController,
+    viewModel: ShoppingHistoryViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
+    uid: String
+) {
+    // Obteniendo el historial de compras desde el ViewModel
+    val shoppingHistory by viewModel.shoppingHistory.observeAsState(initial = emptyList())
+    val errorMessage by viewModel.errorMessage.observeAsState()
+
+    // Ejecuta el request para obtener las compras
+    LaunchedEffect(Unit) {
+        viewModel.getShoppingHistory(uid)
+    }
 
     Column(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
             .verticalScroll(rememberScrollState())
@@ -68,24 +79,46 @@ fun MyShoppingScreen(navController: NavHostController, modifier: Modifier = Modi
                 fontWeight = FontWeight.Bold
             )
         }
+
+        // Mostrar mensaje de error si hay alguno
+        if (errorMessage != null) {
+            Text(
+                text = errorMessage ?: "",
+                color = MaterialTheme.colorScheme.error,
+                modifier = Modifier.padding(16.dp)
+            )
+        }
+
+        // Mostrar un indicador de cargando si el historial está vacío
+        if (shoppingHistory.isEmpty() && errorMessage == null) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator()
+            }
+        } else {
+            // Lista de compras
+            shoppingHistory.forEach { order ->
+                OrderItemRow(navController = navController, order = order)
+            }
+        }
     }
 }
 
 @Composable
-fun OrderItemRow(navController: NavHostController, order: ShoppingHistory) {
+fun OrderItemRow(navController: NavHostController, order: mx.acg.zazil.model.ShoppingHistory) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
             .background(Color(0xFFEBEBEB), shape = RoundedCornerShape(8.dp))
             .clickable {
-        navController.navigate("shoppingDetails")},
-    verticalAlignment = Alignment.CenterVertically
+                navController.navigate("shoppingDetails/${order.id}")
+            },
+        verticalAlignment = Alignment.CenterVertically
     ) {
         // Imagen del producto
         Image(
             painter = painterResource(id = R.drawable.shopping_bag),
-            contentDescription = "Imagen fija del producto",
+            contentDescription = "Imagen del producto",
             modifier = Modifier
                 .padding(20.dp)
                 .size(70.dp)
@@ -99,19 +132,21 @@ fun OrderItemRow(navController: NavHostController, order: ShoppingHistory) {
             modifier = Modifier.weight(1f)
         ) {
             Text(
-                text = "Pedido ${order.orderId}",
+                text = "Pedido #${order.id}",
                 fontWeight = FontWeight.Bold,
                 fontSize = 18.sp,
                 color = Color(0xFFE17F61)
             )
-            Text(text = "Productos: ${order.productQuantity}")
-            Text(text = "Fecha: ${order.date}")
+            Text(text = "Productos: ${order.productos.size}")
+
+            val formattedDate = order.fecha_pedido.substringBefore("T")
+            Text(text = "Fecha: $formattedDate")
+
             Text(
-                text = "Total: $${order.totalPrice}",
+                text = "Total: $${order.monto_total}",
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold
             )
         }
     }
 }
-

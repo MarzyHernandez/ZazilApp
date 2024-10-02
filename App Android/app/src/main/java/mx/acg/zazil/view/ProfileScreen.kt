@@ -14,49 +14,50 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.sp
-import coil.compose.rememberImagePainter
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import com.google.firebase.auth.FirebaseAuth
+import androidx.navigation.compose.rememberNavController
 import mx.acg.zazil.R
-import mx.acg.zazil.viewmodel.ProfileViewModel
+import mx.acg.zazil.view.NavBar
+import mx.acg.zazil.view.ProfileForm
 
+/**
+ * Composable que representa la pantalla de perfil del usuario.
+ * @author Melissa Mireles Rendón
+ * @author Alberto Cebreros González
+ * Incluye la imagen de fondo, la foto de perfil, los datos del usuario y la barra de navegación.
+ * @param [modifier] Modificador para personalizar la disposición y el estilo del Composable.
+ */
 @Composable
-fun ProfileScreen(
-    navController: NavHostController,
-    uid: String,
-    modifier: Modifier = Modifier,
-    profileViewModel: ProfileViewModel = viewModel()
-) {
-    val profileData = profileViewModel.profileData.collectAsState().value
-
-    LaunchedEffect(uid) {
-        profileViewModel.fetchUserProfile(uid)
-    }
-
+fun ProfileScreen(navController: NavHostController, modifier: Modifier = Modifier) {
     Box(
-        modifier = modifier.fillMaxSize()
+        modifier = modifier
+            .fillMaxSize()  // Ocupa la pantalla completa
     ) {
+        // Imagen de fondo
         Image(
             painter = painterResource(id = R.drawable.background_profile),
             contentDescription = "Fondo superior",
             modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Crop
+            contentScale = ContentScale.Crop  // Ajusta la imagen al tamaño de la pantalla
         )
 
+        // Contenido superpuesto
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-                .padding(bottom = 80.dp)
+                .verticalScroll(rememberScrollState())  // Hace que la columna sea desplazable
+                .padding(bottom = 80.dp)  // Deja espacio para la barra de navegación
         ) {
+            // Espacio vacío inicial para darle distancia al contenido superior
             Spacer(modifier = Modifier.height(80.dp))
 
+            // Texto "Mi Perfil"
             Text(
                 text = "Mi perfil",
                 fontSize = 36.sp,
@@ -65,43 +66,35 @@ fun ProfileScreen(
                 modifier = modifier.align(Alignment.CenterHorizontally)
             )
             Spacer(modifier = Modifier.height(80.dp))
-
-            profileData?.let { profile ->
-                Box(
-                    modifier = Modifier
-                        .size(160.dp)
-                        .align(Alignment.CenterHorizontally)
-                        .clip(CircleShape)
-                        .border(width = 5.dp, color = Color(0xFFEBB7A7), shape = CircleShape)
-                        .background(Color.White),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Image(
-                        painter = rememberImagePainter(profile.foto_perfil),
-                        contentDescription = "Profile Picture",
-                        modifier = Modifier.fillMaxSize()
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                ProfileForm(
-                    profile = profile,
-                    modifier = Modifier.padding(horizontal = 16.dp)
+            // Centra imagen de perfil
+            Box(
+                modifier = Modifier
+                    .size(160.dp)
+                    .align(Alignment.CenterHorizontally)
+                    .clip(CircleShape)
+                    .border(width = 5.dp, color = Color(0xFFEBB7A7), shape = CircleShape)
+                    .background(Color.White),
+                contentAlignment = Alignment.Center
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.scarlett),
+                    contentDescription = "Profile Picture",
+                    modifier = Modifier.fillMaxSize()
                 )
-            } ?: run {
-                CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(16.dp))  // Espacio entre imagen y formulario
 
+            ProfileForm(
+                Modifier
+                    .padding(horizontal = 16.dp)
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))  // Espacio entre el formulario y los botones
+
+            // Botón Ver Historial de Compra
             Button(
-                onClick = {
-                    // Obtén el usuario actual desde FirebaseAuth
-                    val currentUser = FirebaseAuth.getInstance().currentUser
-                    val uid = currentUser?.uid ?: ""
-                    // Navega a MyShoppingScreen con el UID del usuario
-                    navController.navigate("myShopping/$uid")},
+                onClick = {navController.navigate("myShopping")},
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFEFEEEE)),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -114,6 +107,7 @@ fun ProfileScreen(
 
             Spacer(modifier = Modifier.height(12.dp))
 
+            // Botón Q&A
             Button(
                 onClick = { navController.navigate("FAQs") },
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFEE1D6)),
@@ -126,7 +120,8 @@ fun ProfileScreen(
                 Text(text = "Preguntas Frecuentes", color = Color(0xFF293392), fontWeight = FontWeight.Bold)
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(16.dp))  // Asegura un espaciado adecuado al final del contenido
         }
     }
 }
+

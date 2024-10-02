@@ -1,4 +1,3 @@
-// NavHost.kt
 package mx.acg.zazil.view
 
 import androidx.compose.foundation.layout.padding
@@ -12,7 +11,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.google.firebase.auth.FirebaseAuth
-import mx.acg.zazil.view.*
 
 @Composable
 fun AppNavHost(
@@ -100,8 +98,17 @@ fun AppNavHost(
                 FAQs(navController = navController)
             }
 
-            composable("shoppingDetails") {
-                MyShoppingDetailsScreen(navController = navController)
+            composable("myShopping/{uid}") { backStackEntry ->
+                // Recupera el argumento `uid` desde la navegación
+                val uid = backStackEntry.arguments?.getString("uid") ?: ""
+
+                // Muestra la pantalla MyShoppingScreen con el UID recuperado
+                MyShoppingScreen(navController = navController, uid = uid)
+            }
+
+            composable("shoppingDetails/{orderId}") { backStackEntry ->
+                val orderId = backStackEntry.arguments?.getString("orderId")?.toInt() ?: 0
+                MyShoppingDetailsScreen(navController = navController, orderId = orderId)
             }
 
             composable("endShopping") {

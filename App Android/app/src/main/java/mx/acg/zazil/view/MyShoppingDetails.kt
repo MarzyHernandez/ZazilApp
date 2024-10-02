@@ -1,5 +1,6 @@
 package mx.acg.zazil.view
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -7,25 +8,41 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import coil.compose.rememberImagePainter
+import mx.acg.zazil.model.Order
+import mx.acg.zazil.model.Product
+import mx.acg.zazil.model.ProductDetails
+import mx.acg.zazil.viewmodel.OrderViewModel
 
 @Composable
-fun MyShoppingDetailsScreen(navController: NavHostController, modifier: Modifier = Modifier) {
+fun MyShoppingDetailsScreen(
+    navController: NavHostController,
+    orderId: Int,  // Recibe el ID de la orden como parámetro
+    viewModel: OrderViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+) {
+    // Obtenemos la lista de órdenes desde el ViewModel
+    val orders = viewModel.orders.observeAsState(initial = emptyList())
+
+    // Buscamos la orden correspondiente al ID recibido
+    val order = orders.value.find { it.id == orderId }
+
     Column(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
             .padding(16.dp)
             .verticalScroll(rememberScrollState())
     ) {
-
         // Encabezado con título y botón "Regresar"
         Box(
             modifier = Modifier
@@ -41,6 +58,7 @@ fun MyShoppingDetailsScreen(navController: NavHostController, modifier: Modifier
                 color = Color(0xFF191919),
             )
         }
+
         Column {
             // Botón "Regresar"
             TextButton(
@@ -61,91 +79,102 @@ fun MyShoppingDetailsScreen(navController: NavHostController, modifier: Modifier
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Resumen del Pedido
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(8.dp))
-                .background(Color(0xFFF5F5F5))
-                .padding(16.dp)
-        ) {
-            Column {
-                Text(
-                    text = "RESUMEN DEL PEDIDO   #MX3325",
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color(0xFF191919)
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = "FECHA: 02/09/2024",
-                    fontSize = 14.sp,
-                    color = Color.Gray
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text(
-                        text = "ESTATUS:",
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color(0xFF191919)
-                    )
-                    Text(
-                        text = "ENTREGADO",
-                        fontSize = 14.sp,
-                        color = Color(0xFF4CAF50), // Verde
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-                Spacer(modifier = Modifier.height(4.dp))
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text(
-                        text = "TOTAL:",
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color(0xFF191919)
-                    )
-                    Text(
-                        text = "$448.00",
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color(0xFF191919)
-                    )
-                }
-            }
-        }
+        if (order != null) {
+            // Mostrar resumen de la orden
+            OrderSummary(order)
 
-        Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
-        // Lista de Productos
-        Text(
-            text = "2 PRODUCTOS",
-            fontSize = 16.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color(0xFF191919)
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        repeat(2) {
-            ProductDetailCard(
-                productName = "Toalla algodón",
-                quantity = 3,
-                price = 369.00
+            // Lista de productos
+            Text(
+                text = "${order.productos.size} PRODUCTOS",
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color(0xFF191919)
             )
+
             Spacer(modifier = Modifier.height(8.dp))
+
+            // Mostrar cada producto en la orden
+            order.productos.forEach { product ->
+                ProductDetailCard(product)
+                Spacer(modifier = Modifier.height(8.dp))
+            }
+        } else {
+            Text(
+                text = "Orden no encontrada.",
+                fontSize = 18.sp,
+                color = Color.Red,
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            )
         }
     }
 }
 
 @Composable
-fun ProductDetailCard(productName: String, quantity: Int, price: Double) {
+fun OrderSummary(order: Order) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(8.dp))
+            .background(Color(0xFFF5F5F5))
+            .padding(16.dp)
+    ) {
+        Column {
+            Text(
+                text = "RESUMEN DEL PEDIDO   #${order.id}",
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color(0xFF191919)
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = "FECHA: ${order.fecha_pedido.split("T").first()}",
+                fontSize = 14.sp,
+                color = Color.Gray
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = "ESTATUS:",
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color(0xFF191919)
+                )
+                Text(
+                    text = order.estado,
+                    fontSize = 14.sp,
+                    color = Color(0xFF4CAF50), // Verde para entregado
+                    fontWeight = FontWeight.Bold
+                )
+            }
+            Spacer(modifier = Modifier.height(4.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = "TOTAL:",
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color(0xFF191919)
+                )
+                Text(
+                    text = "$${order.monto_total}",
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color(0xFF191919)
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun ProductDetailCard(product: ProductDetails) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -155,26 +184,27 @@ fun ProductDetailCard(productName: String, quantity: Int, price: Double) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         // Imagen del producto
-        Box(
+        Image(
+            painter = rememberImagePainter(data = product.imagen),
+            contentDescription = null,
             modifier = Modifier
                 .size(70.dp)
-                .background(Color.Gray, shape = RoundedCornerShape(8.dp))
-        ) {
-            // Aquí puedes poner la imagen del producto
-        }
+                .clip(RoundedCornerShape(8.dp)),
+            contentScale = ContentScale.Crop
+        )
 
         Spacer(modifier = Modifier.width(16.dp))
 
         // Detalles del producto
         Column(modifier = Modifier.weight(1f)) {
             Text(
-                text = productName,
+                text = product.nombre,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color(0xFFE17F61)
             )
             Text(
-                text = "Cantidad: $quantity",
+                text = "Cantidad: ${product.cantidad}",
                 fontSize = 14.sp,
                 color = Color(0xFF191919)
             )
@@ -191,7 +221,7 @@ fun ProductDetailCard(productName: String, quantity: Int, price: Double) {
                 fontWeight = FontWeight.Bold
             )
             Text(
-                text = "$$price",
+                text = "$${product.precio}",
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color(0xFF191919)
@@ -199,5 +229,3 @@ fun ProductDetailCard(productName: String, quantity: Int, price: Double) {
         }
     }
 }
-
-

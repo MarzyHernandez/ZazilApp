@@ -3,6 +3,7 @@ package mx.acg.zazil.model
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
+import mx.acg.zazil.model.ShoppingHistory
 
 /**
  * Interfaz de API para interactuar con el historial de compras usando Retrofit.
@@ -13,10 +14,8 @@ import retrofit2.http.Query
  *
  * @author Melissa Mireles Rendón
  */
-interface   ShoppingHistoryApi {
-    // Método para obtener el historial de compras de un usuario específico mediante su UID.
+interface ShoppingHistoryApi {
     @GET("/")
-    suspend fun getShoppingHistory(
-        @Query("uid") uid: String
-    ): Response<List<ShoppingHistory>>
+    suspend fun getShoppingHistoryByUid(@Query("uid") uid: String): Response<List<ShoppingHistory>>
 }
+
