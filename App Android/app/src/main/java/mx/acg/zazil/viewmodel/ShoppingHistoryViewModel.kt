@@ -1,4 +1,4 @@
-package mx.acg.zazil.viewmodel
+/**package mx.acg.zazil.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
@@ -52,3 +52,4 @@ class ShoppingHistoryViewModel(private val repository: ShoppingHistoryRepository
         }
     }
 }
+ **/
