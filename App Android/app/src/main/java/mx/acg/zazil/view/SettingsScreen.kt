@@ -77,7 +77,7 @@ fun SettingsScreen(navController: NavHostController, modifier: Modifier = Modifi
                 modifier = Modifier.padding(vertical = 8.dp)
             )
 
-            SettingOption(title = "Cambiar Contraseña", iconResId = R.drawable.ic_password)
+            SettingOption(title = "Cambiar Contraseña", iconResId = R.drawable.ic_password )
             SettingOption(title = "Actualizar Datos", iconResId = R.drawable.ic_edit)
             SettingOption(title = "Eliminar Cuenta", iconResId = R.drawable.ic_delete)
 
