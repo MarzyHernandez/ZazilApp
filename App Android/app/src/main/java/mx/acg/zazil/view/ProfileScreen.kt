@@ -24,6 +24,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberImagePainter
+import com.google.firebase.auth.FirebaseAuth
 import mx.acg.zazil.R
 import mx.acg.zazil.view.NavBar
 import mx.acg.zazil.view.ProfileForm
@@ -106,7 +107,12 @@ fun ProfileScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             Button(
-                onClick = { navController.navigate("myShopping") },
+                onClick = {
+                    // Obtén el usuario actual desde FirebaseAuth
+                    val currentUser = FirebaseAuth.getInstance().currentUser
+                    val uid = currentUser?.uid ?: ""
+                    // Navega a MyShoppingScreen con el UID del usuario
+                    navController.navigate("myShopping/$uid")},
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFEFEEEE)),
                 modifier = Modifier
                     .fillMaxWidth()
