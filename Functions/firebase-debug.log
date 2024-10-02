@@ -1,0 +1,23 @@
+[debug] [2024-10-01T19:40:54.500Z] ----------------------------------------------------------------------
+[debug] [2024-10-01T19:40:54.501Z] Command:       /opt/homebrew/Cellar/node/22.9.0/bin/node /Users/marzyhernandez/.npm-global/bin/firebase functions:secrets:set MAIL_USER
+[debug] [2024-10-01T19:40:54.501Z] CLI Version:   13.19.0
+[debug] [2024-10-01T19:40:54.501Z] Platform:      darwin
+[debug] [2024-10-01T19:40:54.501Z] Node Version:  v22.9.0
+[debug] [2024-10-01T19:40:54.501Z] Time:          Tue Oct 01 2024 13:40:54 GMT-0600 (Central Standard Time)
+[debug] [2024-10-01T19:40:54.501Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2024-10-01T19:40:54.531Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2024-10-01T19:40:54.531Z] > authorizing via signed-in user (zazil.app@gmail.com)
+[debug] [2024-10-01T19:40:54.532Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/zazil-app/services/secretmanager.googleapis.com [none]
+[debug] [2024-10-01T19:40:54.532Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/zazil-app/services/secretmanager.googleapis.com x-goog-quota-user=projects/zazil-app
+[debug] [2024-10-01T19:40:54.997Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/zazil-app/services/secretmanager.googleapis.com 200
+[debug] [2024-10-01T19:40:54.997Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/zazil-app/services/secretmanager.googleapis.com [omitted]
+[debug] [2024-10-01T19:40:54.998Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2024-10-01T19:40:54.998Z] > authorizing via signed-in user (zazil.app@gmail.com)
+[debug] [2024-10-01T19:40:54.998Z] [iam] checking project zazil-app for permissions ["firebase.projects.get","secretmanager.secrets.create","secretmanager.secrets.get","secretmanager.secrets.update","secretmanager.versions.add"]
+[debug] [2024-10-01T19:40:54.998Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/zazil-app:testIamPermissions [none]
+[debug] [2024-10-01T19:40:54.998Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/zazil-app:testIamPermissions x-goog-quota-user=projects/zazil-app
+[debug] [2024-10-01T19:40:54.998Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/zazil-app:testIamPermissions {"permissions":["firebase.projects.get","secretmanager.secrets.create","secretmanager.secrets.get","secretmanager.secrets.update","secretmanager.versions.add"]}
+[debug] [2024-10-01T19:40:55.342Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/zazil-app:testIamPermissions 200
+[debug] [2024-10-01T19:40:55.342Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/zazil-app:testIamPermissions {"permissions":["firebase.projects.get","secretmanager.secrets.create","secretmanager.secrets.get","secretmanager.secrets.update","secretmanager.versions.add"]}
+[debug] [2024-10-01T19:40:55.343Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/zazil-app [none]
