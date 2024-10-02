@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -36,6 +37,9 @@ import mx.acg.zazil.view.MyShoppingScreen
 import mx.acg.zazil.view.PaymentScreen
 import mx.acg.zazil.view.ProductDetailScreen
 import mx.acg.zazil.view.RegisterScreen
+import mx.acg.zazil.view.UpdateDataScreen
+import mx.acg.zazil.viewmodel.LoginViewModel
+import mx.acg.zazil.viewmodel.ShoppingHistoryViewModel
 
 
 class MainActivity : ComponentActivity() {
@@ -80,7 +84,7 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.padding(innerPadding)
                     ) {
                         composable("login") {
-                            LoginScreen(navController = navController, signInWithGoogle = ::signInWithGoogle)
+                            LoginScreen(navController = navController, viewModel = LoginViewModel(), signInWithGoogle = ::signInWithGoogle)
                         }
 
                         composable("register") {
@@ -104,12 +108,16 @@ class MainActivity : ComponentActivity() {
                             CatalogScreen(navController = navController)
                         }
 
-                        composable("perfil") {
+                        composable("profile") {
                             ProfileScreen(navController = navController)
                         }
 
                         composable("configuracion") {
                             SettingsScreen(navController = navController)
+                        }
+
+                        composable("update") {
+                            UpdateDataScreen(navController = navController)
                         }
 
                         composable("carrito") {
@@ -127,7 +135,8 @@ class MainActivity : ComponentActivity() {
 
 
                         composable("myShopping") {
-                            MyShoppingScreen(navController = navController)
+                            val shoppingHistoryViewModel: ShoppingHistoryViewModel = viewModel()
+                            MyShoppingScreen(navController = navController, viewModel = shoppingHistoryViewModel)
                         }
 
                         composable("FAQs"){

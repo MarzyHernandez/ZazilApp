@@ -1,12 +1,14 @@
 package mx.acg.zazil.view
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -21,18 +23,21 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.google.firebase.auth.FirebaseAuth
 import mx.acg.zazil.R
-import mx.acg.zazil.model.UserResponse
-import mx.acg.zazil.model.UserService
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
+import mx.acg.zazil.viewmodel.LoginViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 
+/**
+ * Composable para mostrar un campo de entrada de texto simple.
+ *
+ * @param value El valor actual del campo de texto.
+ * @param onValueChange Función que se invoca cuando el valor del campo cambia.
+ * @param label Texto que se muestra como etiqueta dentro del campo.
+ * @param isPassword Indica si el campo es para una contraseña y debe ocultar los caracteres.
+ *
+ * @author Alberto Cebreros González
+ * @author Melissa Mireles Rendón
+ */
 @Composable
 fun SimpleTextInput(
     value: String,
@@ -71,44 +76,30 @@ fun SimpleTextInput(
     )
 }
 
-
+/**
+ * Composable que representa la pantalla de inicio de sesión.
+ *
+ * @param navController Controlador de navegación para moverse entre pantallas.
+ * @param signInWithGoogle Función que maneja la autenticación con Google.
+ *
+ * @author Alberto Cebreros González
+ * @author Melissa Mireles Rendón
+ */
 @Composable
-fun LoginScreen(navController: NavHostController, signInWithGoogle: () -> Unit) {
+fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel = viewModel(), signInWithGoogle: () -> Unit) {
+    // Definir la fuente personalizada
     val gabaritoFontFamily = FontFamily(Font(R.font.gabarito_regular))
 
+    // Variables que almacenan el email y contraseña ingresados por el usuario
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var errorMessage by remember { mutableStateOf<String?>(null) }
-    var userId by remember { mutableStateOf<String?>(null) }  // Variable para mostrar el userId
 
-    // Instancia de FirebaseAuth
-    val auth = FirebaseAuth.getInstance()
-
-    // Función para crear el cliente de Retrofit con interceptor de logging
-    fun createRetrofitClient(): Retrofit {
-        // Crear un interceptor que loguee
-        val logging = HttpLoggingInterceptor { message -> Log.d("HTTP", message) }
-        logging.level = HttpLoggingInterceptor.Level.BODY  // Cambiar a Level.BASIC para menos detalles
-
-        // Crear un cliente OkHttpClient y añadir el interceptor
-        val client = OkHttpClient.Builder()
-            .addInterceptor(logging)
-            .build()
-
-        // Crear la instancia de Retrofit usando el cliente OkHttpClient con logging
-        return Retrofit.Builder()
-            .baseUrl("https://getuidbyemail-dztx2pd2na-uc.a.run.app/")  // URL base
-            .client(client)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-    }
-
-// Crear la instancia del servicio usando el cliente de Retrofit configurado
-    val retrofit = createRetrofitClient()
-
-    val userService = retrofit.create(UserService::class.java)
+    // Observa el ID del usuario y los mensajes de error desde el ViewModel
+    val userId by viewModel.userId.observeAsState()
+    val errorMessage by viewModel.errorMessage.observeAsState()
 
     Box(modifier = Modifier.fillMaxSize()) {
+        // Imagen de logo
         Image(
             painter = painterResource(id = R.drawable.logo),
             contentDescription = "Logo",
@@ -118,12 +109,15 @@ fun LoginScreen(navController: NavHostController, signInWithGoogle: () -> Unit) 
             contentScale = ContentScale.Crop
         )
 
+        // Contenido de la pantalla
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .verticalScroll(rememberScrollState())
                 .padding(24.dp),
             verticalArrangement = Arrangement.Center
         ) {
+            // Mensaje de bienvenida
             Text(
                 text = "¡Hola!",
                 fontSize = 32.sp,
@@ -131,7 +125,6 @@ fun LoginScreen(navController: NavHostController, signInWithGoogle: () -> Unit) 
                 fontFamily = gabaritoFontFamily,
                 color = Color.Black
             )
-
             Text(
                 text = "Te damos la bienvenida a Zazil",
                 fontSize = 16.sp,
@@ -140,8 +133,9 @@ fun LoginScreen(navController: NavHostController, signInWithGoogle: () -> Unit) 
                 modifier = Modifier.padding(top = 8.dp)
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(16.dp)) // Espacio entre el mensaje y el formulario
 
+            // Formulario de inicio de sesión
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -150,7 +144,7 @@ fun LoginScreen(navController: NavHostController, signInWithGoogle: () -> Unit) 
 
                 Text(text = "Completa tus datos", fontSize = 14.sp, color = Color.Black)
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(16.dp)) // Espacio entre el mensaje y el formulario
 
                 // Input de email
                 SimpleTextInput(
@@ -171,6 +165,7 @@ fun LoginScreen(navController: NavHostController, signInWithGoogle: () -> Unit) 
 
                 Spacer(modifier = Modifier.height(16.dp))
 
+                // Enlace para restablecer contraseña
                 Text(
                     text = "Olvidé mi contraseña",
                     color = Color(0xFFE27F61),
@@ -187,67 +182,13 @@ fun LoginScreen(navController: NavHostController, signInWithGoogle: () -> Unit) 
                 // Botón para iniciar sesión
                 Button(
                     onClick = {
-                        // Primero se autentica con Firebase
-                        auth.signInWithEmailAndPassword(email, password)
-                            .addOnCompleteListener { task ->
-                                if (task.isSuccessful) {
-                                    // Autenticación exitosa, proceder con la solicitud GET
-                                    Log.d("LoginScreen", "Autenticación con Firebase exitosa")
-
-                                    // Realizar la solicitud GET con Retrofit para obtener el userId
-                                    val call = userService.getUserIdByEmail(email)
-                                    call.enqueue(object : Callback<UserResponse> {
-                                        override fun onResponse(
-                                            call: Call<UserResponse>,
-                                            response: Response<UserResponse>
-                                        ) {
-                                            if (response.isSuccessful) {
-                                                val user = response.body()
-
-                                                // Imprimir la respuesta completa en el log
-                                                Log.d(
-                                                    "LoginScreen",
-                                                    "Respuesta del servidor: ${response.body()}"
-                                                )
-
-                                                userId = user?.uid
-                                                Log.d("LoginScreen", "UserId: $userId")
-
-                                                // Navegar a la pantalla de catálogo
-                                                navController.navigate("catalog") {
-                                                    popUpTo("login") {
-                                                        inclusive = true
-                                                    } // Limpia el historial de navegación
-                                                }
-
-                                            } else {
-                                                errorMessage = "Error al obtener el user Id"
-                                                Log.d(
-                                                    "LoginScreen",
-                                                    "Error en la respuesta: ${
-                                                        response.errorBody()?.string()
-                                                    }"
-                                                )
-                                            }
-                                        }
-
-                                        override fun onFailure(
-                                            call: Call<UserResponse>,
-                                            t: Throwable
-                                        ) {
-                                            errorMessage = "Error de red: ${t.message}"
-                                        }
-                                    })
-                                } else {
-                                    // Error en la autenticación
-                                    errorMessage =
-                                        "Error en la autenticación: ${task.exception?.message}"
-                                    Log.e(
-                                        "LoginScreen",
-                                        "Error en la autenticación: ${task.exception}"
-                                    )
-                                }
+                        // Llama al método de login en el ViewModel
+                        viewModel.loginWithEmail(email, password) {
+                            // Navegar a la pantalla de catálogo si la autenticación es exitosa
+                            navController.navigate("catalog") {
+                                popUpTo("login") { inclusive = true }
                             }
+                        }
                     },
                     modifier = Modifier.fillMaxWidth(),
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFEBB7A7))
@@ -255,83 +196,72 @@ fun LoginScreen(navController: NavHostController, signInWithGoogle: () -> Unit) 
                     Text(text = "INICIAR SESIÓN")
                 }
 
-                userId?.let {
-                    Text(
-                        text = "User ID: $it",
-                        color = Color.Green,
-                        modifier = Modifier.padding(top = 8.dp)
-                    )
-                }
+                // Muestra el id del usuario o error
+                userId?.let { Text(text = "User ID: $it", color = Color.Green) }
+                errorMessage?.let { Text(text = it, color = Color.Red) }
+            }
 
-                errorMessage?.let {
-                    Text(
-                        text = it,
-                        color = Color.Red,
-                        modifier = Modifier.padding(top = 8.dp)
-                    )
-                }
-
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
+            // Opciones adicionales para crear una cuenta o iniciar sesión con Google
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
+                    Text(
+                        text = "¿No tienes cuenta?",
+                        fontSize = 14.sp,
+                        fontFamily = gabaritoFontFamily
+                    )
+
+                    // Botón para navegar a la pantalla de registro
+                    TextButton(onClick = {navController.navigate("register")} ) {
                         Text(
-                            text = "¿No tienes cuenta?",
+                            text = "Regístrate",
+                            color = Color(0xFFE27F61),
                             fontSize = 14.sp,
                             fontFamily = gabaritoFontFamily
                         )
-
-                        TextButton(onClick = {navController.navigate("register")} ) {
-                            Text(
-                                text = "Regístrate",
-                                color = Color(0xFFE27F61),
-                                fontSize = 14.sp,
-                                fontFamily = gabaritoFontFamily
-                            )
-                        }
                     }
-
-
-                    Spacer(modifier = Modifier.height(8.dp))
-
-                    Text(
-                        text = "o regístrate vía",
-                        fontFamily = gabaritoFontFamily,
-                        fontSize = 14.sp,
-                        color = Color.Black,
-                        modifier = Modifier.align(Alignment.CenterHorizontally) // Centrado
-                    )
                 }
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(8.dp))
 
-                // Botón de registro con Google
-                Button(
-                    onClick = { signInWithGoogle() },
+                Text(
+                    text = "o regístrate vía",
+                    fontFamily = gabaritoFontFamily,
+                    fontSize = 14.sp,
+                    color = Color.Black,
+                    modifier = Modifier.align(Alignment.CenterHorizontally) // Centrado
+                )
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Botón de registro con Google
+            Button(
+                onClick = { signInWithGoogle() },
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFEE1D6))
+            ) {
+                Row(
                     modifier = Modifier.fillMaxWidth(),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFEE1D6))
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(text = "Google", color = Color.Black)
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_google),
-                            contentDescription = "Google Icon",
-                            modifier = Modifier.size(24.dp),
-                            tint = Color.Unspecified
-                        )
-                    }
+                    Text(text = "Google", color = Color.Black)
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_google),
+                        contentDescription = "Google Icon",
+                        modifier = Modifier.size(24.dp),
+                        tint = Color.Unspecified
+                    )
                 }
             }
         }

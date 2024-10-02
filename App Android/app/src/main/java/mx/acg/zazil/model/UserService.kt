@@ -4,15 +4,14 @@ import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-// Definir la interfaz para la API
-interface UserService {
-    @GET("/")
-    fun getUserIdByEmail(
-        @Query("email") email: String
-    ): Call<UserResponse>
-}
-
-// Modelo de respuesta (ajústalo según el JSON de respuesta que recibas)
+/**
+ * Modelo de datos que representa la respuesta de la API cuando se solicita el UID
+ * basado en el correo electrónico del usuario.
+ *
+ * @param uid El UID del usuario retornado por la API.
+ *
+ * @author Alberto Cebreros González
+ */
 data class UserResponse(
     val uid: String
 )

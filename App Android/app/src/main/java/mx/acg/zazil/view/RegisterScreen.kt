@@ -6,6 +6,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -16,22 +17,42 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import mx.acg.zazil.R
+import mx.acg.zazil.model.User
+import mx.acg.zazil.viewmodel.RegisterViewModel
 
+
+/**
+ * Pantalla de registro que permite al usuario introducir sus datos personales, aceptar términos y condiciones,
+ * y realizar el registro en el servidor remoto a través de Retrofit.
+ *
+ * @param navController Controlador de navegación para cambiar entre pantallas.
+ * @author Melissa Mireles Rendón
+ */
 @Composable
 fun RegisterScreen(navController: NavHostController) {
     val gabaritoFontFamily = FontFamily(Font(R.font.gabarito_regular))
 
-    // Declaramos las variables para cada input del registro
+    // Variables para almacenar los datos de entrada del usuario
     var nombre by remember { mutableStateOf("") }
     var apellido by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
+    var telefono by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var errorMessage by remember { mutableStateOf<String?>(null) }
+    var termsAccepted by remember { mutableStateOf(false) }  // Estado del checkbox de términos y condiciones
+    var errorMessage by remember { mutableStateOf<String?>(null) }  // Estado del checkbox de términos y condiciones
 
-    Box(modifier = Modifier
-        .fillMaxSize()) {
+    // Alcance de las coroutines
+    val coroutineScope = rememberCoroutineScope()
+
+    val viewModel: RegisterViewModel = viewModel()
+
+    val registerResult by viewModel.registerResult.observeAsState()
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        // Imagen del logo en la parte superior derecha
         Image(
             painter = painterResource(id = R.drawable.logo),
             contentDescription = "Logo",
@@ -41,6 +62,7 @@ fun RegisterScreen(navController: NavHostController) {
             contentScale = ContentScale.Crop
         )
 
+        // Columna que contiene el formulario de registro
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -48,6 +70,7 @@ fun RegisterScreen(navController: NavHostController) {
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.Center
         ) {
+            // Título de la pantalla
             Text(
                 text = "Regístrate",
                 fontSize = 32.sp,
@@ -55,7 +78,7 @@ fun RegisterScreen(navController: NavHostController) {
                 fontFamily = gabaritoFontFamily,
                 color = Color.Black
             )
-
+            // Mensaje de bienvenida
             Text(
                 text = "Te damos la bienvenida a Zazil",
                 fontSize = 16.sp,
@@ -64,8 +87,9 @@ fun RegisterScreen(navController: NavHostController) {
                 modifier = Modifier.padding(top = 8.dp)
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(16.dp)) // Espacio entre el título y el formulario
 
+            // Formulario de registro
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -105,6 +129,15 @@ fun RegisterScreen(navController: NavHostController) {
 
                 Spacer(modifier = Modifier.height(16.dp))
 
+                // Input de Teléfono
+                SimpleTextInput(
+                    value = telefono,
+                    onValueChange = { telefono = it },
+                    label = "Teléfono"
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
                 // Input de Contraseña
                 SimpleTextInput(
                     value = password,
@@ -116,7 +149,6 @@ fun RegisterScreen(navController: NavHostController) {
                 Spacer(modifier = Modifier.height(16.dp))
 
                 // Checkbox para aceptar términos y condiciones
-                var termsAccepted by remember { mutableStateOf(false) }
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Checkbox(
                         checked = termsAccepted,
@@ -128,7 +160,7 @@ fun RegisterScreen(navController: NavHostController) {
                         fontSize = 14.sp,
                         color = Color.Black)
 
-                    TextButton(onClick = { /* Acción para ir al login */ }) {
+                    TextButton(onClick = { /* Acción para ver términos y condiciones */ }) {
                         Text(
                             text = "términos y condiciones",
                             color = Color(0xFFE27F61),
@@ -144,7 +176,14 @@ fun RegisterScreen(navController: NavHostController) {
                 Button(
                     onClick = {
                         if (termsAccepted) {
-                            // Lógica para registrar al usuario
+                            val user = User(
+                                email = email,
+                                password = password,
+                                nombres = nombre,
+                                apellidos = apellido,
+                                telefono = telefono
+                            )
+                            viewModel.registerUser(user)
                         } else {
                             errorMessage = "Debes aceptar los términos y condiciones"
                         }
@@ -154,9 +193,19 @@ fun RegisterScreen(navController: NavHostController) {
                 ) {
                     Text(
                         text = "REGISTRAR",
-                        color = Color.Black,)
+                        color = Color.Black
+                    )
                 }
 
+                registerResult?.let {
+                    Text(
+                        text = it,
+                        color = if (it.contains("exitoso")) Color.Green else Color.Red,
+                        modifier = Modifier.padding(top = 8.dp)
+                    )
+                }
+
+                // Mostrar el mensaje de error si aplica
                 errorMessage?.let {
                     Text(
                         text = it,

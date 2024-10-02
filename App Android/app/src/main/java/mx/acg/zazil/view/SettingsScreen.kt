@@ -75,9 +75,23 @@ fun SettingsScreen(navController: NavHostController, modifier: Modifier = Modifi
                 modifier = Modifier.padding(vertical = 8.dp)
             )
 
-            SettingOption(title = "Cambiar Contraseña", iconResId = R.drawable.ic_password)
-            SettingOption(title = "Actualizar Datos", iconResId = R.drawable.ic_edit)
-            SettingOption(title = "Eliminar Cuenta", iconResId = R.drawable.ic_delete)
+            SettingOption(
+                title = "Cambiar Contraseña",
+                iconResId = R.drawable.ic_password,
+                onClick = { /* Acción para cambiar contraseña */ }
+            )
+            SettingOption(
+                title = "Actualizar Datos",
+                iconResId = R.drawable.ic_edit,
+                onClick = {
+                    navController.navigate("update")  // Navegar a la pantalla de actualización
+                }
+            )
+            SettingOption(
+                title = "Eliminar Cuenta",
+                iconResId = R.drawable.ic_delete,
+                onClick = { /* Acción para eliminar cuenta */ }
+            )
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -89,10 +103,26 @@ fun SettingsScreen(navController: NavHostController, modifier: Modifier = Modifi
                 modifier = Modifier.padding(vertical = 8.dp)
             )
 
-            SettingOption(title = "Sobre Nosotros", iconResId = R.drawable.ic_about)
-            SettingOption(title = "Términos y Condiciones", iconResId = R.drawable.ic_terms)
-            SettingOption(title = "Aviso de Privacidad", iconResId = R.drawable.ic_privacy)
-            SettingOption(title = "Créditos", iconResId = R.drawable.ic_credits)
+            SettingOption(
+                title = "Sobre Nosotros",
+                iconResId = R.drawable.ic_about,
+                onClick = { /* Acción para mostrar información */ }
+            )
+            SettingOption(
+                title = "Términos y Condiciones",
+                iconResId = R.drawable.ic_terms,
+                onClick = { /* Acción para mostrar términos */ }
+            )
+            SettingOption(
+                title = "Aviso de Privacidad",
+                iconResId = R.drawable.ic_privacy,
+                onClick = { /* Acción para mostrar aviso de privacidad */ }
+            )
+            SettingOption(
+                title = "Créditos",
+                iconResId = R.drawable.ic_credits,
+                onClick = { /* Acción para mostrar créditos */ }
+            )
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -121,14 +151,15 @@ fun SettingsScreen(navController: NavHostController, modifier: Modifier = Modifi
 }
 
 @Composable
-fun SettingOption(title: String, iconResId: Int) {
+fun SettingOption(title: String, iconResId: Int, onClick: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp)
             .clip(RoundedCornerShape(8.dp))
             .background(Color.White)
-            .padding(16.dp),
+            .padding(16.dp)
+            .clickable { onClick() },
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
