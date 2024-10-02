@@ -1,6 +1,6 @@
 package mx.acg.zazil.model
 
-import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -24,14 +24,20 @@ data class ShoppingHistory(
 )
 
 /**
- * Interfaz de servicio para interactuar con el historial de compras usando Retrofit.
- * Define los endpoints para obtener los pedidos de un usuario.
+ * Repositorio para manejar la lógica relacionada con el historial de compras.
  *
- * @param uid El ID de usuario (UID) para el cual se desea obtener el historial de compras.
- * @return Un objeto Call que contiene una lista de objetos ShoppingHistory con los detalles de cada pedido.
+ * Este repositorio se encarga de interactuar con la API [ShoppingHistoryApi] para obtener los
+ * datos del historial de compras del usuario. Sirve como una capa intermedia entre el ViewModel
+ * y la API, manejando las llamadas a la red y procesando la respuesta de la API.
+ *
+ * @param api Instancia de [ShoppingHistoryApi] utilizada para hacer las llamadas a la API.
+ *
+ * @author
  */
-interface ShoppingService {
-    // Método para obtener la lista de pedidos asociados a un usuario mediante su UID
-    @GET("/")
-    fun getOrdersByUid(@Query("uid") uid: String): Call<List<ShoppingHistory>>
+class ShoppingHistoryRepository(private val api: ShoppingHistoryApi) {
+    // Obtiene el historial de compras de un usuario específico.
+    suspend fun getShoppingHistory(uid: String): List<ShoppingHistory>? {
+        val response = api.getShoppingHistory(uid)
+        return if (response.isSuccessful) response.body() else null
+    }
 }
