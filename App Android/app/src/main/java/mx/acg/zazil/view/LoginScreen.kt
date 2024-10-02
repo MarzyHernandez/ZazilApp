@@ -246,7 +246,7 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel = vi
 
             // Botón de registro con Google
             Button(
-                onClick = { signInWithGoogle() },
+                onClick = { signInWithGoogle() },  // Aquí se llama a la función pasada por parámetro
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFEE1D6))
             ) {
@@ -264,6 +264,7 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel = vi
                     )
                 }
             }
+
         }
     }
 }
