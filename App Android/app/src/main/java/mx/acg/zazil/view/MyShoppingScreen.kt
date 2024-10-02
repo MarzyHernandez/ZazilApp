@@ -21,12 +21,11 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import mx.acg.zazil.R
 import mx.acg.zazil.model.ShoppingHistory
-import mx.acg.zazil.viewmodel.ShoppingHistoryViewModel
 
 @Composable
-fun MyShoppingScreen(navController: NavHostController, viewModel: ShoppingHistoryViewModel, modifier: Modifier = Modifier) {
-    val shoppingHistory by viewModel.shoppingHistory.observeAsState(initial = emptyList())
-    val errorMessage by viewModel.errorMessage.observeAsState()
+fun MyShoppingScreen(navController: NavHostController, modifier: Modifier = Modifier) {
+    //val shoppingHistory by viewModel.shoppingHistory.observeAsState(initial = emptyList())
+    //val errorMessage by viewModel.errorMessage.observeAsState()
 
     Column(
         modifier = modifier
@@ -68,20 +67,6 @@ fun MyShoppingScreen(navController: NavHostController, viewModel: ShoppingHistor
                 color = Color.Gray,
                 fontWeight = FontWeight.Bold
             )
-        }
-
-        // Muestra un mensaje de error si lo hay
-        if (errorMessage != null) {
-            Text(
-                text = errorMessage ?: "",
-                color = Color.Red
-            )
-        } else {
-            // Renderiza cada pedido si no hay errores
-            shoppingHistory.forEach { order ->
-                OrderItemRow(order = order, navController = navController)
-                Spacer(modifier = Modifier.height(16.dp))
-            }
         }
     }
 }

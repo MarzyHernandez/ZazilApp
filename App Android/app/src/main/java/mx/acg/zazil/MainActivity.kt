@@ -39,7 +39,6 @@ import mx.acg.zazil.view.ProductDetailScreen
 import mx.acg.zazil.view.RegisterScreen
 import mx.acg.zazil.view.UpdateDataScreen
 import mx.acg.zazil.viewmodel.LoginViewModel
-import mx.acg.zazil.viewmodel.ShoppingHistoryViewModel
 
 
 class MainActivity : ComponentActivity() {
@@ -134,10 +133,10 @@ class MainActivity : ComponentActivity() {
                         }
 
 
-                        composable("myShopping") {
-                            val shoppingHistoryViewModel: ShoppingHistoryViewModel = viewModel()
-                            MyShoppingScreen(navController = navController, viewModel = shoppingHistoryViewModel)
-                        }
+                        //composable("myShopping") {
+                        //    val shoppingHistoryViewModel: ShoppingHistoryViewModel = viewModel()
+                        //    MyShoppingScreen(navController = navController, viewModel = shoppingHistoryViewModel)
+                        //}
 
                         composable("FAQs"){
                             FAQs(navController = navController)
