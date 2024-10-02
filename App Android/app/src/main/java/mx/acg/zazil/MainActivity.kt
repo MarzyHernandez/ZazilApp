@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.navigation.compose.rememberNavController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -37,9 +38,14 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             ZazilTheme {
-                AppNavHost(auth)
+                val navController = rememberNavController()
+                AppNavHost(
+                    auth = auth,
+                    signInWithGoogle = { signInWithGoogle() }  // Pasar la función al NavHost
+                )
             }
         }
+
     }
 
 

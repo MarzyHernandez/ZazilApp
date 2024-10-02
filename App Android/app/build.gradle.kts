@@ -1,9 +1,10 @@
 plugins {
-    id("com.google.gms.google-services")
-
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.jetbrains.kotlin.serialization)  // Asegúrate de que el plugin de serialización esté aquí
+    id("com.google.gms.google-services")  // Esto ya está correcto
 }
+
 
 android {
     namespace = "mx.acg.zazil"
@@ -59,6 +60,8 @@ dependencies {
     implementation ("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.2")
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
+
 
 
     implementation(libs.coil)

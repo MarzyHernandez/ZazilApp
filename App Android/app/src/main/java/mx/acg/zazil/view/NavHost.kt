@@ -6,6 +6,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -14,7 +15,10 @@ import com.google.firebase.auth.FirebaseAuth
 import mx.acg.zazil.view.*
 
 @Composable
-fun AppNavHost(auth: FirebaseAuth) {
+fun AppNavHost(
+    auth: FirebaseAuth,
+    signInWithGoogle: () -> Unit,  // Aceptar la función como parámetro
+) {
     val navController = rememberNavController()
     val currentBackStackEntry = navController.currentBackStackEntryAsState()
 
@@ -60,8 +64,16 @@ fun AppNavHost(auth: FirebaseAuth) {
             }
 
             composable("profile") {
-                ProfileScreen(navController = navController)
+                val currentUser = auth.currentUser
+                val uid = currentUser?.uid
+
+                if (uid != null) {
+                    ProfileScreen(navController = navController, uid = uid)
+                } else {
+                    Text("No has iniciado sesión")
+                }
             }
+
 
             composable("configuracion") {
                 SettingsScreen(navController = navController)

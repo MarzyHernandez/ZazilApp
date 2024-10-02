@@ -1,5 +1,7 @@
 package mx.acg.zazil.view
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -16,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -104,10 +107,10 @@ fun SettingsScreen(navController: NavHostController, modifier: Modifier = Modifi
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                SocialMediaIcon(R.drawable.ic_facebook)
-                SocialMediaIcon(R.drawable.ic_instagram)
-                SocialMediaIcon(R.drawable.ic_tiktok)
-                SocialMediaIcon(R.drawable.ic_web)
+                SocialMediaIcon(R.drawable.ic_facebook, "https://www.facebook.com/share/mjfnrxUW55mwTEXk/?mibextid=LQQJ4d")
+                SocialMediaIcon(R.drawable.ic_instagram, "https://www.instagram.com/toallas.zazil?igsh=MTdtaXRmeXk3MWxqMw==")
+                SocialMediaIcon(R.drawable.ic_tiktok, "https://www.tiktok.com/@todas.brillamos?_t=8qDNNVLY1kz&_r=1")
+                SocialMediaIcon(R.drawable.ic_web, "https://zazilrrr.org/catalogo/zazil/index.php#")
             }
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -147,8 +150,12 @@ fun SettingOption(title: String, iconResId: Int, onClick: () -> Unit = {}) {
 }
 
 @Composable
-fun SocialMediaIcon(iconResId: Int) {
-    IconButton(onClick = { /* Acción para red social */ }) {
+fun SocialMediaIcon(iconResId: Int, url: String) {
+    val context = LocalContext.current
+    IconButton(onClick = {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        context.startActivity(intent)
+    }) {
         Box(
             modifier = Modifier
                 .size(50.dp) // Ajusta el tamaño de la caja para los íconos
@@ -156,13 +163,12 @@ fun SocialMediaIcon(iconResId: Int) {
                 .background(Color(0xFFEBB7A7))
         ) {
             Image(
-                painter = painterResource(id = iconResId), // Reemplaza con tu recurso
+                painter = painterResource(id = iconResId),
                 contentDescription = null,
                 modifier = Modifier
-                    .size(50.dp)  // Tamaño de la imagen
-                    .clip(CircleShape)  // Si quieres mantener la forma circular
+                    .size(50.dp)
+                    .clip(CircleShape)
             )
-
         }
     }
 }
