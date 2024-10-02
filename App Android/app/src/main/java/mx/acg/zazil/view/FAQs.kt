@@ -23,58 +23,22 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import mx.acg.zazil.R
+import mx.acg.zazil.model.FAQItem
+import mx.acg.zazil.model.FAQService
+import mx.acg.zazil.viewmodel.FAQViewModel
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.http.GET
 
-// Retrofit interface para obtener los datos
-interface FAQService {
-    @GET("/")
-    fun getAllFAQs(): Call<List<FAQItem>>
-}
 
-// Data class para representar los datos obtenidos
-data class FAQItem(
-    val id: Int,
-    val pregunta: String,
-    val respuesta: String
-)
+
+
 val gabaritoFontFamily = FontFamily(Font(R.font.gabarito_regular))
 
 
-// ViewModel para manejar la lógica de obtención de datos
-class FAQViewModel : ViewModel() {
-    private val _faqItems = mutableStateOf<List<FAQItem>>(emptyList())
-    val faqItems: State<List<FAQItem>> = _faqItems
 
-    init {
-        fetchFAQs()
-    }
-
-    private fun fetchFAQs() {
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://getallfaq-dztx2pd2na-uc.a.run.app/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
-        val service = retrofit.create(FAQService::class.java)
-        service.getAllFAQs().enqueue(object : Callback<List<FAQItem>> {
-            override fun onResponse(call: Call<List<FAQItem>>, response: Response<List<FAQItem>>) {
-                if (response.isSuccessful) {
-                    _faqItems.value = response.body() ?: emptyList()
-                }
-            }
-
-            override fun onFailure(call: Call<List<FAQItem>>, t: Throwable) {
-                // Manejo de errores
-                t.printStackTrace()
-            }
-        })
-    }
-}
 
 @Composable
 fun FAQs(navController: NavHostController, modifier: Modifier = Modifier, faqViewModel: FAQViewModel = viewModel()) {
