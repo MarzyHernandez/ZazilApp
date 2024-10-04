@@ -25,6 +25,7 @@ data class User(
  * @param message Un mensaje de respuesta del servidor (puede ser éxito o error).
  */
 data class RegisterResponse(
+    val success: Boolean,
     val message: String
 )
 

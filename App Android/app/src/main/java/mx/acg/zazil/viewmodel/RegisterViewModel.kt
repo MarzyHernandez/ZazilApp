@@ -1,8 +1,6 @@
 package mx.acg.zazil.viewmodel
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.launch
 import mx.acg.zazil.model.RegisterApi
 import mx.acg.zazil.model.User
 import retrofit2.Retrofit
@@ -11,6 +9,11 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.LiveData
+import mx.acg.zazil.model.RegisterResponse
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+
 
 /**
  * Crea un cliente de Retrofit configurado con un interceptor de logging para depuración.
@@ -44,17 +47,22 @@ class RegisterViewModel : ViewModel() {
      * @param user Datos del usuario a registrar.
      */
     fun registerUser(user: User) {
-        viewModelScope.launch {
-            try {
-                val response = registerApi.registerUser(user).execute()
-                if (response.isSuccessful) {
+        registerApi.registerUser(user).enqueue(object : Callback<RegisterResponse> {
+            override fun onResponse(
+                call: Call<RegisterResponse>,
+                response: Response<RegisterResponse>
+            ) {
+                if (response.isSuccessful && response.body()?.success == true) {
                     _registerResult.value = "Registro exitoso"
                 } else {
-                    _registerResult.value = "Error en el registro: ${response.message()}"
+                    _registerResult.value =
+                        "Error en el registro: ${response.body()?.message ?: response.message()}"
                 }
-            } catch (e: Exception) {
-                _registerResult.value = "Error de red: ${e.message}"
             }
-        }
+
+            override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
+                _registerResult.value = "Error de red: ${t.message}"
+            }
+        })
     }
 }
