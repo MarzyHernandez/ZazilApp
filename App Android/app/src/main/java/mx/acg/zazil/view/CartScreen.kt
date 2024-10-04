@@ -306,7 +306,16 @@ fun CartTotal(navController: NavHostController, total: Double) {
             }
 
             Button(
-                onClick = { navController.navigate("endShopping") },
+                onClick = {
+                    val calle = ""  // Puedes reemplazar estos valores por los reales cuando se obtengan
+                    val numeroInterior = ""
+                    val colonia = ""
+                    val codigoPostal = ""
+                    val ciudad = ""
+                    val estado = ""
+                    val pais = ""
+                    navController.navigate("endShopping/$total/$calle/$numeroInterior/$colonia/$codigoPostal/$ciudad/$estado/$pais")
+                },
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFE17F61)),
                 shape = RoundedCornerShape(10.dp),
                 modifier = Modifier
@@ -316,7 +325,6 @@ fun CartTotal(navController: NavHostController, total: Double) {
                 Text(text = "CONTINUAR",
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
-                    fontFamily = gabaritoFontFamily,
                     color = Color.White)
             }
         }

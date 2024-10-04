@@ -12,7 +12,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.ui.Alignment
@@ -24,11 +23,28 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import mx.acg.zazil.R
+import mx.acg.zazil.model.MakeOrder
+import mx.acg.zazil.viewmodel.MakeOrderViewModel
+
+import android.util.Log
+import com.google.firebase.auth.FirebaseAuth
 
 @Composable
-fun PaymentScreen(navController: NavHostController, modifier: Modifier = Modifier) {
+fun PaymentScreen(
+    navController: NavHostController,
+    total: String,
+    calle: String,
+    numeroInterior: String,
+    colonia: String,
+    codigoPostal: String,
+    ciudad: String,
+    estado: String,
+    pais: String,
+    modifier: Modifier = Modifier,
+    makeOrderViewModel: MakeOrderViewModel = viewModel() // Inyectamos el ViewModel
+) {
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -55,58 +71,7 @@ fun PaymentScreen(navController: NavHostController, modifier: Modifier = Modifie
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Sección de Envío y Pago
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            // Texto de "ENVÍO" con el mismo peso que "PAGO"
-            TextButton(
-                onClick = { navController.navigate("endShopping") },
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(end = 8.dp) // Asegura el mismo padding
-            ) {
-                Text(
-                    text = "ENVÍO",
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color(0xFF999999), // Texto gris
-                    modifier = Modifier.fillMaxWidth(),
-                    textAlign = TextAlign.Center // Centro el texto
-                )
-            }
-
-            // Divider separado
-            Divider(
-                modifier = Modifier
-                    .width(1.dp)
-                    .height(20.dp),
-                color = Color.Gray
-            )
-
-            // Texto de "PAGO" con el mismo peso que "ENVÍO"
-            TextButton(
-                onClick = { navController.navigate("payment") },
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(start = 8.dp) // Asegura el mismo padding
-            ) {
-                Text(
-                    text = "PAGO",
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color(0xFFE17F61), // Texto resaltado
-                    modifier = Modifier.fillMaxWidth(),
-                    textAlign = TextAlign.Center // Centro el texto
-                )
-            }
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Dirección de envío
+        // Mostrar los datos de envío
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -124,29 +89,31 @@ fun PaymentScreen(navController: NavHostController, modifier: Modifier = Modifie
 
                 Spacer(modifier = Modifier.height(8.dp))
 
+                // Mostrar los datos del cliente
                 Text(
-                    text = "MARIANA HERNÁNDEZ 55 8895 1362",
+                    text = "$calle, $numeroInterior, $colonia, $codigoPostal, $ciudad, $estado, $pais",
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
-                    color = Color(0xFF191919)
-                )
-                Text(
-                    text = "Av. Paseo de la Reforma 222, Piso 5,\nJuárez, Cuauhtémoc, 06600, Ciudad de México",
-                    fontSize = 14.sp,
                     color = Color(0xFF191919)
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
 
+                // Botón para editar los datos
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
                 ) {
                     TextButton(
-                        onClick = { navController.navigate("endShopping") }, // Aquí navega a la pantalla de envío
+                        onClick = {
+                            Log.d("PaymentScreen", "Navegando a la pantalla de edición")
+                            navController.navigate(
+                                "endShopping/$total/$calle/$numeroInterior/$colonia/$codigoPostal/$ciudad/$estado/$pais"
+                            )
+                        },
                         modifier = Modifier
-                            .align(Alignment.BottomEnd) // Alinear a la derecha
-                            .padding(end = 2.dp) // Reducir padding para pegar el texto
+                            .align(Alignment.BottomEnd)
+                            .padding(end = 2.dp)
                     ) {
                         Text(
                             text = "EDITAR",
@@ -161,35 +128,7 @@ fun PaymentScreen(navController: NavHostController, modifier: Modifier = Modifie
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Métodos de pago
-        Column(modifier = Modifier.fillMaxWidth()) {
-            Text(
-                text = "ELIGE TU MÉTODO DE PAGO",
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.Gray
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            PaymentMethodOption(
-                methodName = "PAYPAL",
-                description = "Compra en línea con tu cuenta.",
-                iconRes = R.drawable.ic_paypal // Reemplaza con tu recurso de PayPal
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            PaymentMethodOption(
-                methodName = "TARJETAS DE CRÉDITO O DÉBITO",
-                description = "Visa, Mastercard",
-                iconRes = R.drawable.ic_credit_card // Reemplaza con tu recurso de tarjeta de crédito
-            )
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Total del pedido
+        // Mostrar el total del pedido
         Column(
             modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.End
@@ -202,7 +141,7 @@ fun PaymentScreen(navController: NavHostController, modifier: Modifier = Modifie
             )
 
             Text(
-                text = "$486.00",
+                text = "$$total",
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color(0xFF191919)
@@ -213,7 +152,36 @@ fun PaymentScreen(navController: NavHostController, modifier: Modifier = Modifie
 
         // Botón de finalizar compra
         Button(
-            onClick = { /* Acción para finalizar compra */ },
+            onClick = {
+                Log.d("PaymentScreen", "Finalizando compra...")
+
+                // Obtener el uid directamente desde Firebase
+                val currentUser = FirebaseAuth.getInstance().currentUser
+                val uid = currentUser?.uid
+
+                if (uid != null) {
+                    // Crear objeto MakeOrder con los datos
+                    val makeOrder = MakeOrder(
+                        uid = uid,
+                        codigo_postal = codigoPostal.toInt(),
+                        estado = estado,
+                        ciudad = ciudad,
+                        calle = calle,
+                        numero_interior = numeroInterior,
+                        pais = pais,
+                        colonia = colonia
+                    )
+
+                    Log.d("PaymentScreen", "MakeOrder creado: $makeOrder")
+
+                    // Llamar a la API para hacer el pedido
+                    makeOrderViewModel.makeOrder(makeOrder)
+
+                    Log.d("PaymentScreen", "Solicitud de orden enviada")
+                } else {
+                    Log.e("PaymentScreen", "Error: Usuario no autenticado, uid es null.")
+                }
+            },
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFE17F61)),
             modifier = Modifier
                 .fillMaxWidth()
@@ -270,4 +238,3 @@ fun PaymentMethodOption(methodName: String, description: String, iconRes: Int) {
         }
     }
 }
-
