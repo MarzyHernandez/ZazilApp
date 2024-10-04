@@ -22,7 +22,7 @@ class MainActivity : ComponentActivity() {
     private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState) // Esto es correcto, así que mantenlo así.
+        super.onCreate(savedInstanceState)
 
         // Inicializar Firebase
         FirebaseApp.initializeApp(this)
@@ -30,7 +30,7 @@ class MainActivity : ComponentActivity() {
 
         // Configurar Google Sign-In
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken("your-google-id-token")
+            .requestIdToken("3024441242-in4h94s1di0nh0tqppmg4fj9nah9ri6j.apps.googleusercontent.com")
             .requestEmail()
             .build()
 
@@ -41,21 +41,21 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 AppNavHost(
                     auth = auth,
-                    signInWithGoogle = { signInWithGoogle() }  // Pasar la función al NavHost
+                    signInWithGoogle = { signInWithGoogle() }  // Pasar la función
                 )
             }
         }
-
     }
-
 
     // Iniciar el flujo de Google Sign-In
     private fun signInWithGoogle() {
         val signInIntent = googleSignInClient.signInIntent
         startActivityForResult(signInIntent, RC_SIGN_IN)
+        // Añade un log aquí para verificar que se llamó al método
+        println("SignIn with Google flow started")
     }
 
-    // Resultado de Google Sign-In
+    // Manejo del resultado de Google Sign-In
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -63,13 +63,16 @@ class MainActivity : ComponentActivity() {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             try {
                 val account = task.getResult(ApiException::class.java)
+                println("SignIn result received, account: $account")
                 account?.idToken?.let { firebaseAuthWithGoogle(it) }
             } catch (e: ApiException) {
-                // Manejo del error si el inicio de sesión con Google falla
                 e.printStackTrace()
+                // Añade un log para verificar si hubo algún error en el proceso
+                println("Google Sign-In failed: ${e.message}")
             }
         }
     }
+
 
     // Autenticar con Firebase usando el token de Google
     private fun firebaseAuthWithGoogle(idToken: String) {
@@ -80,7 +83,7 @@ class MainActivity : ComponentActivity() {
                     // El inicio de sesión fue exitoso
                     println("Inicio de sesión exitoso con Google")
                 } else {
-                    // Error en la autenticación
+                    // Manejo de error en la autenticación
                     println("Error en la autenticación con Google: ${task.exception}")
                 }
             }
@@ -90,3 +93,4 @@ class MainActivity : ComponentActivity() {
         private const val RC_SIGN_IN = 9001
     }
 }
+
