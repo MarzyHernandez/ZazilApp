@@ -27,7 +27,6 @@ import androidx.navigation.NavHostController
 import mx.acg.zazil.R
 import mx.acg.zazil.viewmodel.LoginViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.google.firebase.auth.FirebaseAuth
 
 /**
  * Composable para mostrar un campo de entrada de texto simple.
@@ -89,22 +88,12 @@ fun SimpleTextInput(
  */
 @Composable
 fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel = viewModel(), signInWithGoogle: () -> Unit) {
-
-    val user = FirebaseAuth.getInstance().currentUser
-
-    // Simulamos que el usuario se ha logueado correctamente
-    if (user != null) {
-        val uid = user.uid
-        Log.d("LoginScreen", "UID encontrado en LoginScreen: $uid")
-    }
-
     // Definir la fuente personalizada
     val gabaritoFontFamily = FontFamily(Font(R.font.gabarito_regular))
 
     // Variables que almacenan el email y contraseña ingresados por el usuario
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var uid by remember { mutableStateOf<String?>(null) }
 
     // Observa el ID del usuario y los mensajes de error desde el ViewModel
     val userId by viewModel.userId.observeAsState()
@@ -195,12 +184,20 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel = vi
                 Button(
                     onClick = {
                         // Llama al método de login en el ViewModel
-                        viewModel.loginWithEmail(email, password) {
-                            // Navegar a la pantalla de catálogo si la autenticación es exitosa
-                            navController.navigate("catalog/$uid") {
-                                popUpTo("login") { inclusive = true }
+                        viewModel.loginWithEmail(
+                            email = email,
+                            password = password,
+                            onSuccess = {
+                                // Navegar a la pantalla de catálogo si la autenticación es exitosa
+                                navController.navigate("catalog") {
+                                    popUpTo("login") { inclusive = true }
+                                }
+                            },
+                            onFailure = { errorMessage ->
+                                // Maneja el error aquí (puedes mostrar un mensaje o manejar de otra manera)
+                                Log.e("Login", "Error en la autenticación: $errorMessage")
                             }
-                        }
+                        )
                     },
                     modifier = Modifier.fillMaxWidth(),
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFEBB7A7))
