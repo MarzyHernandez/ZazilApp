@@ -67,7 +67,6 @@ fun MyShoppingDetailsScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
-            .padding(16.dp)
             .verticalScroll(rememberScrollState())
     ) {
 
@@ -84,13 +83,13 @@ fun MyShoppingDetailsScreen(
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color(0xFF191919),
+                modifier = Modifier.padding(start = 20.dp)
             )
         }
 
         // Botón "Regresar"
         TextButton(
-            onClick = { navController.navigateUp() },
-            modifier = Modifier.padding(start = 16.dp, top = 8.dp)
+            onClick = { navController.navigateUp() }
         ) {
             Text(
                 text = "< Regresar",
@@ -121,6 +120,7 @@ fun MyShoppingDetailsScreen(
                 text = "${order.productos.size} PRODUCTOS",
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(horizontal = 16.dp),
                 color = Color(0xFF191919)
             )
 

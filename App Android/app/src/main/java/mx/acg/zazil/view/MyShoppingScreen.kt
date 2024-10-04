@@ -43,7 +43,6 @@ fun MyShoppingScreen(
             .fillMaxSize()
             .background(Color.White)
             .verticalScroll(rememberScrollState())
-            .padding(16.dp)
     ) {
         // Encabezado
         Box(
