@@ -1,5 +1,6 @@
 package mx.acg.zazil.view
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -8,9 +9,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -23,9 +22,21 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavHostController
+import com.google.firebase.auth.FirebaseAuth
 
 @Composable
-fun EndShoppingScreen(navController: NavHostController, modifier: Modifier = Modifier) {
+fun EndShoppingScreen(
+    navController: NavHostController,
+    total: String,
+    calle: String,
+    numeroInterior: String,
+    colonia: String,
+    codigoPostal: String,
+    ciudad: String,
+    estado: String,
+    pais: String,
+    modifier: Modifier = Modifier
+) {
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -52,57 +63,6 @@ fun EndShoppingScreen(navController: NavHostController, modifier: Modifier = Mod
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Sección de Envío y Pago
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            // Texto de "ENVÍO" con el mismo peso que "PAGO"
-            TextButton(
-                onClick = { navController.navigate("endShopping") },
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(end = 8.dp) // Asegura el mismo padding
-            ) {
-                Text(
-                    text = "ENVÍO",
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color(0xFFE17F61), // Texto resaltado
-                    modifier = Modifier.fillMaxWidth(),
-                    textAlign = TextAlign.Center // Centro el texto
-                )
-            }
-
-            // Divider separado
-            Divider(
-                modifier = Modifier
-                    .width(1.dp)
-                    .height(20.dp),
-                color = Color.Gray
-            )
-
-            // Texto de "PAGO" con el mismo peso que "ENVÍO"
-            TextButton(
-                onClick = { navController.navigate("payment") },
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(start = 8.dp) // Asegura el mismo padding
-            ) {
-                Text(
-                    text = "PAGO",
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color(0xFF999999), // Texto gris
-                    modifier = Modifier.fillMaxWidth(),
-                    textAlign = TextAlign.Center // Centro el texto
-                )
-            }
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
         // Datos del cliente
         Column(modifier = Modifier.fillMaxWidth()) {
             Text(
@@ -114,80 +74,80 @@ fun EndShoppingScreen(navController: NavHostController, modifier: Modifier = Mod
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Campos de texto
-            var nombre by remember { mutableStateOf("") }
-            var apellidos by remember { mutableStateOf("") }
-            var correo by remember { mutableStateOf("") }
-            var calle by remember { mutableStateOf("") }
-            var colonia by remember { mutableStateOf("") }
-            var codigoPostal by remember { mutableStateOf("") }
-            var ciudad by remember { mutableStateOf("") }
-            var telefono by remember { mutableStateOf("") }
-
+            // Campos de texto con datos pre-llenados
+            var updatedCalle by remember { mutableStateOf(calle) }
+            var updatedNumeroInterior by remember { mutableStateOf(numeroInterior) }
+            var updatedColonia by remember { mutableStateOf(colonia) }
+            var updatedCodigoPostal by remember { mutableStateOf(codigoPostal) }
+            var updatedCiudad by remember { mutableStateOf(ciudad) }
+            var updatedEstado by remember { mutableStateOf(estado) }
+            var updatedPais by remember { mutableStateOf(pais) }
 
             TextField(
-                value = nombre,
-                onValueChange = { nombre = it },
-                label = { Text("Nombre(s)") },
-                modifier = Modifier.fillMaxWidth(),
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            TextField(
-                value = apellidos,
-                onValueChange = { apellidos = it },
-                label = { Text("Apellidos") },
+                value = updatedCalle,
+                onValueChange = { updatedCalle = it },
+                label = { Text("Calle") },
                 modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.height(8.dp))
             TextField(
-                value = correo,
-                onValueChange = { correo = it },
-                label = { Text("Correo") },
-                modifier = Modifier.fillMaxWidth(),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            TextField(
-                value = calle,
-                onValueChange = { calle = it },
-                label = { Text("Calle y número") },
+                value = updatedNumeroInterior,
+                onValueChange = { updatedNumeroInterior = it },
+                label = { Text("Número Interior") },
                 modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.height(8.dp))
             TextField(
-                value = colonia,
-                onValueChange = { colonia = it },
+                value = updatedColonia,
+                onValueChange = { updatedColonia = it },
                 label = { Text("Colonia") },
                 modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.height(8.dp))
             TextField(
-                value = codigoPostal,
-                onValueChange = { codigoPostal = it },
+                value = updatedCodigoPostal,
+                onValueChange = { updatedCodigoPostal = it },
                 label = { Text("Código Postal") },
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
             Spacer(modifier = Modifier.height(8.dp))
             TextField(
-                value = ciudad,
-                onValueChange = { ciudad = it },
-                label = { Text("City") },
+                value = updatedCiudad,
+                onValueChange = { updatedCiudad = it },
+                label = { Text("Ciudad") },
                 modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.height(8.dp))
             TextField(
-                value = telefono,
-                onValueChange = { telefono = it },
-                label = { Text("Teléfono móvil") },
-                modifier = Modifier.fillMaxWidth(),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone)
+                value = updatedEstado,
+                onValueChange = { updatedEstado = it },
+                label = { Text("Estado") },
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            TextField(
+                value = updatedPais,
+                onValueChange = { updatedPais = it },
+                label = { Text("País") },
+                modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.height(16.dp))
 
             // Botón de continuar
             Button(
-                onClick = { /* Acción para continuar */ },
+                onClick = {
+                    val currentUser = FirebaseAuth.getInstance().currentUser
+                    val uid = currentUser?.uid
+                    if (uid != null) {
+                        // Navegar a la pantalla de pago con los valores actualizados
+                        navController.navigate(
+                            "payment/$total/$updatedCalle/$updatedNumeroInterior/$updatedColonia/$updatedCodigoPostal/$updatedCiudad/$updatedEstado/$updatedPais"
+                        )
+                    } else {
+                        Log.e("EndShoppingScreen", "Error: Usuario no autenticado, uid es null.")
+                    }
+                },
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFE17F61)),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -206,4 +166,3 @@ fun EndShoppingScreen(navController: NavHostController, modifier: Modifier = Mod
         }
     }
 }
-

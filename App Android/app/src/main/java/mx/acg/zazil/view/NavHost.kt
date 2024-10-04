@@ -119,13 +119,55 @@ fun AppNavHost(
                 )
             }
 
-            composable("endShopping") {
-                EndShoppingScreen(navController = navController)
+            composable("endShopping/{total}/{calle}/{numeroInterior}/{colonia}/{codigoPostal}/{ciudad}/{estado}/{pais}") { backStackEntry ->
+                val total = backStackEntry.arguments?.getString("total") ?: "0.00"
+                val calle = backStackEntry.arguments?.getString("calle") ?: ""
+                val numeroInterior = backStackEntry.arguments?.getString("numeroInterior") ?: ""
+                val colonia = backStackEntry.arguments?.getString("colonia") ?: ""
+                val codigoPostal = backStackEntry.arguments?.getString("codigoPostal") ?: ""
+                val ciudad = backStackEntry.arguments?.getString("ciudad") ?: ""
+                val estado = backStackEntry.arguments?.getString("estado") ?: ""
+                val pais = backStackEntry.arguments?.getString("pais") ?: ""
+
+                EndShoppingScreen(
+                    navController = navController,
+                    total = total,
+                    calle = calle,
+                    numeroInterior = numeroInterior,
+                    colonia = colonia,
+                    codigoPostal = codigoPostal,
+                    ciudad = ciudad,
+                    estado = estado,
+                    pais = pais
+                )
             }
 
-            composable("payment") {
-                PaymentScreen(navController = navController)
+
+
+            composable("payment/{total}/{calle}/{numeroInterior}/{colonia}/{codigoPostal}/{ciudad}/{estado}/{pais}") { backStackEntry ->
+                val total = backStackEntry.arguments?.getString("total") ?: "0.00"
+                val calle = backStackEntry.arguments?.getString("calle") ?: ""
+                val numeroInterior = backStackEntry.arguments?.getString("numeroInterior") ?: ""
+                val colonia = backStackEntry.arguments?.getString("colonia") ?: ""
+                val codigoPostal = backStackEntry.arguments?.getString("codigoPostal") ?: ""
+                val ciudad = backStackEntry.arguments?.getString("ciudad") ?: ""
+                val estado = backStackEntry.arguments?.getString("estado") ?: ""
+                val pais = backStackEntry.arguments?.getString("pais") ?: ""
+
+                PaymentScreen(
+                    navController = navController,
+                    total = total,
+                    calle = calle,
+                    numeroInterior = numeroInterior,
+                    colonia = colonia,
+                    codigoPostal = codigoPostal,
+                    ciudad = ciudad,
+                    estado = estado,
+                    pais = pais
+                )
             }
+
+
             composable("settings") { SettingsScreen(navController) }
 
             composable("TyC") { TyC(navController) }
