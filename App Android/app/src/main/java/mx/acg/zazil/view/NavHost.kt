@@ -47,7 +47,7 @@ fun AppNavHost(
             composable("productDetail/{productId}") { backStackEntry ->
                 val productId = backStackEntry.arguments?.getString("productId")?.toIntOrNull()
                 if (productId != null) {
-                    ProductDetailScreen(productId = productId)
+                    ProductDetailScreen(productId = productId, navController = navController)
                 } else {
                     Text("Producto no encontrado")
                 }
@@ -57,10 +57,10 @@ fun AppNavHost(
                 BlogScreen()
             }
 
-            composable("catalog/{uid}") { backStackEntry ->
-                val uid = backStackEntry.arguments?.getString("uid") ?: ""
-                CatalogScreen(navController = navController, uid = uid)
+            composable("catalog") {
+                CatalogScreen(navController = navController)
             }
+
 
             composable("profile") {
                 val currentUser = auth.currentUser
@@ -94,6 +94,7 @@ fun AppNavHost(
                     Text("No has iniciado sesión")
                 }
             }
+
 
             composable("FAQs") {
                 FAQs(navController = navController)

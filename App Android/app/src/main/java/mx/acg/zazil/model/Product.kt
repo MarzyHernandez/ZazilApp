@@ -1,3 +1,4 @@
+
 package mx.acg.zazil.model
 
 import retrofit2.Retrofit
@@ -19,11 +20,12 @@ data class Product(
 object RetrofitInstance {
     val productApi: ProductApi by lazy {
         Retrofit.Builder()
-            .baseUrl("https://getallproducts-dztx2pd2na-uc.a.run.app/") // URL base para obtener productos
+            .baseUrl("https://getallproducts-dztx2pd2na-uc.a.run.app/") // Base URL para obtener todos los productos
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(ProductApi::class.java)
     }
+
     val productDetailApi: ProductApi by lazy {
         Retrofit.Builder()
             .baseUrl("https://getproductbyid-dztx2pd2na-uc.a.run.app/") // Base URL para obtener producto por ID
@@ -31,6 +33,4 @@ object RetrofitInstance {
             .build()
             .create(ProductApi::class.java)
     }
-
 }
-

@@ -19,8 +19,6 @@ import mx.acg.zazil.R
  */
 @Composable
 fun NavBar(navController: NavHostController, modifier: Modifier = Modifier) {
-    var uid by remember { mutableStateOf<String?>(null) }
-
     // Barra de navegación fija
     Row(
         modifier = modifier
@@ -48,7 +46,7 @@ fun NavBar(navController: NavHostController, modifier: Modifier = Modifier) {
                 tint = Color.White
             )
         }
-        IconButton(onClick = { navController.navigate("catalog/${uid}") }) { // Home ahora lleva a CatalogScreen
+        IconButton(onClick = { navController.navigate("catalog") }) { // Home ahora lleva a CatalogScreen
             Icon(
                 painter = painterResource(id = R.drawable.ic_home_w),
                 contentDescription = "Home",

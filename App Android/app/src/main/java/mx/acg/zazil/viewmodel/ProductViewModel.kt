@@ -1,4 +1,3 @@
-
 // ProductViewModel.kt
 package mx.acg.zazil.viewmodel
 
@@ -23,7 +22,7 @@ class ProductViewModel : ViewModel() {
     fun loadProductById(productId: Int, onProductLoaded: (Product) -> Unit) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val product = RetrofitInstance.productApi.getProductById(productId)
+                val product = RetrofitInstance.productDetailApi.getProductById(productId)
                 onProductLoaded(product)
                 Log.d("ProductViewModel", "Producto cargado: ${product.nombre}")
             } catch (e: Exception) {

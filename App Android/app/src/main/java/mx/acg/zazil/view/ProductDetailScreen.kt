@@ -39,6 +39,7 @@ import mx.acg.zazil.viewmodel.ProductDetailViewModel
 fun ProductDetailScreen(
     productId: Int,
     productDetailViewModel: ProductDetailViewModel = viewModel(),
+    navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
     // Observar el producto seleccionado
@@ -98,7 +99,7 @@ fun ProductDetailScreen(
             }
 
             // Botón "Regresar"
-            TextButton(onClick = {}) {
+            TextButton(onClick = {navController.navigate("catalog")}) {
                 Text(
                     text = "< Regresar",
                     fontSize = 14.sp,

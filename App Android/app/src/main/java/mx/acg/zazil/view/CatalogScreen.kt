@@ -1,11 +1,9 @@
 package mx.acg.zazil.view
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -28,6 +26,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberImagePainter
 import mx.acg.zazil.viewmodel.CatalogViewModel
 import androidx.navigation.NavHostController
+
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Icon
@@ -39,8 +38,7 @@ import mx.acg.zazil.R
 fun CatalogScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    catalogViewModel: CatalogViewModel = viewModel(),
-    uid: String
+    catalogViewModel: CatalogViewModel = viewModel()
 ) {
     val products = catalogViewModel.products.observeAsState(initial = emptyList())
 
@@ -148,12 +146,7 @@ fun CatalogScreen(
                                 price = "$${product.precio_rebajado}",
                                 imageUrl = product.imagen,
                                 productId = product.id,
-                                onClick = { if (uid.isNotBlank()) {
-                                    navController.navigate("productDetail/${product.id}")
-                                } else {
-                                    Log.e("Navigation", "El UID está vacío, no se puede navegar a ProductDetailScreen")
-                                }
-                                }
+                                onClick = { navController.navigate("productDetail/${product.id}") }
                             )
                         }
                     }

@@ -191,7 +191,7 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel = vi
                             password = password,
                             onSuccess = {
                                 // Navegar a la pantalla de catálogo si la autenticación es exitosa
-                                navController.navigate("catalog/${uid}") {
+                                navController.navigate("catalog") {
                                     popUpTo("login") { inclusive = true }
                                 }
                             },
