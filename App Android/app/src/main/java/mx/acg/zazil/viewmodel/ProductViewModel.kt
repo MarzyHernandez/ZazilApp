@@ -32,7 +32,7 @@ class ProductViewModel : ViewModel() {
     }
 
     // Método para cargar un producto específico por ID y llamar al callback con el producto cargado
-    fun loadProductById(productId: Int) {
+    fun loadProductById(productId: Int, onProductLoaded: (Product) -> Unit) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val product = RetrofitInstance.productApi.getProductById(productId)

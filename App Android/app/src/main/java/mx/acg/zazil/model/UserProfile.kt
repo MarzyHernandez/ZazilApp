@@ -10,5 +10,5 @@ class UserProfile(
     val nombres: String,
     val email: String,
     val uid: String,
-    val foto_perfil: String?
+    val foto_perfil:String?
 )

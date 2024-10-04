@@ -38,14 +38,6 @@ data class CartUpdate(
 )
 
 
-// Interfaz para la API del carrito
-interface CartApi {
-    @GET("/")
-    suspend fun getCartByUid(@Query("uid") uid: String): Cart
-
-    @PUT("https://updatecart-dztx2pd2na-uc.a.run.app")
-    suspend fun updateCart(@Body cartUpdate: CartUpdate): Response<ResponseBody>
-}
 
 // Singleton para Retrofit de la API del carrito
 object CartRetrofitInstance {

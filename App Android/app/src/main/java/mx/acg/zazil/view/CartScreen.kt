@@ -298,4 +298,3 @@ fun CartTotal(navController: NavHostController, total: Double) {
         }
     }
 }
-

@@ -57,8 +57,9 @@ fun AppNavHost(
                 BlogScreen()
             }
 
-            composable("catalog") {
-                CatalogScreen(navController = navController)
+            composable("catalog/{uid}") { backStackEntry ->
+                val uid = backStackEntry.arguments?.getString("uid") ?: ""
+                CatalogScreen(navController = navController, uid = uid)
             }
 
             composable("profile") {
@@ -108,7 +109,8 @@ fun AppNavHost(
 
             composable("shoppingDetails/{orderId}") { backStackEntry ->
                 val orderId = backStackEntry.arguments?.getString("orderId")?.toInt() ?: 0
-                MyShoppingDetailsScreen(navController = navController, orderId = orderId)
+                val uid = FirebaseAuth.getInstance().currentUser?.uid
+                MyShoppingDetailsScreen(navController = navController, orderId = orderId, uid = uid ?: "")
             }
 
             composable("endShopping") {

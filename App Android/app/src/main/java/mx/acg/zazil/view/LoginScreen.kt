@@ -91,6 +91,8 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel = vi
     // Definir la fuente personalizada
     val gabaritoFontFamily = FontFamily(Font(R.font.gabarito_regular))
 
+    var uid by remember { mutableStateOf<String?>(null) }
+
     // Variables que almacenan el email y contraseña ingresados por el usuario
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -189,7 +191,7 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel = vi
                             password = password,
                             onSuccess = {
                                 // Navegar a la pantalla de catálogo si la autenticación es exitosa
-                                navController.navigate("catalog") {
+                                navController.navigate("catalog/${uid}") {
                                     popUpTo("login") { inclusive = true }
                                 }
                             },
