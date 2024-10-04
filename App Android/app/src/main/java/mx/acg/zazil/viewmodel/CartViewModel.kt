@@ -7,30 +7,24 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import mx.acg.zazil.model.AddToCartRequest
 import mx.acg.zazil.model.Cart
-import mx.acg.zazil.model.CartApi
-import retrofit2.HttpException
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import mx.acg.zazil.model.CartRetrofitInstance
+import mx.acg.zazil.model.CartUpdate
+import okhttp3.ResponseBody
+import retrofit2.Response
+
 
 class CartViewModel : ViewModel() {
     private val _cart = MutableLiveData<Cart?>()
     val cart: LiveData<Cart?> get() = _cart
 
-    private val _errorMessage = MutableLiveData<String?>()
-    val errorMessage: LiveData<String?> = _errorMessage
+    private val _cartUpdated = MutableLiveData<Boolean>()
+    val cartUpdated: LiveData<Boolean> get() = _cartUpdated
 
-    // Singleton para Retrofit de la API del carrito
-    object CartRetrofitInstance {
-        val cartApi: CartApi by lazy {
-            Retrofit.Builder()
-                .baseUrl("https://getactivecart-dztx2pd2na-uc.a.run.app/") // Base URL de la API del carrito
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(CartApi::class.java)
-        }
-    }
+    //cartState
+    private val _cartState = MutableLiveData<Cart?>()
+    val cartState: LiveData<Cart?> get() = _cartState
+
 
     // Método para cargar el carrito
     fun loadCartByUid(uid: String) {
@@ -45,49 +39,54 @@ class CartViewModel : ViewModel() {
         }
     }
 
-    // Obtener el carrito del usuario por UID
-    fun fetchCart(uid: String) {
-        viewModelScope.launch {
+    // Método para agregar un producto al carrito
+    fun addToCart(productId: Int, uid: String) {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
-                val cartData = CartRetrofitInstance.cartApi.getCartByUid(uid)
-                _cart.value = cartData
-                Log.d(
-                    "CartViewModel",
-                    "Carrito actualizado con ${cartData.productos.size} productos"
+                val cartUpdate = CartUpdate(
+                    uid = uid,
+                    id_producto = productId,
+                    cantidad = 1
                 )
-            } catch (e: Exception) {
-                _errorMessage.value = "Error al obtener el carrito: ${e.message}"
-            }
-        }
-    }
 
-    // Agregar producto al carrito
-    fun addProductToCart(uid: String, productId: Int, quantity: Int) {
-        viewModelScope.launch {
-            try {
-                // Asegúrate de que el uid esté presente
-                if (uid.isNotBlank()) {
-                    Log.d("CartViewModel", "UID encontrado: $uid")
+                // Llama a la API para actualizar el carrito
+                val response = CartRetrofitInstance.cartApi.updateCart(cartUpdate)
 
-                    // Enviar la solicitud a la API con el uid en la URL
-                    CartRetrofitInstance.cartApi.addProductToCart(
-                        uid = uid,
-                        productId = productId,
-                        quantity = quantity
-                    )
-
-                    // Refrescar el carrito después de agregar el producto
-                    fetchCart(uid)
+                if (response.isSuccessful) {
+                    Log.d("CartViewModel", "Producto agregado al carrito: $productId")
                 } else {
-                    Log.e("CartViewModel", "El UID está vacío, no se puede agregar al carrito")
+                    Log.e("CartViewModel", "Error en la respuesta: ${response.errorBody()?.string()}")
                 }
-            } catch (e: HttpException) {
-                Log.e("CartViewModel", "Error al agregar producto al carrito: ${e.message()}")
-                val errorBody = e.response()?.errorBody()?.string()
-                Log.e("CartViewModel", "Error body: $errorBody")
+                loadCartByUid(uid)
             } catch (e: Exception) {
-                Log.e("CartViewModel", "Error al agregar producto al carrito: ${e.message}")
+                Log.e("CartViewModel", "Error agregando producto al carrito", e)
             }
         }
     }
+
+    // Método para quitar un producto del carrito
+    fun removeFromCart(productId: Int, uid: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val cartUpdate = CartUpdate(
+                    uid = uid,
+                    id_producto = productId,
+                    cantidad = -1
+                )
+                val response = CartRetrofitInstance.cartApi.updateCart(cartUpdate)
+                if (response.isSuccessful) {
+                    Log.d("CartViewModel", "Producto removido del carrito: $productId")
+                } else {
+                    Log.e("CartViewModel", "Error en la respuesta: ${response.errorBody()?.string()}")
+                }
+                loadCartByUid(uid)
+            } catch (e: Exception) {
+                Log.e("CartViewModel", "Error removiendo producto del carrito", e)
+            }
+        }
+    }
+
+
 }
+
+
