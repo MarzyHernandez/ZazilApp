@@ -203,10 +203,10 @@
               
               <li class="dropdown">
                 <a href="#" id="userSettings" class="user-settings" data-toggle="dropdown" aria-haspopup="true">
-                  <span class="user-name d-none d-md-block">Carlos Herrera</span>
+                  <span class="user-name d-none d-md-block">Administrador</span>
                   <span class="avatar">
-                    <img src="assets/images/user4.png" alt="Free Admin Templates">
-                    <span class="status busy"></span>
+                    <img src="https://definicion.de/wp-content/uploads/2019/07/perfil-de-usuario.png" alt="Free Admin Templates">
+                    
                   </span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="userSettings">
@@ -386,6 +386,15 @@
     }
   }
 
+
+  
+    // Función para mostrar los productos
+    function toggleProductos(iconElement) {
+      const productosDetalle = iconElement.nextElementSibling;
+      productosDetalle.style.display = productosDetalle.style.display === 'none' ? 'block' : 'none';
+    }
+
+    
   // Función para llenar una fila de la tabla con los datos obtenidos
   function fillOrderRow(order, userData) {
     const tableBody = document.getElementById('orders-table-body');
@@ -498,12 +507,6 @@
         }
       }
     });
-
-    // Función para mostrar los productos
-    function toggleProductos(iconElement) {
-      const productosDetalle = iconElement.nextElementSibling;
-      productosDetalle.style.display = productosDetalle.style.display === 'none' ? 'block' : 'none';
-    }
 
     // Actualizar el estilo del select según el estado
     function updateEstadoSelect(selectElement) {
