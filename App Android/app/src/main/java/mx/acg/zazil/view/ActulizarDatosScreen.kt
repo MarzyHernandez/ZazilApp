@@ -21,6 +21,14 @@ import com.google.firebase.auth.FirebaseAuth
 import mx.acg.zazil.R
 import mx.acg.zazil.viewmodel.UpdateDataViewModel
 
+
+//REVISAR SI SE USA
+
+
+
+
+
+
 @Composable
 fun ActualizarDatosScreen(viewModel: UpdateDataViewModel = viewModel()) {
     val gabaritoFontFamily = FontFamily(Font(R.font.gabarito_regular))
