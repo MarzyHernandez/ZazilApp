@@ -106,7 +106,11 @@ fun SettingsScreen(navController: NavHostController, modifier: Modifier = Modifi
                 navController.navigate("aboutUs")
             }
 
-            SettingOption(title = "Términos y Condiciones", iconResId = R.drawable.ic_terms)
+            // Navegar a la pantalla de "TyC"
+            SettingOption(title = "Términos y Condiciones", iconResId = R.drawable.ic_terms) {
+                navController.navigate("TyC")
+            }
+
             SettingOption(title = "Aviso de Privacidad", iconResId = R.drawable.ic_privacy)
             SettingOption(title = "Créditos", iconResId = R.drawable.ic_credits)
 

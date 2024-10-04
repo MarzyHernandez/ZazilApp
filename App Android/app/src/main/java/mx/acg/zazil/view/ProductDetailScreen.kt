@@ -142,12 +142,12 @@ fun ProductDetailScreen(
                 Column {
                     // Precio del producto
                     Text(
-                        text = "$${product.precio_normal}",
+                        text = "$${product.precio_rebajado}",
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color(0xFF191919)
                     )
-                    product.precio_rebajado?.let {
+                    product.precio_normal?.let {
                         Text(
                             text = "$$it",
                             fontSize = 16.sp,

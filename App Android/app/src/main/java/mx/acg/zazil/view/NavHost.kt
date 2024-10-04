@@ -126,6 +126,9 @@ fun AppNavHost(
                 PaymentScreen(navController = navController)
             }
             composable("settings") { SettingsScreen(navController) }
+
+            composable("TyC") { TyC(navController) }
+
             composable("aboutUs") { AboutUsScreen(navController) }
         }
     }

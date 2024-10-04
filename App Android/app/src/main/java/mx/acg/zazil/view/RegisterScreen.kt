@@ -160,7 +160,7 @@ fun RegisterScreen(navController: NavHostController) {
                         fontSize = 14.sp,
                         color = Color.Black)
 
-                    TextButton(onClick = { /* Acción para ver términos y condiciones */ }) {
+                    TextButton(onClick = { }) {
                         Text(
                             text = "términos y condiciones",
                             color = Color(0xFFE27F61),

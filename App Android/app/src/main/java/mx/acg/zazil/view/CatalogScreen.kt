@@ -145,7 +145,7 @@ fun CatalogScreen(
                         items(filteredProducts) { product ->
                             ProductItem(
                                 title = product.nombre,
-                                price = "$${product.precio_normal}",
+                                price = "$${product.precio_rebajado}",
                                 imageUrl = product.imagen,
                                 productId = product.id,
                                 onClick = { if (uid.isNotBlank()) {
