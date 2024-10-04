@@ -2,6 +2,7 @@ package mx.acg.zazil.view
 
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -23,10 +24,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.google.firebase.auth.FirebaseAuth
 import mx.acg.zazil.R
 
 @Composable
 fun SettingsScreen(navController: NavHostController, modifier: Modifier = Modifier) {
+    // Obtén la instancia de FirebaseAuth
+    val auth = FirebaseAuth.getInstance()
+
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -51,7 +56,12 @@ fun SettingsScreen(navController: NavHostController, modifier: Modifier = Modifi
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 8.dp)
-                    .clickable { navController.navigate("login") },  // Acción de cerrar sesión
+                    .clickable {
+                        Log.d("SettingsScreen", "Cerrando sesión...") // Log para rastrear cuando se clickea "Cerrar sesión"
+                        auth.signOut()  // Cierra la sesión de Firebase
+                        Log.d("SettingsScreen", "Sesión cerrada con éxito. Redirigiendo a la pantalla de login.")
+                        navController.navigate("login")  // Redirige al login
+                    },
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
