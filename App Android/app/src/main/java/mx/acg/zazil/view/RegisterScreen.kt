@@ -54,6 +54,11 @@ fun RegisterScreen(navController: NavHostController) {
 
     val registerResult by viewModel.registerResult.observeAsState()
 
+    // Función para validar la contraseña
+    fun isPasswordValid(password: String): Boolean {
+        return password.length >= 6 && password.any { it.isDigit() }
+    }
+
     Box(modifier = Modifier.fillMaxSize()) {
         // Imagen del logo en la parte superior derecha
         Image(
@@ -144,7 +149,14 @@ fun RegisterScreen(navController: NavHostController) {
                 // Input de Contraseña
                 SimpleTextInput(
                     value = password,
-                    onValueChange = { password = it },
+                    onValueChange = {
+                        password = it
+                        if (!isPasswordValid(it)) {
+                            errorMessage = "La contraseña debe tener al menos 6 caracteres e incluir al menos un número."
+                        } else {
+                            errorMessage = null  // La contraseña es válida
+                        }
+                    },
                     label = "Contraseña",
                     isPassword = true
                 )
@@ -176,10 +188,10 @@ fun RegisterScreen(navController: NavHostController) {
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // Botón de registro
+                // Botón de registro (desactivado si no se cumplen las condiciones)
                 Button(
                     onClick = {
-                        if (termsAccepted) {
+                        if (termsAccepted && isPasswordValid(password)) {
                             val user = User(
                                 email = email,
                                 password = password,
@@ -188,7 +200,7 @@ fun RegisterScreen(navController: NavHostController) {
                                 telefono = telefono
                             )
                             viewModel.registerUser(user)
-                        } else {
+                        } else if (!termsAccepted) {
                             errorMessage = "Debes aceptar los términos y condiciones"
                         }
                     },

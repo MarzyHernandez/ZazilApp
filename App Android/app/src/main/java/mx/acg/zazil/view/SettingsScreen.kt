@@ -112,9 +112,11 @@ fun SettingsScreen(navController: NavHostController, modifier: Modifier = Modifi
             }
 
             SettingOption(title = "Aviso de Privacidad", iconResId = R.drawable.ic_privacy)
-            SettingOption(title = "Créditos", iconResId = R.drawable.ic_credits)
 
-            Spacer(modifier = Modifier.height(16.dp))
+            // Navegar a la pantalla de "Créditos"
+            SettingOption(title = "Créditos", iconResId = R.drawable.ic_credits) {
+                navController.navigate("credits")
+            }
 
             // Redes Sociales
             Row(

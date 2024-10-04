@@ -173,6 +173,8 @@ fun AppNavHost(
             composable("TyC") { TyC(navController) }
 
             composable("aboutUs") { AboutUsScreen(navController) }
+
+            composable("credits") { CreditsScreen(navController) }
         }
     }
 }
