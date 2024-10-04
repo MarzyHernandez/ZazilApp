@@ -15,9 +15,9 @@ import com.google.firebase.auth.FirebaseAuth
 @Composable
 fun AppNavHost(
     auth: FirebaseAuth,
-    signInWithGoogle: () -> Unit,  // Aceptar la función como parámetro
+    signInWithGoogle: () -> Unit,
+    navController: NavHostController
 ) {
-    val navController = rememberNavController()
     val currentBackStackEntry = navController.currentBackStackEntryAsState()
 
     // Condiciona la visibilidad de la NavBar dependiendo de la ruta actual
@@ -37,7 +37,7 @@ fun AppNavHost(
             modifier = Modifier.padding(innerPadding)
         ) {
             composable("login") {
-                LoginScreen(navController = navController, signInWithGoogle = {})
+                LoginScreen(navController = navController, signInWithGoogle = signInWithGoogle)
             }
 
             composable("register") {
@@ -57,8 +57,9 @@ fun AppNavHost(
                 BlogScreen()
             }
 
-            composable("catalog") {
-                CatalogScreen(navController = navController)
+            composable("catalog/{uid}") { backStackEntry ->
+                val uid = backStackEntry.arguments?.getString("uid") ?: ""
+                CatalogScreen(navController = navController, uid = uid)
             }
 
             composable("profile") {
@@ -108,7 +109,8 @@ fun AppNavHost(
 
             composable("shoppingDetails/{orderId}") { backStackEntry ->
                 val orderId = backStackEntry.arguments?.getString("orderId")?.toInt() ?: 0
-                MyShoppingDetailsScreen(navController = navController, orderId = orderId)
+                val uid = FirebaseAuth.getInstance().currentUser?.uid
+                MyShoppingDetailsScreen(navController = navController, orderId = orderId, uid = uid ?: "")
             }
 
             composable("endShopping") {

@@ -1,5 +1,6 @@
 package mx.acg.zazil.view
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -89,6 +90,8 @@ fun SimpleTextInput(
 fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel = viewModel(), signInWithGoogle: () -> Unit) {
     // Definir la fuente personalizada
     val gabaritoFontFamily = FontFamily(Font(R.font.gabarito_regular))
+
+    var uid by remember { mutableStateOf<String?>(null) }
 
     // Variables que almacenan el email y contraseña ingresados por el usuario
     var email by remember { mutableStateOf("") }
@@ -183,12 +186,20 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel = vi
                 Button(
                     onClick = {
                         // Llama al método de login en el ViewModel
-                        viewModel.loginWithEmail(email, password) {
-                            // Navegar a la pantalla de catálogo si la autenticación es exitosa
-                            navController.navigate("catalog") {
-                                popUpTo("login") { inclusive = true }
+                        viewModel.loginWithEmail(
+                            email = email,
+                            password = password,
+                            onSuccess = {
+                                // Navegar a la pantalla de catálogo si la autenticación es exitosa
+                                navController.navigate("catalog/${uid}") {
+                                    popUpTo("login") { inclusive = true }
+                                }
+                            },
+                            onFailure = { errorMessage ->
+                                // Maneja el error aquí (puedes mostrar un mensaje o manejar de otra manera)
+                                Log.e("Login", "Error en la autenticación: $errorMessage")
                             }
-                        }
+                        )
                     },
                     modifier = Modifier.fillMaxWidth(),
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFEBB7A7))

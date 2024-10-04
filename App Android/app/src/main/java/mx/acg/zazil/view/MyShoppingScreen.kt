@@ -19,8 +19,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import coil.compose.rememberImagePainter
 import mx.acg.zazil.R
+import mx.acg.zazil.model.ShoppingHistory
 import mx.acg.zazil.viewmodel.ShoppingHistoryViewModel
 
 @Composable
@@ -97,21 +97,25 @@ fun MyShoppingScreen(
         } else {
             // Lista de compras
             shoppingHistory.forEach { order ->
-                OrderItemRow(navController = navController, order = order)
+                OrderItemRow(navController = navController, order = order, uid = uid)
             }
         }
     }
 }
 
 @Composable
-fun OrderItemRow(navController: NavHostController, order: mx.acg.zazil.model.ShoppingHistory) {
+fun OrderItemRow(
+    navController: NavHostController,
+    order: ShoppingHistory,
+    uid: String
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
             .background(Color(0xFFEBEBEB), shape = RoundedCornerShape(8.dp))
             .clickable {
-                navController.navigate("shoppingDetails/${order.id}")
+                navController.navigate("shoppingDetails/${order.id}/$uid")
             },
         verticalAlignment = Alignment.CenterVertically
     ) {

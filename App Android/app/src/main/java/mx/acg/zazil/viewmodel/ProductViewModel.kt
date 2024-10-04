@@ -1,4 +1,3 @@
-// ProductViewModel.kt
 package mx.acg.zazil.viewmodel
 
 import android.util.Log
@@ -16,17 +15,31 @@ class ProductViewModel : ViewModel() {
     private val _loadedProducts = MutableLiveData<Map<Int, Product>>() // Mapa de productos cargados por ID
     val loadedProducts: LiveData<Map<Int, Product>> get() = _loadedProducts
 
-    private val productsMap = mutableMapOf<Int, Product>()  // Mapa para almacenar los productos cargados
+    private val _selectedProduct = MutableLiveData<Product?>()
+    val selectedProduct: LiveData<Product?> get() = _selectedProduct
+
+    // Método para cargar todos los productos
+    fun loadAllProducts() {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val products = RetrofitInstance.productApi.getProducts()
+                val productsMap = products.associateBy { it.id }
+                _loadedProducts.postValue(productsMap)
+            } catch (e: Exception) {
+                Log.e("ProductViewModel", "Error cargando productos", e)
+            }
+        }
+    }
 
     // Método para cargar un producto específico por ID y llamar al callback con el producto cargado
     fun loadProductById(productId: Int, onProductLoaded: (Product) -> Unit) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val product = RetrofitInstance.productDetailApi.getProductById(productId)
-                onProductLoaded(product)
-                Log.d("ProductViewModel", "Producto cargado: ${product.nombre}")
+                val product = RetrofitInstance.productApi.getProductById(productId)
+                _selectedProduct.postValue(product)
             } catch (e: Exception) {
-                Log.e("ProductViewModel", "Error cargando producto por ID", e)
+                Log.e("ProductViewModel", "Error cargando producto", e)
+                _selectedProduct.postValue(null)
             }
         }
     }

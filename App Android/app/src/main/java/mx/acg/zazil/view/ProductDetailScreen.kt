@@ -1,5 +1,6 @@
 package mx.acg.zazil.view
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -29,7 +30,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavHostController
+import com.google.firebase.auth.FirebaseAuth
 import mx.acg.zazil.R
+import mx.acg.zazil.viewmodel.CartViewModel
 import mx.acg.zazil.viewmodel.ProductDetailViewModel
 
 @Composable
@@ -40,6 +43,8 @@ fun ProductDetailScreen(
 ) {
     // Observar el producto seleccionado
     val selectedProduct by productDetailViewModel.selectedProduct.observeAsState()
+    val cartViewModel = viewModel<CartViewModel>()
+    val cartUpdated by cartViewModel.cartUpdated.observeAsState()
 
     // Llama al ViewModel para cargar el producto por su ID
     LaunchedEffect(productId) {
@@ -154,7 +159,17 @@ fun ProductDetailScreen(
 
                 // Botón de agregar al carrito
                 Button(
-                    onClick = { /* Acción para agregar al carrito */ },
+                    onClick = {
+                        val user = FirebaseAuth.getInstance().currentUser
+                        val uid = user?.uid
+
+                        if (uid != null) {
+                            // Llama al método para agregar el producto al carrito
+                            cartViewModel.addToCart(productId, uid)
+                        } else {
+                            Log.e("ProductDetailScreen", "Error: No se pudo obtener el UID del usuario.")
+                        }
+                    },
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFE17F61)),
                     modifier = Modifier
                         .height(40.dp)

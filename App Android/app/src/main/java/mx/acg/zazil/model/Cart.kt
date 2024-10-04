@@ -1,8 +1,12 @@
 package mx.acg.zazil.model
 
+import okhttp3.ResponseBody
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.PUT
 import retrofit2.http.Query
 
 // Modelo del carrito
@@ -25,11 +29,15 @@ data class CartProduct(
     val cantidad: Int
 )
 
-// Interfaz para la API del carrito
-interface CartApi {
-    @GET("/")
-    suspend fun getCartByUid(@Query("uid") uid: String): Cart
-}
+
+// Clase de datos que representa el cuerpo de la solicitud para actualizar el carrito
+data class CartUpdate(
+    val uid: String,
+    val id_producto: Int,
+    val cantidad: Int
+)
+
+
 
 // Singleton para Retrofit de la API del carrito
 object CartRetrofitInstance {

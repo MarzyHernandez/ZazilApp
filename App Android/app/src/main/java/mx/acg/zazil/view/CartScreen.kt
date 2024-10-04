@@ -1,5 +1,6 @@
 package mx.acg.zazil.view
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -20,6 +21,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.rememberImagePainter
+import com.google.firebase.auth.FirebaseAuth
 import mx.acg.zazil.R
 import mx.acg.zazil.model.Product
 import mx.acg.zazil.viewmodel.CartViewModel
@@ -128,6 +130,7 @@ fun CartScreen(
                 items(cart?.productos ?: emptyList()) { cartProduct ->
                     loadedProducts[cartProduct.id_producto]?.let { product ->
                         CartItemRow(
+                            productId = cartProduct.id_producto,
                             productName = product.nombre,
                             productImageUrl = product.imagen,
                             quantity = cartProduct.cantidad,
@@ -153,6 +156,7 @@ fun CartScreen(
 
 @Composable
 fun CartItemRow(
+    productId: Int,  // Añadimos el productId como parámetro
     productName: String,
     productImageUrl: String,
     quantity: Int,
@@ -160,6 +164,10 @@ fun CartItemRow(
     onAddClicked: () -> Unit,
     onRemoveClicked: () -> Unit
 ) {
+    val cartViewModel = viewModel<CartViewModel>()
+    val user = FirebaseAuth.getInstance().currentUser
+    val uid = user?.uid
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -197,7 +205,6 @@ fun CartItemRow(
             )
         }
 
-        // Botones para aumentar o disminuir la cantidad
         Column(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -205,7 +212,14 @@ fun CartItemRow(
         ) {
             // Botón añadir (ic_add)
             IconButton(
-                onClick = onAddClicked,
+                onClick = {
+                    if (uid != null) {
+                        cartViewModel.addToCart(productId, uid)
+                    } else {
+                        // Manejo del caso en que el usuario no esté autenticado
+                        Log.e("CartItemRow", "Error: No se pudo obtener el UID del usuario.")
+                    }
+                },
                 modifier = Modifier.size(36.dp)
             ) {
                 Image(
@@ -219,7 +233,14 @@ fun CartItemRow(
 
             // Botón quitar (ic_remove)
             IconButton(
-                onClick = onRemoveClicked,
+                onClick = {
+                    if (uid != null) {
+                        cartViewModel.removeFromCart(productId, uid)  // Llama a removeFromCart cuando se hace clic en quitar
+                    } else {
+                        // Manejo del caso en que el usuario no esté autenticado
+                        Log.e("CartItemRow", "Error: No se pudo obtener el UID del usuario.")
+                    }
+                },
                 modifier = Modifier.size(36.dp)
             ) {
                 Image(
@@ -231,6 +252,7 @@ fun CartItemRow(
         }
     }
 }
+
 
 
 @Composable
@@ -251,7 +273,9 @@ fun CartTotal(navController: NavHostController, total: Double) {
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Button(
-                onClick = { /* Acción para seguir comprando */ },
+                onClick = {
+                    navController.navigate("catalog")
+                },
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFEE1D6)),
                 shape = RoundedCornerShape(10.dp),
                 modifier = Modifier
@@ -274,4 +298,3 @@ fun CartTotal(navController: NavHostController, total: Double) {
         }
     }
 }
-
