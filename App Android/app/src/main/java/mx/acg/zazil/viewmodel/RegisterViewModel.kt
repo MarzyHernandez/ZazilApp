@@ -52,11 +52,10 @@ class RegisterViewModel : ViewModel() {
                 call: Call<RegisterResponse>,
                 response: Response<RegisterResponse>
             ) {
-                if (response.isSuccessful && response.body()?.success == true) {
+                if (response.isSuccessful) {
                     _registerResult.value = "Registro exitoso"
                 } else {
-                    _registerResult.value =
-                        "Error en el registro: ${response.body()?.message ?: response.message()}"
+                    _registerResult.value = "Error en el registro: ${response.body()?.message ?: response.message()}"
                 }
             }
 

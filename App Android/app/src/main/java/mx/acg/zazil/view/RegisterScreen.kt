@@ -188,7 +188,6 @@ fun RegisterScreen(navController: NavHostController) {
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // Botón de registro (desactivado si no se cumplen las condiciones)
                 Button(
                     onClick = {
                         var errorFound = false
@@ -206,34 +205,31 @@ fun RegisterScreen(navController: NavHostController) {
 
                         // Si no hay errores, proceder con el registro
                         if (!errorFound) {
-                            val user = User(
-                                email = email,
-                                password = password,
-                                nombres = nombre,
-                                apellidos = apellido,
-                                telefono = telefono
-                            )
-
-                            // Limpiar el mensaje de error antes de realizar el registro
+                            // Limpiar el mensaje antes de registrar
                             errorMessage = null
-
-                            viewModel.registerUser(user)
+                            viewModel.registerUser(
+                                User(
+                                    email = email,
+                                    password = password,
+                                    nombres = nombre,
+                                    apellidos = apellido,
+                                    telefono = telefono
+                                )
+                            )
                         }
                     },
                     modifier = Modifier.fillMaxWidth(),
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFEBB7A7))
                 ) {
-                    Text(
-                        text = "REGISTRAR",
-                        color = Color.Black
-                    )
+                    Text(text = "REGISTRAR", color = Color.Black)
                 }
 
-                // Mostrar el mensaje de error si aplica
+
+                // Mostrar el mensaje de error o éxito
                 registerResult?.let {
+                    // Si el mensaje contiene "exitoso", mostramos el mensaje de éxito y limpiamos posibles errores previos
                     if (it.contains("exitoso")) {
-                        // Limpiar todos los mensajes de error si el registro es exitoso
-                        errorMessage = null
+                        errorMessage = null  // Limpiar el mensaje de error
                     }
 
                     Text(
@@ -243,6 +239,7 @@ fun RegisterScreen(navController: NavHostController) {
                     )
                 }
 
+                // Mostrar el mensaje de error si existe
                 errorMessage?.let {
                     Text(
                         text = it,
@@ -250,6 +247,7 @@ fun RegisterScreen(navController: NavHostController) {
                         modifier = Modifier.padding(top = 8.dp)
                     )
                 }
+
 
 
                 Column(
