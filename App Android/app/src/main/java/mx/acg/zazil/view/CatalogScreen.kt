@@ -149,8 +149,7 @@ fun CatalogScreen(
                                 imageUrl = product.imagen,
                                 productId = product.id,
                                 onClick = { if (uid.isNotBlank()) {
-                                    Log.d("Navigation", "Navegando a ProductDetail con UID: $uid")
-                                    navController.navigate("productDetail/${product.id}/$uid")
+                                    navController.navigate("productDetail/${product.id}")
                                 } else {
                                     Log.e("Navigation", "El UID está vacío, no se puede navegar a ProductDetailScreen")
                                 }
