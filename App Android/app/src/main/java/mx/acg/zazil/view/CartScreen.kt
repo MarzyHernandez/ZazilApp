@@ -16,6 +16,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -83,15 +84,15 @@ fun CartScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
-            .padding(16.dp)
+            .padding(0.dp)
     ) {
         // Encabezado del carrito
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .clip(RoundedCornerShape(bottomEnd = 16.dp, bottomStart = 16.dp))
+                .clip(RoundedCornerShape(bottomEnd = 18.dp, bottomStart = 18.dp))
                 .background(Color(0xFFFEE1D6))
-                .padding(vertical = 16.dp)
+                .padding(vertical = 32.dp)
         ) {
             Row(
                 modifier = Modifier
@@ -103,6 +104,7 @@ fun CartScreen(
                     text = "Carrito",
                     fontSize = 28.sp,
                     fontWeight = FontWeight.Bold,
+                    fontFamily = gabaritoFontFamily,
                     color = Color(0xFF191919)
                 )
                 Icon(
@@ -117,36 +119,44 @@ fun CartScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Mostrar indicador de carga si los productos aún se están cargando
-        if (isLoading) {
-            CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
-        } else {
-            // Usamos LazyColumn para que la lista de productos sea desplazable
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)  // Esto asegura que la lista de productos ocupe solo el espacio restante
-            ) {
-                items(cart?.productos ?: emptyList()) { cartProduct ->
-                    loadedProducts[cartProduct.id_producto]?.let { product ->
-                        CartItemRow(
-                            productId = cartProduct.id_producto,
-                            productName = product.nombre,
-                            productImageUrl = product.imagen,
-                            quantity = cartProduct.cantidad,
-                            price = product.precio_normal,
-                            onAddClicked = { /* Acción para aumentar la cantidad */ },
-                            onRemoveClicked = { /* Acción para disminuir la cantidad */ }
-                        )
-                        Spacer(modifier = Modifier.height(16.dp))
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.White)
+                .padding(16.dp)
+        ) {
+            // Mostrar indicador de carga si los productos aún se están cargando
+            if (isLoading) {
+                CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
+            } else {
+                // Usamos LazyColumn para que la lista de productos sea desplazable
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)  // Esto asegura que la lista de productos ocupe solo el espacio restante
+                ) {
+                    items(cart?.productos ?: emptyList()) { cartProduct ->
+                        loadedProducts[cartProduct.id_producto]?.let { product ->
+                            CartItemRow(
+                                productId = cartProduct.id_producto,
+                                productName = product.nombre,
+                                productImageUrl = product.imagen,
+                                quantity = cartProduct.cantidad,
+                                price = product.precio_normal,
+                                onAddClicked = { /* Acción para aumentar la cantidad */ },
+                                onRemoveClicked = { /* Acción para disminuir la cantidad */ }
+                            )
+                            Spacer(modifier = Modifier.height(16.dp))
+                        }
                     }
                 }
             }
-        }
 
-        // Total del carrito y botones de acción
-        cart?.let {
-            CartTotal(navController = navController, total = it.monto_total)
+            // Total del carrito y botones de acción
+            cart?.let {
+                CartTotal(navController = navController, total = it.monto_total)
+            }
         }
     }
 }
@@ -191,17 +201,21 @@ fun CartItemRow(
         // Detalles del producto
         Column(
             modifier = Modifier.weight(1f)
+                .padding(vertical = 8.dp)
+                .padding(horizontal = 16.dp)
         ) {
             Text(
                 text = productName,
                 fontWeight = FontWeight.Bold,
+                fontFamily = gabaritoFontFamily,
                 fontSize = 20.sp,
                 color = Color(0xFFE17F61)
             )
             Text(text = "Cantidad: $quantity")
             Text(
                 text = "Precio: $$price",
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                fontFamily = gabaritoFontFamily,
             )
         }
 
@@ -225,7 +239,7 @@ fun CartItemRow(
                 Image(
                     painter = painterResource(id = R.drawable.ic_add),
                     contentDescription = "Añadir",
-                    modifier = Modifier.size(24.dp)
+                    modifier = Modifier.size(48.dp)
                 )
             }
 
@@ -246,7 +260,7 @@ fun CartItemRow(
                 Image(
                     painter = painterResource(id = R.drawable.ic_remove),
                     contentDescription = "Quitar",
-                    modifier = Modifier.size(24.dp)
+                    modifier = Modifier.size(48.dp)
                 )
             }
         }
@@ -262,6 +276,7 @@ fun CartTotal(navController: NavHostController, total: Double) {
             text = "Total: \$$total",
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold,
+            fontFamily = gabaritoFontFamily,
             color = Color.Black
         )
         Spacer(modifier = Modifier.height(16.dp))
@@ -282,7 +297,12 @@ fun CartTotal(navController: NavHostController, total: Double) {
                     .weight(1f)
                     .height(52.dp)
             ) {
-                Text(text = "SEGUIR COMPRANDO", fontSize = 16.sp, color = Color.Black)
+                Text(text = "SEGUIR COMPRANDO",
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = gabaritoFontFamily,
+                    textAlign = TextAlign.Center,
+                    color = Color.Black)
             }
 
             Button(
@@ -293,7 +313,11 @@ fun CartTotal(navController: NavHostController, total: Double) {
                     .weight(1f)
                     .height(52.dp)
             ) {
-                Text(text = "CONTINUAR", fontSize = 18.sp, color = Color.White)
+                Text(text = "CONTINUAR",
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = gabaritoFontFamily,
+                    color = Color.White)
             }
         }
     }
