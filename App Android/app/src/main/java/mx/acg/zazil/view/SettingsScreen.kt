@@ -96,7 +96,13 @@ fun SettingsScreen(
             )
 
             SettingOption(title = "Cambiar Contraseña", iconResId = R.drawable.ic_password)
-            SettingOption(title = "Actualizar Datos", iconResId = R.drawable.ic_edit)
+            SettingOption(
+                title = "Actualizar Datos",
+                iconResId = R.drawable.ic_edit
+            ) {
+                navController.navigate("updateData")  // Navega a la pantalla de actualización de datos
+            }
+
 
             SettingOption(
                 title = "Eliminar Cuenta",

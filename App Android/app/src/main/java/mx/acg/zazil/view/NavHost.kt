@@ -22,7 +22,7 @@ fun AppNavHost(
 
     // Condiciona la visibilidad de la NavBar dependiendo de la ruta actual
     val currentRoute = currentBackStackEntry.value?.destination?.route
-    val showNavBar = currentRoute != "login" && currentRoute != "register"
+    val showNavBar = currentRoute != "login" && currentRoute != "register" && currentRoute != "recuperarContrasena"
 
     Scaffold(
         bottomBar = {
@@ -38,6 +38,10 @@ fun AppNavHost(
         ) {
             composable("login") {
                 LoginScreen(navController = navController, signInWithGoogle = signInWithGoogle)
+            }
+
+            composable("recuperarContrasena") {
+                RecuperarContrasenaScreen(navController = navController)
             }
 
             composable("register") {
@@ -169,6 +173,10 @@ fun AppNavHost(
 
 
             composable("settings") { SettingsScreen(navController) }
+
+            composable("updateData") {
+                ActualizarDatosScreen()  // Aquí llamamos a la pantalla de ActualizarDatos
+            }
 
             composable("TyC") { TyC(navController) }
 
