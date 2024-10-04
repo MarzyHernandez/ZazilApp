@@ -1,5 +1,6 @@
 package mx.acg.zazil.view
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -44,6 +45,9 @@ fun CartScreen(
     // Estado para saber si las solicitudes ya se hicieron
     var isProductLoadingStarted by remember { mutableStateOf(false) }
 
+    // Verificación y log del `uid`
+    Log.d("CartScreen", "UID recibido: $uid")
+
     // Cargar el carrito al inicio
     LaunchedEffect(uid) {
         cartViewModel.loadCartByUid(uid)
@@ -55,24 +59,18 @@ fun CartScreen(
             val productos = it.productos
 
             if (productos.isNotEmpty() && !isProductLoadingStarted) {
-                // Marcamos que la carga de productos ha comenzado
-                isProductLoadingStarted = true
-                isLoading = true  // Empezamos cargando
+                isProductLoadingStarted = true  // Aseguramos que solo se ejecute una vez
+                isLoading = true  // Iniciamos la carga
 
                 // Hacemos las solicitudes de productos
                 productos.forEach { cartProduct ->
                     if (!loadedProducts.containsKey(cartProduct.id_producto)) {
                         // Cargamos el producto y lo añadimos al mapa
-                        productViewModel.loadProductById(cartProduct.id_producto) { product ->
-                            loadedProducts[cartProduct.id_producto] = product
-
-                            // Desactivar la carga cuando todos los productos hayan sido cargados
-                            if (loadedProducts.size == productos.size) {
-                                isLoading = false
-                            }
-                        }
+                        productViewModel.loadProductById(cartProduct.id_producto)
                     }
                 }
+
+                isLoading = false  // Terminamos la carga
             }
         }
     }
@@ -147,9 +145,6 @@ fun CartScreen(
         }
     }
 }
-
-
-
 
 @Composable
 fun CartItemRow(

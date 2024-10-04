@@ -25,19 +25,10 @@ data class CartProduct(
     val cantidad: Int
 )
 
-// Interfaz para la API del carrito
-interface CartApi {
-    @GET("/")
-    suspend fun getCartByUid(@Query("uid") uid: String): Cart
-}
+data class AddToCartRequest(
+    val uid: String,
+    val id_producto: Int,
+    val cantidad: Int
+)
 
-// Singleton para Retrofit de la API del carrito
-object CartRetrofitInstance {
-    val cartApi: CartApi by lazy {
-        Retrofit.Builder()
-            .baseUrl("https://getactivecart-dztx2pd2na-uc.a.run.app/") // Base URL de la API del carrito
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(CartApi::class.java)
-    }
-}
+

@@ -1,5 +1,6 @@
 package mx.acg.zazil.view
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -30,16 +31,24 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavHostController
 import mx.acg.zazil.R
+import mx.acg.zazil.model.Product
+import mx.acg.zazil.viewmodel.CartViewModel
 import mx.acg.zazil.viewmodel.ProductDetailViewModel
 
 @Composable
 fun ProductDetailScreen(
     productId: Int,
     productDetailViewModel: ProductDetailViewModel = viewModel(),
+    cartViewModel: CartViewModel = viewModel(), // CartViewModel inyectado
+    uid: String,
     modifier: Modifier = Modifier
 ) {
     // Observar el producto seleccionado
     val selectedProduct by productDetailViewModel.selectedProduct.observeAsState()
+
+    // Verificación y log del `uid`
+    Log.d("ProductDetailScreen", "UID recibido: $uid")
+
 
     // Llama al ViewModel para cargar el producto por su ID
     LaunchedEffect(productId) {
@@ -154,7 +163,18 @@ fun ProductDetailScreen(
 
                 // Botón de agregar al carrito
                 Button(
-                    onClick = { /* Acción para agregar al carrito */ },
+                    onClick = {
+                        if (uid.isNotBlank()) {
+                            Log.d("ProductDetailScreen", "UID encontrado: $uid")  // Registro para verificar el UID
+                            cartViewModel.addProductToCart(
+                                uid = uid,
+                                productId = product.id,
+                                quantity = 1
+                            )
+                        } else {
+                            Log.e("ProductDetailScreen", "El UID está vacío, no se puede agregar al carrito")
+                        }
+                    },
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFE17F61)),
                     modifier = Modifier
                         .height(40.dp)

@@ -2,15 +2,19 @@ package mx.acg.zazil.model
 
 data class Order(
     val id: Int,
-    val direccion_envio: Address,
+    val direccion_envio: DireccionEnvio,
     val monto_total: Double,
-    val fecha_pedido: String,
-    val estado: String,
+    val fecha_envio: String?,
+    val fecha_entrega: String?,
+    val metodo_pago: String,
     val productos: List<ProductDetails>,
+    val fecha_pedido: String,
+    val uid: String,
+    val estado: String
 )
 
 data class Address(
-    val codigo_postal: Int,
+    val codigo_postal: String,
     val estado: String,
     val ciudad: String,
     val calle: String,

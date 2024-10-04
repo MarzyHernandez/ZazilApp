@@ -1,11 +1,11 @@
 package mx.acg.zazil.view
 
+import android.util.Log
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -36,20 +36,23 @@ fun AppNavHost(
             startDestination = "login",
             modifier = Modifier.padding(innerPadding)
         ) {
+
             composable("login") {
                 LoginScreen(navController = navController, signInWithGoogle = {})
             }
+
 
             composable("register") {
                 RegisterScreen(navController = navController)
             }
 
-            composable("productDetail/{productId}") { backStackEntry ->
+            composable("productDetail/{productId}/{uid}") { backStackEntry ->
                 val productId = backStackEntry.arguments?.getString("productId")?.toIntOrNull()
-                if (productId != null) {
-                    ProductDetailScreen(productId = productId)
+                val uid = backStackEntry.arguments?.getString("uid")
+                if (productId != null && uid != null) {
+                    ProductDetailScreen(productId = productId, uid = uid)
                 } else {
-                    Text("Producto no encontrado")
+                    Text("Producto no encontrado o UID inválido")
                 }
             }
 
@@ -57,8 +60,11 @@ fun AppNavHost(
                 BlogScreen()
             }
 
-            composable("catalog") {
-                CatalogScreen(navController = navController)
+            composable("catalog/{uid}") { backStackEntry ->
+                val uid = backStackEntry.arguments?.getString("uid")
+                if (uid != null) {
+                    CatalogScreen(navController = navController, uid = uid)
+                }
             }
 
             composable("profile") {
@@ -106,9 +112,18 @@ fun AppNavHost(
                 MyShoppingScreen(navController = navController, uid = uid)
             }
 
-            composable("shoppingDetails/{orderId}") { backStackEntry ->
-                val orderId = backStackEntry.arguments?.getString("orderId")?.toInt() ?: 0
-                MyShoppingDetailsScreen(navController = navController, orderId = orderId)
+            composable("productDetail/{productId}/{uid}") { backStackEntry ->
+                val productId = backStackEntry.arguments?.getString("productId")?.toIntOrNull()
+                val uid = backStackEntry.arguments?.getString("uid")
+
+                // Verificación y log de `uid`
+                Log.d("Navegación", "UID recibido en ProductDetailScreen: $uid")
+
+                if (productId != null && uid != null) {
+                    ProductDetailScreen(productId = productId, uid = uid)
+                } else {
+                    Log.e("Navegación", "Falta productId o uid")
+                }
             }
 
             composable("endShopping") {
