@@ -107,10 +107,15 @@ fun AppNavHost(
                 MyShoppingScreen(navController = navController, uid = uid)
             }
 
-            composable("shoppingDetails/{orderId}") { backStackEntry ->
+            composable("shoppingDetails/{orderId}/{uid}") { backStackEntry ->
                 val orderId = backStackEntry.arguments?.getString("orderId")?.toInt() ?: 0
-                val uid = FirebaseAuth.getInstance().currentUser?.uid
-                MyShoppingDetailsScreen(navController = navController, orderId = orderId, uid = uid ?: "")
+                val uid = backStackEntry.arguments?.getString("uid") ?: ""
+
+                MyShoppingDetailsScreen(
+                    navController = navController,
+                    orderId = orderId,
+                    uid = uid
+                )
             }
 
             composable("endShopping") {
