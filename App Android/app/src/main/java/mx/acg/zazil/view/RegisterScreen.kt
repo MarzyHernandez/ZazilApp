@@ -15,6 +15,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -43,6 +44,8 @@ fun RegisterScreen(navController: NavHostController) {
     var password by remember { mutableStateOf("") }
     var termsAccepted by remember { mutableStateOf(false) }  // Estado del checkbox de términos y condiciones
     var errorMessage by remember { mutableStateOf<String?>(null) }  // Estado del checkbox de términos y condiciones
+
+    var showDialog by remember { mutableStateOf(false) } // Estado para controlar el diálogo
 
     // Alcance de las coroutines
     val coroutineScope = rememberCoroutineScope()
@@ -160,7 +163,8 @@ fun RegisterScreen(navController: NavHostController) {
                         fontSize = 14.sp,
                         color = Color.Black)
 
-                    TextButton(onClick = { }) {
+                    // Botón de términos y condiciones que activa el diálogo
+                    TextButton(onClick = { showDialog = true }) {
                         Text(
                             text = "términos y condiciones",
                             color = Color(0xFFE27F61),
@@ -277,5 +281,34 @@ fun RegisterScreen(navController: NavHostController) {
                 }
             }
         }
+    }
+
+    // Mostrar el AlertDialog con los términos y condiciones
+    if (showDialog) {
+        AlertDialog(
+            onDismissRequest = { showDialog = false },
+            title = {
+                Text(
+                    text = "Términos y Condiciones",
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            },
+            text = {
+                Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                    Text(
+                        text = "Al utilizar nuestra aplicación de tienda en línea, usted acepta cumplir con los siguientes términos y condiciones. Nuestra plataforma proporciona un espacio para la compra de productos a través de su dispositivo Android. Los precios, la disponibilidad de productos, y las ofertas especiales están sujetos a cambios sin previo aviso. Nos reservamos el derecho de modificar o descontinuar la aplicación en cualquier momento sin responsabilidad alguna hacia usted. Es su responsabilidad asegurarse de que la información de su cuenta y los datos proporcionados para la compra sean precisos y estén actualizados. El uso indebido de nuestra aplicación, como el intento de fraude o cualquier otra actividad ilegal, resultará en la cancelación de su cuenta y podría ser reportado a las autoridades competentes.",
+                        fontSize = 14.sp,
+                        lineHeight = 22.sp,
+                        textAlign = TextAlign.Justify
+                    )
+                }
+            },
+            confirmButton = {
+                TextButton(onClick = { showDialog = false }) {
+                    Text("Cerrar", color = Color(0xFFE27F61))
+                }
+            }
+        )
     }
 }
