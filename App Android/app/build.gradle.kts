@@ -52,11 +52,24 @@ android {
 }
 
 dependencies {
+    implementation("com.stripe:stripe-android:20.51.0")
+    implementation("com.github.kittinunf.fuel:fuel:2.3.1")
+    implementation("com.github.kittinunf.fuel:fuel-json:2.3.1")
+
     implementation(platform("com.google.firebase:firebase-bom:33.3.0"))
     implementation(platform("com.google.firebase:firebase-auth"))
     implementation ("com.google.android.gms:play-services-auth:19.2.0")
-    implementation ("com.stripe:stripe-android:20.50.1")
     implementation ("com.google.firebase:firebase-functions-ktx")
+
+    implementation("com.paypal.android:paypal-web-payments:1.5.0")
+
+
+
+    //implementation(libs.paypal.checkout)
+
+    //implementation ("com.paypal.checkout:android-sdk:1.2.1")
+
+
 
     implementation(libs.coil)
     implementation(libs.retrofit)
@@ -74,6 +87,7 @@ dependencies {
     implementation(libs.firebase.common.ktx)
     implementation(libs.firebase.auth.ktx)
     implementation(libs.androidx.appcompat)
+    implementation(libs.firebase.firestore.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

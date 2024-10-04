@@ -16,8 +16,13 @@ runtimeLivedata = "1.7.1"
 firebaseCommonKtx = "21.0.0"
 firebaseAuthKtx = "23.0.0"
 appcompat = "1.7.0"
+firebaseFirestoreKtx = "25.1.0"
+paypal-sdk = "1.5.0"
+
 
 [libraries]
+paypal-checkout = { module = "com.paypal.checkout:android-sdk", version.ref = "paypal-sdk" }
+
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
@@ -40,6 +45,7 @@ androidx-runtime-livedata = { group = "androidx.compose.runtime", name = "runtim
 firebase-common-ktx = { group = "com.google.firebase", name = "firebase-common-ktx", version.ref = "firebaseCommonKtx" }
 firebase-auth-ktx = { group = "com.google.firebase", name = "firebase-auth-ktx", version.ref = "firebaseAuthKtx" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+firebase-firestore-ktx = { group = "com.google.firebase", name = "firebase-firestore-ktx", version.ref = "firebaseFirestoreKtx" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

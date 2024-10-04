@@ -20,8 +20,9 @@
             android:theme="@style/Theme.Zazil">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
+
+                <data android:scheme="com.zazil.app" android:host="paypalpay" />
             </intent-filter>
         </activity>
     </application>
