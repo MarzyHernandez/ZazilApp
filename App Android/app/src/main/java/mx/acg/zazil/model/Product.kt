@@ -24,5 +24,13 @@ object RetrofitInstance {
             .build()
             .create(ProductApi::class.java)
     }
+    val productDetailApi: ProductApi by lazy {
+        Retrofit.Builder()
+            .baseUrl("https://getproductbyid-dztx2pd2na-uc.a.run.app/") // Base URL para obtener producto por ID
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(ProductApi::class.java)
+    }
+
 }
 

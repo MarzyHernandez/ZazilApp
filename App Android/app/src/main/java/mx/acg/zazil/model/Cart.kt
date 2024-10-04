@@ -1,14 +1,7 @@
 package mx.acg.zazil.model
 
-import okhttp3.ResponseBody
-import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.PUT
-import retrofit2.http.Query
-
 // Modelo del carrito
 data class Cart(
     val id: String,
@@ -36,8 +29,6 @@ data class CartUpdate(
     val id_producto: Int,
     val cantidad: Int
 )
-
-
 
 // Singleton para Retrofit de la API del carrito
 object CartRetrofitInstance {
