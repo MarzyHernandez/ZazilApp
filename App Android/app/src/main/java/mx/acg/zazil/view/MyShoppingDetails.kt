@@ -93,7 +93,7 @@ fun MyShoppingDetailsScreen(
             modifier = Modifier.padding(start = 16.dp, top = 8.dp)
         ) {
             Text(
-                text = "← Regresar",
+                text = "< Regresar",
                 fontSize = 14.sp,
                 color = Color.Gray,
                 fontWeight = FontWeight.Bold
