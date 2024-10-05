@@ -143,7 +143,7 @@ fun CartScreen(
                                 productName = product.nombre,
                                 productImageUrl = product.imagen,
                                 quantity = cartProduct.cantidad,
-                                price = product.precio_normal,
+                                price = product.precio_rebajado,
                                 onAddClicked = { /* Acción para aumentar la cantidad */ },
                                 onRemoveClicked = { /* Acción para disminuir la cantidad */ }
                             )
