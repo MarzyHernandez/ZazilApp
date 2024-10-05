@@ -1,9 +1,10 @@
 plugins {
-    id("com.google.gms.google-services")
-
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.jetbrains.kotlin.serialization)  // Asegúrate de que el plugin de serialización esté aquí
+    id("com.google.gms.google-services")  // Esto ya está correcto
 }
+
 
 android {
     namespace = "mx.acg.zazil"
@@ -52,28 +53,27 @@ android {
 }
 
 dependencies {
-    implementation("com.stripe:stripe-android:20.51.0")
-    implementation("com.github.kittinunf.fuel:fuel:2.3.1")
-    implementation("com.github.kittinunf.fuel:fuel-json:2.3.1")
-
     implementation(platform("com.google.firebase:firebase-bom:33.3.0"))
     implementation(platform("com.google.firebase:firebase-auth"))
     implementation ("com.google.android.gms:play-services-auth:19.2.0")
-    implementation ("com.google.firebase:firebase-functions-ktx")
+    implementation ("com.stripe:stripe-android:20.50.1")
+    implementation ("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.2")
+    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
 
-    implementation("com.paypal.android:paypal-web-payments:1.5.0")
-
-
-
-    //implementation(libs.paypal.checkout)
-
-    //implementation ("com.paypal.checkout:android-sdk:1.2.1")
+    implementation("com.stripe:stripe-android:20.51.0")
+    implementation("com.github.kittinunf.fuel:fuel:2.3.1")
+    implementation("com.github.kittinunf.fuel:fuel-json:2.3.1")
 
 
 
     implementation(libs.coil)
     implementation(libs.retrofit)
     implementation(libs.gson)
+    implementation(libs.okhttp)
+    implementation(libs.okhttp.logging.interceptor)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -86,8 +86,9 @@ dependencies {
     implementation(libs.androidx.runtime.livedata)
     implementation(libs.firebase.common.ktx)
     implementation(libs.firebase.auth.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.firebase.firestore.ktx)
+    implementation(libs.androidx.navigation.runtime.ktx)
+    implementation(libs.androidx.material.icons.extended)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -95,4 +96,5 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
 }

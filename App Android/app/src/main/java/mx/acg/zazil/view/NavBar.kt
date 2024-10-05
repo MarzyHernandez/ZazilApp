@@ -53,7 +53,7 @@ fun NavBar(navController: NavHostController, modifier: Modifier = Modifier) {
                 tint = Color.White
             )
         }
-        IconButton(onClick = { navController.navigate("perfil") }) {
+        IconButton(onClick = { navController.navigate("profile") }) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_profile_w),
                 contentDescription = "Perfil",

@@ -1,3 +1,4 @@
+// ProductViewModel.kt
 package mx.acg.zazil.viewmodel
 
 import android.util.Log
@@ -11,31 +12,18 @@ import mx.acg.zazil.model.Product
 import mx.acg.zazil.model.RetrofitInstance
 
 class ProductViewModel : ViewModel() {
-    private val _products = MutableLiveData<List<Product>>() // Lista de todos los productos
-    val products: LiveData<List<Product>> get() = _products
 
-    private val _selectedProduct = MutableLiveData<Product?>() // Producto seleccionado
-    val selectedProduct: LiveData<Product?> get() = _selectedProduct
+    private val _loadedProducts = MutableLiveData<Map<Int, Product>>() // Mapa de productos cargados por ID
+    val loadedProducts: LiveData<Map<Int, Product>> get() = _loadedProducts
 
-    // Método para cargar la lista de productos
-    fun loadProducts() {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                val productList = RetrofitInstance.productApi.getProducts()
-                _products.postValue(productList)
-                Log.d("ProductViewModel", "Productos cargados: ${productList.size}")
-            } catch (e: Exception) {
-                Log.e("ProductViewModel", "Error cargando productos", e)
-            }
-        }
-    }
+    private val productsMap = mutableMapOf<Int, Product>()  // Mapa para almacenar los productos cargados
 
-    // Método para cargar un producto específico por ID
-    fun loadProductById(productId: Int) {
+    // Método para cargar un producto específico por ID y llamar al callback con el producto cargado
+    fun loadProductById(productId: Int, onProductLoaded: (Product) -> Unit) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val product = RetrofitInstance.productDetailApi.getProductById(productId)
-                _selectedProduct.postValue(product)
+                onProductLoaded(product)
                 Log.d("ProductViewModel", "Producto cargado: ${product.nombre}")
             } catch (e: Exception) {
                 Log.e("ProductViewModel", "Error cargando producto por ID", e)

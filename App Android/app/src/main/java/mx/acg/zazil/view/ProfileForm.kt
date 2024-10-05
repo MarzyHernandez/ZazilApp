@@ -1,5 +1,6 @@
 package mx.acg.zazil.view
 
+import UserProfile
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,20 +12,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
-
-/**
- * Composable que muestra el formulario de perfil del usuario con sus datos personales.
- * @author Melissa Mireles Rendón
- * @author Alberto Cebreros González
- * Organiza los campos de nombre, teléfono, correo y contraseña en filas.
- * @param [modifier] Modificador para personalizar la disposición y el estilo del formulario.
- */
 @Composable
-fun ProfileForm(modifier: Modifier = Modifier) {
-    val nombre = remember { mutableStateOf("Ana Sofía Vázquez Delgado") }
-    val telefono = remember { mutableStateOf("5567892234") }
-    val correo = remember { mutableStateOf("ana.vazquez@gmail.com") }
-    val contrasena = remember { mutableStateOf("********") }
+fun ProfileForm(profile: UserProfile, modifier: Modifier = Modifier) {
+    val nombres = remember { mutableStateOf(profile.nombres) }
+    val apellidos = remember { mutableStateOf(profile.apellidos) }
+    val telefono = remember { mutableStateOf(profile.telefono) }
+    val correo = remember { mutableStateOf(profile.email) }
 
     Column(
         modifier = modifier
@@ -36,24 +29,22 @@ fun ProfileForm(modifier: Modifier = Modifier) {
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            // Recuadro Nombre
             ProfileInputField(
-                label = "Nombre",
-                value = nombre.value,
+                label = "Nombres",
+                value = nombres.value,
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxWidth(),
-                onValueChange = { nombre.value = it }
+                onValueChange = { nombres.value = it }
             )
 
-            // Recuadro Teléfono
             ProfileInputField(
-                label = "Teléfono",
-                value = telefono.value,
+                label = "Apellidos",
+                value = apellidos.value,
                 modifier = Modifier
-                    .weight(0.5f)
+                    .weight(1f)
                     .fillMaxWidth(),
-                onValueChange = { telefono.value = it }
+                onValueChange = { apellidos.value = it }
             )
         }
 
@@ -61,7 +52,6 @@ fun ProfileForm(modifier: Modifier = Modifier) {
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            // Recuadro Correo
             ProfileInputField(
                 label = "Correo",
                 value = correo.value,
@@ -71,14 +61,13 @@ fun ProfileForm(modifier: Modifier = Modifier) {
                 onValueChange = { correo.value = it }
             )
 
-            // Recuadro Contraseña
             ProfileInputField(
-                label = "Contraseña",
-                value = contrasena.value,
+                label = "Teléfono",
+                value = telefono.value,
                 modifier = Modifier
                     .weight(0.5f)
                     .fillMaxWidth(),
-                onValueChange = { contrasena.value = it }
+                onValueChange = { telefono.value = it }
             )
         }
     }

@@ -1,37 +1,56 @@
 package mx.acg.zazil.view
 
+import android.content.Intent
+import android.net.Uri
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import com.google.firebase.auth.FirebaseAuth
 import mx.acg.zazil.R
+import androidx.lifecycle.viewmodel.compose.viewModel
+import mx.acg.zazil.viewmodel.SettingsViewModel
 
 @Composable
-fun SettingsScreen(modifier: Modifier = Modifier) {
+fun SettingsScreen(
+    navController: NavHostController,
+    modifier: Modifier = Modifier,
+    settingsViewModel: SettingsViewModel = viewModel()  // Inyectamos el ViewModel
+) {
+    // Obtén la instancia de FirebaseAuth
+    val auth = FirebaseAuth.getInstance()
+    val currentUser = auth.currentUser
+    val uid = currentUser?.uid
+
+    // Estado para controlar el diálogo de confirmación
+    var showDialog by remember { mutableStateOf(false) }
+
     Box(
         modifier = modifier
             .fillMaxSize()
-            .background(Color(0xFFFEE1D6)) // Fondo color rosa
+            .background(Color(0xFFFEE1D6))  // Fondo color rosa
             .padding(16.dp)
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .verticalScroll(rememberScrollState()) // Hacemos la columna scrolleable
+                .verticalScroll(rememberScrollState())  // Hacemos la columna scrolleable
         ) {
             // Título de Ajustes
             Text(
@@ -45,7 +64,12 @@ fun SettingsScreen(modifier: Modifier = Modifier) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 8.dp),
+                    .padding(vertical = 8.dp)
+                    .clickable {
+                        Log.d("SettingsScreen", "Cerrando sesión...")
+                        auth.signOut()
+                        navController.navigate("login")
+                    },
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
@@ -72,8 +96,21 @@ fun SettingsScreen(modifier: Modifier = Modifier) {
             )
 
             SettingOption(title = "Cambiar Contraseña", iconResId = R.drawable.ic_password)
-            SettingOption(title = "Actualizar Datos", iconResId = R.drawable.ic_edit)
-            SettingOption(title = "Eliminar Cuenta", iconResId = R.drawable.ic_delete)
+            SettingOption(
+                title = "Actualizar Datos",
+                iconResId = R.drawable.ic_edit
+            ) {
+                navController.navigate("updateData")  // Navega a la pantalla de actualización de datos
+            }
+
+
+            SettingOption(
+                title = "Eliminar Cuenta",
+                iconResId = R.drawable.ic_delete
+            ) {
+                // Mostrar diálogo de confirmación antes de eliminar la cuenta
+                showDialog = true
+            }
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -85,22 +122,29 @@ fun SettingsScreen(modifier: Modifier = Modifier) {
                 modifier = Modifier.padding(vertical = 8.dp)
             )
 
-            SettingOption(title = "Sobre Nosotros", iconResId = R.drawable.ic_about)
-            SettingOption(title = "Términos y Condiciones", iconResId = R.drawable.ic_terms)
-            SettingOption(title = "Aviso de Privacidad", iconResId = R.drawable.ic_privacy)
-            SettingOption(title = "Créditos", iconResId = R.drawable.ic_credits)
+            SettingOption(title = "Sobre Nosotros", iconResId = R.drawable.ic_about) {
+                navController.navigate("aboutUs")
+            }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            SettingOption(title = "Términos y Condiciones", iconResId = R.drawable.ic_terms) {
+                navController.navigate("TyC")
+            }
+
+            SettingOption(title = "Aviso de Privacidad", iconResId = R.drawable.ic_privacy)
+
+            SettingOption(title = "Créditos", iconResId = R.drawable.ic_credits) {
+                navController.navigate("credits")
+            }
 
             // Redes Sociales
             Row(
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                SocialMediaIcon(R.drawable.ic_facebook)
-                SocialMediaIcon(R.drawable.ic_instagram)
-                SocialMediaIcon(R.drawable.ic_tiktok)
-                SocialMediaIcon(R.drawable.ic_web)
+                SocialMediaIcon(R.drawable.ic_facebook, "https://www.facebook.com/share/mjfnrxUW55mwTEXk/?mibextid=LQQJ4d")
+                SocialMediaIcon(R.drawable.ic_instagram, "https://www.instagram.com/toallas.zazil?igsh=MTdtaXRmeXk3MWxqMw==")
+                SocialMediaIcon(R.drawable.ic_tiktok, "https://www.tiktok.com/@todas.brillamos?_t=8qDNNVLY1kz&_r=1")
+                SocialMediaIcon(R.drawable.ic_web, "https://zazilrrr.org/catalogo/zazil/index.php#")
             }
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -114,14 +158,53 @@ fun SettingsScreen(modifier: Modifier = Modifier) {
             )
         }
     }
+
+    // Diálogo de confirmación para eliminar la cuenta
+    if (showDialog) {
+        AlertDialog(
+            onDismissRequest = { showDialog = false },
+            title = { Text(text = "Confirmación", color = Color(0xFFE17F61)) },  // Cambia el color del título
+            text = { Text(text = "¿Estás seguro que deseas eliminar tu cuenta?", color = Color(0xFF191919)) },  // Texto del cuerpo
+            confirmButton = {
+                Button(
+                    onClick = {
+                        uid?.let {
+                            settingsViewModel.deleteAccount(
+                                uid = it,
+                                onSuccess = {
+                                    Log.d("SettingsScreen", "Cuenta eliminada exitosamente")
+                                    navController.navigate("login")  // Navega a la pantalla de login tras la eliminación
+                                },
+                                onError = { errorMessage ->
+                                    Log.e("SettingsScreen", "Error al eliminar la cuenta: $errorMessage")
+                                }
+                            )
+                        } ?: Log.e("SettingsScreen", "Error: UID no encontrado")
+                        showDialog = false
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFE17F61))  // Botón de confirmación en rosita
+                ) {
+                    Text(text = "Eliminar", color = Color.White)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDialog = false }) {
+                    Text(text = "Cancelar", color = Color(0xFFE17F61))  // Texto de cancelación en rosita
+                }
+            },
+            containerColor = Color.White,  // Fondo del diálogo en rosita claro
+        )
+    }
+
 }
 
 @Composable
-fun SettingOption(title: String, iconResId: Int) {
+fun SettingOption(title: String, iconResId: Int, onClick: () -> Unit = {}) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp)
+            .clickable { onClick() }  // Añadimos un callback para manejar clics
             .clip(RoundedCornerShape(8.dp))
             .background(Color.White)
             .padding(16.dp),
@@ -139,8 +222,12 @@ fun SettingOption(title: String, iconResId: Int) {
 }
 
 @Composable
-fun SocialMediaIcon(iconResId: Int) {
-    IconButton(onClick = { /* Acción para red social */ }) {
+fun SocialMediaIcon(iconResId: Int, url: String) {
+    val context = LocalContext.current
+    IconButton(onClick = {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        context.startActivity(intent)
+    }) {
         Box(
             modifier = Modifier
                 .size(50.dp) // Ajusta el tamaño de la caja para los íconos
@@ -148,13 +235,12 @@ fun SocialMediaIcon(iconResId: Int) {
                 .background(Color(0xFFEBB7A7))
         ) {
             Image(
-                painter = painterResource(id = iconResId), // Reemplaza con tu recurso
+                painter = painterResource(id = iconResId),
                 contentDescription = null,
                 modifier = Modifier
-                    .size(50.dp)  // Tamaño de la imagen
-                    .clip(CircleShape)  // Si quieres mantener la forma circular
+                    .size(50.dp)
+                    .clip(CircleShape)
             )
-
         }
     }
 }

@@ -1,3 +1,4 @@
+
 package mx.acg.zazil.model
 
 import retrofit2.Retrofit
@@ -15,14 +16,6 @@ data class Product(
     val precio_rebajado: Double,
     val imagen: String
 )
-
-interface ProductApi {
-    @GET("/") // Obtener todos los productos
-    suspend fun getProducts(): List<Product>
-
-    @GET("/") // Obtener un producto por ID
-    suspend fun getProductById(@Query("id") productId: Int): Product
-}
 
 object RetrofitInstance {
     val productApi: ProductApi by lazy {
