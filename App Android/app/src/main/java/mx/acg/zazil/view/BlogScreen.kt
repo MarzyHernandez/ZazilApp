@@ -22,6 +22,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
 import mx.acg.zazil.R
 import mx.acg.zazil.viewmodel.PostViewModel
@@ -69,30 +70,42 @@ fun BlogScreen(
                         fontWeight = FontWeight.Bold,
                         fontFamily = gabaritoFontFamily,
                         color = Color(0xFF191919)
-
                     )
-
                 }
             }
 
             Spacer(modifier = Modifier.height(16.dp))
 
-
-
-            // Mostrar los posts obtenidos de la API
-            posts.forEach { post ->
-                BlogPost(
-                    title = post.titulo,
-                    author = post.autor,
-                    timeAgo = post.fecha.substring(0, 10),  // Solo mostramos la fecha, puedes formatear mejor si lo prefieres
-                    description = post.contenido,
-                    imageUrls = listOf(post.imagen)  // Solo una imagen, en este caso
-                )
-                Spacer(modifier = Modifier.height(16.dp)) // Espacio entre publicaciones
+            if (posts.isEmpty()) {
+                // Mostrar el loader debajo del título "Publicaciones" mientras las publicaciones están cargando
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 16.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator(
+                        color = Color(0xFFE17F61), // Color personalizado para el loader
+                        modifier = Modifier.size(50.dp)
+                    )
+                }
+            } else {
+                // Mostrar los posts obtenidos de la API
+                posts.forEach { post ->
+                    BlogPost(
+                        title = post.titulo,
+                        author = post.autor,
+                        timeAgo = post.fecha.substring(0, 10),
+                        description = post.contenido,
+                        imageUrls = listOf(post.imagen)
+                    )
+                    Spacer(modifier = Modifier.height(16.dp)) // Espacio entre publicaciones
+                }
             }
         }
     }
 }
+
 
 @Composable
 fun BlogPost(
@@ -123,28 +136,27 @@ fun BlogPost(
                 Text(
                     text = title,
                     fontSize = 16.sp,
-                    color = Color(0xFFE17F61),  // Aplica el color aquí
+                    color = Color(0xFFE17F61),
                     fontFamily = gabaritoFontFamily,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier
-                        .weight(1f)  // Ocupa todo el espacio restante a la izquierda
-                        .wrapContentHeight()  // Permite que el título crezca en altura si es necesario
-                        .widthIn(max = 230.dp)  // Ajusta el ancho máximo para que el texto haga salto de línea
+                        .weight(1f)
+                        .wrapContentHeight()
+                        .widthIn(max = 230.dp)
                 )
 
-                Spacer(modifier = Modifier.width(12.dp))  // Espacio entre el título y la información del autor
+                Spacer(modifier = Modifier.width(12.dp))
 
                 // Imagen, autor y fecha alineados a la derecha
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    // Imagen del autor
                     Image(
-                        painter = painterResource(id = R.drawable.experto),  // Icono del perfil del autor
+                        painter = painterResource(id = R.drawable.experto),
                         contentDescription = "Imagen del autor",
                         modifier = Modifier
                             .size(40.dp)
-                            .clip(CircleShape)  // Hacemos la imagen redonda
+                            .clip(CircleShape)
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Column {
@@ -171,16 +183,15 @@ fun BlogPost(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                // Mostramos las imágenes desde las URLs
                 imageUrls.forEach { imageUrl ->
                     Image(
-                        painter = rememberImagePainter(imageUrl),  // Usamos Coil para cargar las imágenes desde URLs
+                        painter = rememberAsyncImagePainter(imageUrl),
                         contentDescription = "Imagen de la publicación",
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
                             .weight(1f)
-                            .clip(RoundedCornerShape(8.dp))  // Bordes redondeados
-                            .aspectRatio(1.5f)  // Relación de aspecto uniforme
+                            .clip(RoundedCornerShape(8.dp))
+                            .aspectRatio(1.5f)
                     )
                 }
             }

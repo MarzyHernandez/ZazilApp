@@ -18,17 +18,34 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.Response
 import java.io.IOException
 
+/**
+ * ViewModel que maneja la lógica de inicio de sesión y comunicación con la API para la autenticación de usuarios.
+ *
+ * Este ViewModel se encarga de gestionar el inicio de sesión del usuario utilizando Firebase Authentication,
+ * realizar solicitudes a la API para obtener el UID del usuario y manejar el envío de datos de usuario a la API.
+ * También permite establecer mensajes de error y exponerlos a la vista.
+ *
+ * @property userId LiveData que contiene el UID del usuario autenticado.
+ * @property errorMessage LiveData que contiene mensajes de error en caso de que ocurran.
+ * @property googleUser Instancia de GoogleUser para el envío de datos de usuario.
+ *
+ * @author Melissa Mireles Rendón
+ * @author Alberto Cebreros González
+ *
+ */
 class LoginViewModel : ViewModel() {
 
+    // LiveData para el UID del usuario autenticado
     private val _userId = MutableLiveData<String?>()
     val userId: LiveData<String?> get() = _userId
 
+    // LiveData para el mensaje de error
     private val _errorMessage = MutableLiveData<String?>()
     val errorMessage: MutableLiveData<String?> get() = _errorMessage
 
     private val googleUser = GoogleUser()
 
-    // Crear instancia de Retrofit directamente en el ViewModel
+    // Crear instancia de Retrofit directamente en el ViewModel para la comunicación con la API
     private val retrofit: Retrofit by lazy {
         val logging = HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
@@ -45,14 +62,16 @@ class LoginViewModel : ViewModel() {
             .build()
     }
 
-    // Crear la instancia del servicio
+    // Crear la instancia del servicio para las solicitudes a la API
     private val userService: UserApi = retrofit.create(UserApi::class.java)
 
     /**
-     * Función para iniciar sesión utilizando el email y password.
-     * @param email Correo del usuario
-     * @param password Contraseña del usuario
-     * @param onSuccess Callback que se llama cuando la autenticación es exitosa.
+     * Inicia sesión utilizando el email y la contraseña proporcionados.
+     *
+     * @param email Correo electrónico del usuario.
+     * @param password Contraseña del usuario.
+     * @param onSuccess Callback a ejecutar si el inicio de sesión es exitoso.
+     * @param onFailure Callback a ejecutar si el inicio de sesión falla, proporcionando el mensaje de error.
      */
     fun loginWithEmail(
         email: String,
@@ -60,22 +79,23 @@ class LoginViewModel : ViewModel() {
         onSuccess: () -> Unit,
         onFailure: (String) -> Unit
     ) {
-        // Verifica si los campos están vacíos
+        // Verifica si los campos están vacíos y establece el mensaje de error si es así
         if (email.isBlank() || password.isBlank()) {
             _errorMessage.value = "Los campos de correo y contraseña no pueden estar vacíos."
             onFailure("Los campos de correo y contraseña no pueden estar vacíos.")
             return
         }
 
+        // Intentar iniciar sesión con Firebase Authentication
         FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    // Usuario autenticado correctamente
+                    // Si la autenticación es exitosa, obtener el usuario actual
                     val user = FirebaseAuth.getInstance().currentUser
                     if (user != null) {
                         viewModelScope.launch {
                             try {
-                                // Realiza la solicitud de login utilizando la API
+                                // Realiza la solicitud a la API para obtener el UID del usuario
                                 val response: Response<UserResponse> = userService.getUserIdByEmail(email)
 
                                 if (response.isSuccessful) {
@@ -94,6 +114,10 @@ class LoginViewModel : ViewModel() {
                                     _errorMessage.value = error
                                     onFailure(error)
                                 }
+                            } catch (e: IOException) {
+                                val error = "Error de red: Verifica tu conexión a Internet."
+                                _errorMessage.value = error
+                                onFailure(error)
                             } catch (e: Exception) {
                                 val error = "Error de red: ${e.message}"
                                 _errorMessage.value = error
@@ -114,7 +138,10 @@ class LoginViewModel : ViewModel() {
     }
 
     /**
-     * Función para enviar datos del usuario a la API.
+     * Envía los datos del usuario a la API.
+     *
+     * @param email Correo electrónico del usuario.
+     * @param uid UID del usuario.
      */
     fun sendUserDataToApi(email: String, uid: String) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -128,7 +155,9 @@ class LoginViewModel : ViewModel() {
     }
 
     /**
-     * Establece un mensaje de error personalizado.
+     * Establece un mensaje de error personalizado en el LiveData.
+     *
+     * @param message Mensaje de error a establecer.
      */
     fun setErrorMessage(message: String) {
         _errorMessage.value = message
