@@ -91,7 +91,7 @@ fun HeaderWithGradientLogo() {
 fun StoryTeamSection() {
     Row(
         modifier = Modifier
-            .fillMaxWidth() // Ocupa todo el ancho disponible
+            .fillMaxWidth()
             .padding(horizontal = 16.dp) // Añade espacio horizontal
             .horizontalScroll(rememberScrollState()), // Habilita el desplazamiento horizontal
         horizontalArrangement = Arrangement.spacedBy(16.dp) // Espacio entre las tarjetas
@@ -129,7 +129,7 @@ fun TeamMemberStoryCard(member: TeamMember) {
         colors = CardDefaults.cardColors(containerColor = Color.White) // Color de fondo blanco
     ) {
         Box(
-            modifier = Modifier.fillMaxSize() // El contenido ocupa todo el tamaño de la tarjeta
+            modifier = Modifier.fillMaxSize() //
         ) {
             // Imagen del miembro
             Image(
@@ -145,7 +145,7 @@ fun TeamMemberStoryCard(member: TeamMember) {
                 modifier = Modifier
                     .align(Alignment.BottomStart) // Se alinea en la parte inferior de la tarjeta
                     .background(Color(0xAA635A57)) // Fondo semitransparente para resaltar el texto
-                    .fillMaxWidth() // El fondo cubre todo el ancho de la tarjeta
+                    .fillMaxWidth() //
                     .padding(8.dp), // Espacio interno
                 horizontalAlignment = Alignment.CenterHorizontally // El texto está centrado horizontalmente
             ) {
