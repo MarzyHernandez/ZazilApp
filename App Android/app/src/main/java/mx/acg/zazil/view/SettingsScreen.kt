@@ -19,6 +19,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -44,121 +45,157 @@ fun SettingsScreen(
     Box(
         modifier = modifier
             .fillMaxSize()
-            .background(Color(0xFFFEE1D6))  // Fondo color rosa
-            .padding(16.dp)
+            .background(Color.White)  // Fondo color blanco
+            .padding(0.dp)
     ) {
+
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .verticalScroll(rememberScrollState())  // Hacemos la columna scrolleable
         ) {
-            // Título de Ajustes
-            Text(
-                text = "Ajustes",
-                fontSize = 28.sp,
-                color = Color(0xFF191919),
-                modifier = Modifier.padding(bottom = 16.dp)
-            )
 
-            // Opción "Cerrar sesión"
-            Row(
+            // Encabezado del carrito
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 8.dp)
-                    .clickable {
-                        Log.d("SettingsScreen", "Cerrando sesión...")
-                        auth.signOut()
-                        navController.navigate("login")
-                    },
-                verticalAlignment = Alignment.CenterVertically
+                    .clip(RoundedCornerShape(bottomEnd = 18.dp, bottomStart = 18.dp))
+                    .background(Color(0xFFFEE1D6))
+                    .padding(vertical = 32.dp)
             ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_logout),
-                    contentDescription = "Cerrar sesión",
-                    tint = Color.Black
-                )
-                Spacer(modifier = Modifier.width(8.dp))
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "Ajustes",
+                        fontSize = 36.sp,
+                        fontWeight = FontWeight.Bold,
+                        fontFamily = gabaritoFontFamily,
+                        color = Color(0xFF191919)
+
+                    )
+                }
+            }
+
+            Column( modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)) {
+                // Opción "Cerrar sesión"
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp)
+                        .clickable {
+                            Log.d("SettingsScreen", "Cerrando sesión...")
+                            auth.signOut()
+                            navController.navigate("login")
+                        },
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Spacer(modifier = Modifier.width(24.dp))
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_logout),
+                        contentDescription = "Cerrar sesión",
+                        tint = Color.Black
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = "Cerrar sesión",
+                        fontSize = 16.sp,
+                        color = Color(0xFF191919)
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // Sección "Mi Cuenta"
                 Text(
-                    text = "Cerrar sesión",
+                    text = "MI CUENTA",
                     fontSize = 16.sp,
-                    color = Color(0xFF191919)
+                    color = Color(0xFF545454),
+                    modifier = Modifier.padding(vertical = 8.dp)
+                )
+
+
+                SettingOption(
+                    title = "Actualizar Datos",
+                    iconResId = R.drawable.ic_edit
+                ) {
+                    navController.navigate("updateData")  // Navega a la pantalla de actualización de datos
+                }
+
+
+                SettingOption(
+                    title = "Eliminar Cuenta",
+                    iconResId = R.drawable.ic_delete
+                ) {
+                    // Mostrar diálogo de confirmación antes de eliminar la cuenta
+                    showDialog = true
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // Sección "Acerca de"
+                Text(
+                    text = "ACERCA DE",
+                    fontSize = 16.sp,
+                    color = Color(0xFF545454),
+                    modifier = Modifier.padding(vertical = 8.dp)
+                )
+
+                SettingOption(title = "Sobre Nosotros", iconResId = R.drawable.ic_about) {
+                    navController.navigate("aboutUs")
+                }
+
+                SettingOption(title = "Términos y Condiciones", iconResId = R.drawable.ic_terms) {
+                    navController.navigate("TyC")
+                }
+
+                SettingOption(title = "Aviso de Privacidad", iconResId = R.drawable.ic_privacy)
+
+                SettingOption(title = "Créditos", iconResId = R.drawable.ic_credits) {
+                    navController.navigate("credits")
+                }
+
+                Spacer(modifier = Modifier.height(50.dp))
+                // Redes Sociales
+                Row(
+                    horizontalArrangement = Arrangement.SpaceEvenly,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    SocialMediaIcon(
+                        R.drawable.ic_facebook,
+                        "https://www.facebook.com/share/mjfnrxUW55mwTEXk/?mibextid=LQQJ4d"
+                    )
+                    SocialMediaIcon(
+                        R.drawable.ic_instagram,
+                        "https://www.instagram.com/toallas.zazil?igsh=MTdtaXRmeXk3MWxqMw=="
+                    )
+                    SocialMediaIcon(
+                        R.drawable.ic_tiktok,
+                        "https://www.tiktok.com/@todas.brillamos?_t=8qDNNVLY1kz&_r=1"
+                    )
+                    SocialMediaIcon(
+                        R.drawable.ic_web,
+                        "https://zazilrrr.org/catalogo/zazil/index.php#"
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // Versión de la aplicación
+                Text(
+                    text = "v1.0.1",
+                    fontSize = 12.sp,
+                    color = Color.Gray,
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
             }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Sección "Mi Cuenta"
-            Text(
-                text = "MI CUENTA",
-                fontSize = 16.sp,
-                color = Color(0xFF545454),
-                modifier = Modifier.padding(vertical = 8.dp)
-            )
-
-            SettingOption(title = "Cambiar Contraseña", iconResId = R.drawable.ic_password)
-            SettingOption(
-                title = "Actualizar Datos",
-                iconResId = R.drawable.ic_edit
-            ) {
-                navController.navigate("updateData")  // Navega a la pantalla de actualización de datos
-            }
-
-
-            SettingOption(
-                title = "Eliminar Cuenta",
-                iconResId = R.drawable.ic_delete
-            ) {
-                // Mostrar diálogo de confirmación antes de eliminar la cuenta
-                showDialog = true
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Sección "Acerca de"
-            Text(
-                text = "ACERCA DE",
-                fontSize = 16.sp,
-                color = Color(0xFF545454),
-                modifier = Modifier.padding(vertical = 8.dp)
-            )
-
-            SettingOption(title = "Sobre Nosotros", iconResId = R.drawable.ic_about) {
-                navController.navigate("aboutUs")
-            }
-
-            SettingOption(title = "Términos y Condiciones", iconResId = R.drawable.ic_terms) {
-                navController.navigate("TyC")
-            }
-
-            SettingOption(title = "Aviso de Privacidad", iconResId = R.drawable.ic_privacy)
-
-            SettingOption(title = "Créditos", iconResId = R.drawable.ic_credits) {
-                navController.navigate("credits")
-            }
-
-            // Redes Sociales
-            Row(
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                SocialMediaIcon(R.drawable.ic_facebook, "https://www.facebook.com/share/mjfnrxUW55mwTEXk/?mibextid=LQQJ4d")
-                SocialMediaIcon(R.drawable.ic_instagram, "https://www.instagram.com/toallas.zazil?igsh=MTdtaXRmeXk3MWxqMw==")
-                SocialMediaIcon(R.drawable.ic_tiktok, "https://www.tiktok.com/@todas.brillamos?_t=8qDNNVLY1kz&_r=1")
-                SocialMediaIcon(R.drawable.ic_web, "https://zazilrrr.org/catalogo/zazil/index.php#")
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Versión de la aplicación
-            Text(
-                text = "v1.0.1",
-                fontSize = 12.sp,
-                color = Color.Gray,
-                modifier = Modifier.align(Alignment.CenterHorizontally)
-            )
         }
     }
-
     // Diálogo de confirmación para eliminar la cuenta
     if (showDialog) {
         AlertDialog(
@@ -227,7 +264,10 @@ fun SocialMediaIcon(iconResId: Int, url: String) {
     IconButton(onClick = {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
         context.startActivity(intent)
-    }) {
+    })
+
+    {
+        Spacer(modifier = Modifier.height(50.dp))
         Box(
             modifier = Modifier
                 .size(50.dp) // Ajusta el tamaño de la caja para los íconos

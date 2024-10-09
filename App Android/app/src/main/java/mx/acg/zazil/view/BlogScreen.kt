@@ -42,61 +42,42 @@ fun BlogScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFEFEEEE))
+            .background(Color.White)
             .verticalScroll(rememberScrollState())  // Hacer la pantalla desplazable
     ) {
         Column(
             modifier = Modifier
-                .padding(16.dp)
+                .padding(0.dp)
                 .fillMaxWidth()
         ) {
-            // Encabezado con logotipo y nombre
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clip(RoundedCornerShape(bottomEnd = 16.dp, bottomStart = 16.dp)) // Bordes redondeados solo en la parte inferior
-                    .background(Color(0xFFFEE1D6))  // Color de fondo rosa
-                    .padding(vertical = 16.dp) // Ajuste de padding interno
+                    .clip(RoundedCornerShape(bottomEnd = 18.dp, bottomStart = 18.dp))
+                    .background(Color(0xFFFEE1D6))
+                    .padding(vertical = 32.dp)
             ) {
                 Row(
                     modifier = Modifier
-                        .align(Alignment.CenterStart)
-                        .padding(start = 8.dp),
+                        .fillMaxWidth()
+                        .padding(start = 16.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Box(
-                        modifier = Modifier
-                            .size(50.dp) // Tamaño del círculo
-                            .clip(CircleShape) // Forma circular
-                            .background(Color.White) // Fondo blanco del círculo
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.logo),
-                            contentDescription = "Logotipo",
-                            modifier = Modifier
-                                .size(40.dp) // Tamaño del logo
-                                .align(Alignment.Center) // Centrar el logo dentro del círculo
-                        )
-                    }
-                    Spacer(modifier = Modifier.width(10.dp)) // Espacio entre el logo y el texto
                     Text(
-                        text = "ZAZIL",
-                        fontSize = 24.sp,
+                        text = "Publicaciones",
+                        fontSize = 36.sp,
                         fontWeight = FontWeight.Bold,
+                        fontFamily = gabaritoFontFamily,
                         color = Color(0xFF191919)
+
                     )
+
                 }
             }
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Encabezado de la pantalla
-            Text(
-                text = "Publicaciones",
-                fontSize = 28.sp,
-                color = Color(0xFFE17F61),
-                modifier = Modifier.padding(bottom = 16.dp)
-            )
+
 
             // Mostrar los posts obtenidos de la API
             posts.forEach { post ->
@@ -122,63 +103,86 @@ fun BlogPost(
     imageUrls: List<String>,  // Lista de URLs de imágenes
     modifier: Modifier = Modifier
 ) {
-    // Tarjeta de la publicación
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .background(Color.White, shape = RoundedCornerShape(16.dp))
-            .padding(16.dp)
-    ) {
-        // Título con el color personalizado
-        Text(
-            text = title,
-            fontSize = 16.sp,
-            color = Color(0xFFE17F61),  // Aplica el color aquí
-            fontWeight = FontWeight.Bold
-        )
-        Spacer(modifier = Modifier.height(4.dp))
+    Column(modifier = modifier
+        .fillMaxWidth()
+        .padding(16.dp)) {
 
-        Row(
-            verticalAlignment = Alignment.CenterVertically
+        // Tarjeta de la publicación
+        Column(
+            modifier = modifier
+                .fillMaxWidth()
+                .background(Color(0xFFEDEDED), shape = RoundedCornerShape(16.dp))
+                .padding(horizontal = 16.dp, vertical = 16.dp)
         ) {
-            // Imagen del autor
-            Image(
-                painter = painterResource(id = R.drawable.scarlett),  // Icono del perfil del autor
-                contentDescription = "Imagen del autor",
-                modifier = Modifier
-                    .size(40.dp)
-                    .clip(CircleShape)  // Hacemos la imagen redonda
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            Column {
-                Text(text = author, fontSize = 14.sp, color = Color(0xFF545454))
-                Text(text = timeAgo, fontSize = 12.sp, color = Color.Gray)
-            }
-        }
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        // Descripción de la publicación
-        Text(text = description, fontSize = 14.sp, color = Color(0xFF545454))
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        // Imágenes del contenido de la publicación
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            // Mostramos las imágenes desde las URLs
-            imageUrls.forEach { imageUrl ->
-                Image(
-                    painter = rememberImagePainter(imageUrl),  // Usamos Coil para cargar las imágenes desde URLs
-                    contentDescription = "Imagen de la publicación",
-                    contentScale = ContentScale.Crop,
+            // Row que contiene el título y luego la imagen, autor y fecha
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                // Título del post primero
+                Text(
+                    text = title,
+                    fontSize = 16.sp,
+                    color = Color(0xFFE17F61),  // Aplica el color aquí
+                    fontFamily = gabaritoFontFamily,
+                    fontWeight = FontWeight.Bold,
                     modifier = Modifier
-                        .weight(1f)
-                        .clip(RoundedCornerShape(8.dp))  // Bordes redondeados
-                        .aspectRatio(1.5f)  // Relación de aspecto uniforme
+                        .weight(1f)  // Ocupa todo el espacio restante a la izquierda
+                        .wrapContentHeight()  // Permite que el título crezca en altura si es necesario
+                        .widthIn(max = 230.dp)  // Ajusta el ancho máximo para que el texto haga salto de línea
                 )
+
+                Spacer(modifier = Modifier.width(12.dp))  // Espacio entre el título y la información del autor
+
+                // Imagen, autor y fecha alineados a la derecha
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    // Imagen del autor
+                    Image(
+                        painter = painterResource(id = R.drawable.experto),  // Icono del perfil del autor
+                        contentDescription = "Imagen del autor",
+                        modifier = Modifier
+                            .size(40.dp)
+                            .clip(CircleShape)  // Hacemos la imagen redonda
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Column {
+                        Text(text = author, fontSize = 14.sp, color = Color(0xFF545454))
+                        Text(text = timeAgo, fontSize = 12.sp, color = Color.Gray)
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // Descripción de la publicación
+            Text(
+                text = description,
+                fontFamily = gabaritoFontFamily,
+                fontSize = 14.sp,
+                color = Color(0xFF545454)
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // Imágenes del contenido de la publicación
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                // Mostramos las imágenes desde las URLs
+                imageUrls.forEach { imageUrl ->
+                    Image(
+                        painter = rememberImagePainter(imageUrl),  // Usamos Coil para cargar las imágenes desde URLs
+                        contentDescription = "Imagen de la publicación",
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .weight(1f)
+                            .clip(RoundedCornerShape(8.dp))  // Bordes redondeados
+                            .aspectRatio(1.5f)  // Relación de aspecto uniforme
+                    )
+                }
             }
         }
     }

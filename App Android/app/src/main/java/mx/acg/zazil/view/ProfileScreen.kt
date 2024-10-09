@@ -73,6 +73,7 @@ fun ProfileScreen(
                 fontSize = 36.sp,
                 color = Color.Black,
                 fontWeight = FontWeight.Bold,
+                fontFamily = gabaritoFontFamily,
                 modifier = modifier.align(Alignment.CenterHorizontally)
             )
             Spacer(modifier = Modifier.height(80.dp))
@@ -120,7 +121,7 @@ fun ProfileScreen(
                     .height(50.dp),
                 shape = RoundedCornerShape(8.dp)
             ) {
-                Text(text = "Ver Historial de Compra", color = Color(0xFFE17F61), fontWeight = FontWeight.Bold)
+                Text(text = "HISTORIAL DE COMPRA", fontSize = 16.sp, fontFamily = gabaritoFontFamily, color = Color(0xFFE17F61), fontWeight = FontWeight.Bold)
             }
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -134,7 +135,7 @@ fun ProfileScreen(
                     .height(50.dp),
                 shape = RoundedCornerShape(8.dp)
             ) {
-                Text(text = "Preguntas Frecuentes", color = Color(0xFF293392), fontWeight = FontWeight.Bold)
+                Text(text = "PREGUNTAS FRECUENTES", color = Color(0xFF293392), fontSize = 16.sp,fontFamily = gabaritoFontFamily, fontWeight = FontWeight.Bold)
             }
 
             Spacer(modifier = Modifier.height(16.dp))

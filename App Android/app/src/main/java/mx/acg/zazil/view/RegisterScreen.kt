@@ -62,12 +62,13 @@ fun RegisterScreen(navController: NavHostController) {
     Box(modifier = Modifier.fillMaxSize()) {
         // Imagen del logo en la parte superior derecha
         Image(
-            painter = painterResource(id = R.drawable.logo),
+            painter = painterResource(id = R.drawable.mid_logo),
             contentDescription = "Logo",
             modifier = Modifier
-                .size(200.dp)
+                .size(height = 200.dp, width = 100.dp)
                 .align(Alignment.TopEnd),
-            contentScale = ContentScale.Crop
+
+            contentScale = ContentScale.Fit
         )
 
         // Columna que contiene el formulario de registro
@@ -81,7 +82,7 @@ fun RegisterScreen(navController: NavHostController) {
             // Título de la pantalla
             Text(
                 text = "Regístrate",
-                fontSize = 32.sp,
+                fontSize = 42.sp,
                 fontWeight = FontWeight.Bold,
                 fontFamily = gabaritoFontFamily,
                 color = Color.Black
@@ -89,7 +90,7 @@ fun RegisterScreen(navController: NavHostController) {
             // Mensaje de bienvenida
             Text(
                 text = "Te damos la bienvenida a Zazil",
-                fontSize = 16.sp,
+                fontSize = 18.sp,
                 fontFamily = gabaritoFontFamily,
                 color = Color(0xFFE27F61),
                 modifier = Modifier.padding(top = 8.dp)
@@ -105,7 +106,8 @@ fun RegisterScreen(navController: NavHostController) {
             ) {
                 Text(
                     text = "Completa tus datos",
-                    fontSize = 14.sp,
+                    fontSize = 16.sp,
+                    fontFamily = gabaritoFontFamily,
                     color = Color.Black)
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -173,6 +175,7 @@ fun RegisterScreen(navController: NavHostController) {
                     Text(
                         text = "Acepto",
                         fontSize = 14.sp,
+                        fontFamily = gabaritoFontFamily,
                         color = Color.Black)
 
                     // Botón de términos y condiciones que activa el diálogo
@@ -221,7 +224,7 @@ fun RegisterScreen(navController: NavHostController) {
                     modifier = Modifier.fillMaxWidth(),
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFEBB7A7))
                 ) {
-                    Text(text = "REGISTRAR", color = Color.Black)
+                    Text(text = "REGISTRAR", fontFamily = gabaritoFontFamily, fontWeight = FontWeight.Bold)
                 }
 
 
@@ -264,7 +267,7 @@ fun RegisterScreen(navController: NavHostController) {
                     ) {
                         Text(
                             text = "¿Ya tienes cuenta?",
-                            fontSize = 14.sp,
+                            fontSize = 16.sp,
                             fontFamily = gabaritoFontFamily
                         )
 
@@ -272,7 +275,7 @@ fun RegisterScreen(navController: NavHostController) {
                             Text(
                                 text = "Iniciar sesión",
                                 color = Color(0xFFE27F61),
-                                fontSize = 14.sp,
+                                fontSize = 16.sp,
                                 fontFamily = gabaritoFontFamily
                             )
                         }
@@ -283,7 +286,7 @@ fun RegisterScreen(navController: NavHostController) {
                     Text(
                         text = "o regístrate vía",
                         fontFamily = gabaritoFontFamily,
-                        fontSize = 14.sp,
+                        fontSize = 16.sp,
                         color = Color.Black,
                         modifier = Modifier.align(Alignment.CenterHorizontally)
                     )
@@ -302,7 +305,7 @@ fun RegisterScreen(navController: NavHostController) {
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(text = "Google", color = Color.Black)
+                        Text(text = "Google", color = Color.Black, fontFamily = gabaritoFontFamily,fontSize = 16.sp)
                         Icon(
                             painter = painterResource(id = R.drawable.ic_google),
                             contentDescription = "Google Icon",

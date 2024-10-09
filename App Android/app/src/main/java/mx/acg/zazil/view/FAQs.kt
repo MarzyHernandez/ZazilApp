@@ -78,7 +78,7 @@ fun FAQs(navController: NavHostController, modifier: Modifier = Modifier, faqVie
 
         // Botón "Regresar"
         TextButton(
-            onClick = { navController.navigate("perfil") },
+            onClick = { navController.navigate("profile") },
             modifier = Modifier.padding(top = 16.dp)
         ) {
             Text(text = "< Regresar", color = Color.Gray, fontWeight = FontWeight.Bold)
