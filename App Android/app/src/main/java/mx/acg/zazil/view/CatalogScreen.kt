@@ -28,6 +28,7 @@ import mx.acg.zazil.viewmodel.CatalogViewModel
 import androidx.navigation.NavHostController
 
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.*
@@ -41,6 +42,7 @@ fun CatalogScreen(
     catalogViewModel: CatalogViewModel = viewModel()
 ) {
     val products = catalogViewModel.products.observeAsState(initial = emptyList())
+    val isLoading = catalogViewModel.isLoading.observeAsState(initial = false)
 
     // Estado para la consulta de búsqueda
     var searchQuery by remember { mutableStateOf(TextFieldValue("")) }
@@ -61,80 +63,87 @@ fun CatalogScreen(
     Box(
         modifier = modifier
             .fillMaxSize()
-            .background(Color.White) // Color de fondo rosa para la parte superior
+            .background(Color.White)
             .clip(RoundedCornerShape(topStart = 0.dp, topEnd = 0.dp))
     ) {
-        Column {
-            // Encabezado con logo y texto "ZAZIL"
+        if (isLoading.value) {
+            // Muestra el loader mientras se están cargando los productos
             Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(bottomEnd = 18.dp, bottomStart = 18.dp))
-                    .background(Color(0xFFFEE1D6))
-                    .padding(vertical = 32.dp)
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
             ) {
-                Row(
+                CircularProgressIndicator(color = Color(0xFFE17F61))
+            }
+        } else {
+            // Muestra el contenido cuando los productos ya han cargado
+            Column {
+                // Encabezado con logo y texto "ZAZIL"
+                Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 16.dp),
-                    verticalAlignment = Alignment.CenterVertically
+                        .clip(RoundedCornerShape(bottomEnd = 18.dp, bottomStart = 18.dp))
+                        .background(Color(0xFFFEE1D6))
+                        .padding(vertical = 32.dp)
                 ) {
-                    Text(
-                        text = "Productos",
-                        fontSize = 36.sp,
-                        fontWeight = FontWeight.Bold,
-                        fontFamily = gabaritoFontFamily,
-                        color = Color(0xFF191919)
-
-                    )
-                }
-            }
-
-            // Aquí aplicamos el fondo blanco para la sección de productos
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(Color.White) // Fondo blanco desde esta sección
-                    .padding(16.dp)
-                    .clip(RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp))
-
-
-            ) {
-                Column {
-                    // Barra de búsqueda
-                    OutlinedTextField(
-                        value = searchQuery,
-                        onValueChange = { searchQuery = it },
-                        label = { Text("Buscar productos") },
+                    Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(bottom = 16.dp),
-                        singleLine = true,
-                        leadingIcon = {
-                            Icon(
-                                imageVector = androidx.compose.material.icons.Icons.Default.Search,
-                                contentDescription = "Buscar"
-                            )
-                        },
-                        shape = RoundedCornerShape(64.dp) // Bordes redondeados
-                    )
-
-
-                    // Grid de productos con 2 columnas
-                    LazyVerticalGrid(
-                        columns = GridCells.Fixed(2),
-                        verticalArrangement = Arrangement.spacedBy(16.dp),
-                        horizontalArrangement = Arrangement.spacedBy(16.dp),
-                        contentPadding = PaddingValues(bottom = 16.dp)
+                            .padding(start = 16.dp),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        items(filteredProducts) { product ->
-                            ProductItem(
-                                title = product.nombre,
-                                price = "$${product.precio_rebajado}",
-                                imageUrl = product.imagen,
-                                productId = product.id,
-                                onClick = { navController.navigate("productDetail/${product.id}") }
-                            )
+                        Text(
+                            text = "Productos",
+                            fontSize = 36.sp,
+                            fontWeight = FontWeight.Bold,
+                            fontFamily = gabaritoFontFamily,
+                            color = Color(0xFF191919)
+                        )
+                    }
+                }
+
+                // Aquí aplicamos el fondo blanco para la sección de productos
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color.White)
+                        .padding(16.dp)
+                        .clip(RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp))
+                ) {
+                    Column {
+                        // Barra de búsqueda
+                        OutlinedTextField(
+                            value = searchQuery,
+                            onValueChange = { searchQuery = it },
+                            label = { Text("Buscar productos") },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = 16.dp),
+                            singleLine = true,
+                            leadingIcon = {
+                                Icon(
+                                    imageVector = androidx.compose.material.icons.Icons.Default.Search,
+                                    contentDescription = "Buscar"
+                                )
+                            },
+                            shape = RoundedCornerShape(64.dp)
+                        )
+
+                        // Grid de productos con 2 columnas
+                        LazyVerticalGrid(
+                            columns = GridCells.Fixed(2),
+                            verticalArrangement = Arrangement.spacedBy(16.dp),
+                            horizontalArrangement = Arrangement.spacedBy(16.dp),
+                            contentPadding = PaddingValues(bottom = 16.dp)
+                        ) {
+                            items(filteredProducts) { product ->
+                                ProductItem(
+                                    title = product.nombre,
+                                    price = "$${product.precio_rebajado}",
+                                    imageUrl = product.imagen,
+                                    productId = product.id,
+                                    onClick = { navController.navigate("productDetail/${product.id}") }
+                                )
+                            }
                         }
                     }
                 }

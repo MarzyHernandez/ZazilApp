@@ -3,6 +3,7 @@ package mx.acg.zazil.view
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -15,6 +16,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -23,6 +25,7 @@ import androidx.navigation.NavHostController
 import mx.acg.zazil.R
 import mx.acg.zazil.model.User
 import mx.acg.zazil.viewmodel.RegisterViewModel
+
 /**
  * Pantalla de registro que permite al usuario introducir sus datos personales, aceptar términos y condiciones,
  * y realizar el registro en el servidor remoto a través de Retrofit.
@@ -101,15 +104,112 @@ fun RegisterScreen(navController: NavHostController) {
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                SimpleTextInput(value = nombre, onValueChange = { nombre = it }, label = "Nombre(s)")
+                // Campos de entrada utilizando OutlinedTextField con label
+                BasicTextField(
+                    value = nombre,
+                    onValueChange = { nombre = it },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp),
+                    decorationBox = { innerTextField ->
+                        Column {
+                            Text(
+                                text = "Nombre(s)",
+                                fontSize = 14.sp,
+                                color = Color.Gray
+                            )
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 4.dp, bottom = 8.dp)
+                            ) {
+                                innerTextField() // Campo de entrada de texto
+                            }
+                            Divider(color = Color.Gray, thickness = 1.dp) // Línea divisoria debajo del campo
+                        }
+                    }
+                )
+
                 Spacer(modifier = Modifier.height(16.dp))
-                SimpleTextInput(value = apellido, onValueChange = { apellido = it }, label = "Apellido")
+                BasicTextField(
+                    value = apellido,
+                    onValueChange = { apellido = it },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp),
+                    decorationBox = { innerTextField ->
+                        Column {
+                            Text(
+                                text = "Apellido",
+                                fontSize = 14.sp,
+                                color = Color.Gray
+                            )
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 4.dp, bottom = 8.dp)
+                            ) {
+                                innerTextField()
+                            }
+                            Divider(color = Color.Gray, thickness = 1.dp)
+                        }
+                    }
+                )
+
                 Spacer(modifier = Modifier.height(16.dp))
-                SimpleTextInput(value = email, onValueChange = { email = it }, label = "Correo")
+                BasicTextField(
+                    value = email,
+                    onValueChange = { email = it },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp),
+                    decorationBox = { innerTextField ->
+                        Column {
+                            Text(
+                                text = "Correo",
+                                fontSize = 14.sp,
+                                color = Color.Gray
+                            )
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 4.dp, bottom = 8.dp)
+                            ) {
+                                innerTextField()
+                            }
+                            Divider(color = Color.Gray, thickness = 1.dp)
+                        }
+                    }
+                )
+
                 Spacer(modifier = Modifier.height(16.dp))
-                SimpleTextInput(value = telefono, onValueChange = { telefono = it }, label = "Teléfono")
+                BasicTextField(
+                    value = telefono,
+                    onValueChange = { telefono = it },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp),
+                    decorationBox = { innerTextField ->
+                        Column {
+                            Text(
+                                text = "Teléfono",
+                                fontSize = 14.sp,
+                                color = Color.Gray
+                            )
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 4.dp, bottom = 8.dp)
+                            ) {
+                                innerTextField()
+                            }
+                            Divider(color = Color.Gray, thickness = 1.dp)
+                        }
+                    }
+                )
+
                 Spacer(modifier = Modifier.height(16.dp))
-                SimpleTextInput(
+                BasicTextField(
                     value = password,
                     onValueChange = {
                         password = it
@@ -119,9 +219,29 @@ fun RegisterScreen(navController: NavHostController) {
                             errorMessage = null
                         }
                     },
-                    label = "Contraseña",
-                    isPassword = true
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp),
+                    visualTransformation = PasswordVisualTransformation(),
+                    decorationBox = { innerTextField ->
+                        Column {
+                            Text(
+                                text = "Contraseña",
+                                fontSize = 14.sp,
+                                color = Color.Gray
+                            )
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 4.dp, bottom = 8.dp)
+                            ) {
+                                innerTextField()
+                            }
+                            Divider(color = Color.Gray, thickness = 1.dp)
+                        }
+                    }
                 )
+
 
                 Spacer(modifier = Modifier.height(16.dp))
 
@@ -158,6 +278,28 @@ fun RegisterScreen(navController: NavHostController) {
                     Text(text = "REGISTRAR", fontFamily = gabaritoFontFamily, fontWeight = FontWeight.Bold)
                 }
 
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "¿Ya tienes cuenta?",
+                        fontSize = 16.sp,
+                        fontFamily = gabaritoFontFamily
+                    )
+
+                    // Botón para navegar a la pantalla de registro
+                    TextButton(onClick = { navController.navigate("login") }) {
+                        Text(
+                            text = "Inicia Sesión",
+                            color = Color(0xFFE27F61),
+                            fontSize = 16.sp,
+                            fontFamily = gabaritoFontFamily
+                        )
+                    }
+                }
+
                 registerResult?.let {
                     if (it.contains("exitoso")) {
                         showDialog = true // Mostrar el diálogo de éxito
@@ -180,11 +322,11 @@ fun RegisterScreen(navController: NavHostController) {
             confirmButton = {
                 Box(
                     modifier = Modifier.fillMaxWidth(),
-                    contentAlignment = Alignment.Center // Alineación central del botón
+                    contentAlignment = Alignment.Center
                 ) {
                     Button(
                         onClick = {
-                            navController.navigate("login") // Navegar a la pantalla de login
+                            navController.navigate("login")
                             showDialog = false
                         },
                         colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFE17F61))

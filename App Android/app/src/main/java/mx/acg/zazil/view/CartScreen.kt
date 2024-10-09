@@ -130,7 +130,7 @@ fun CartScreen(
         ) {
             // Mostrar indicador de carga si los productos aún se están cargando
             if (isLoading) {
-                CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
+                CircularProgressIndicator(color = Color(0xFFE17F61), modifier = Modifier.align(Alignment.CenterHorizontally))
             } else {
                 // Usamos LazyColumn para que la lista de productos sea desplazable
                 LazyColumn(

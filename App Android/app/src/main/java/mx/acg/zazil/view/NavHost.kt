@@ -175,7 +175,7 @@ fun AppNavHost(
             composable("settings") { SettingsScreen(navController) }
 
             composable("updateData") {
-                ActualizarDatosScreen()  // Aquí llamamos a la pantalla de ActualizarDatos
+                ActualizarDatosScreen(navController = navController)  // Aquí llamamos a la pantalla de ActualizarDatos
             }
 
             composable("TyC") { TyC(navController) }

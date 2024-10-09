@@ -17,6 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import com.google.firebase.auth.FirebaseAuth
 import mx.acg.zazil.R
 import mx.acg.zazil.viewmodel.UpdateDataViewModel
@@ -30,7 +31,7 @@ import mx.acg.zazil.viewmodel.UpdateDataViewModel
 
 
 @Composable
-fun ActualizarDatosScreen(viewModel: UpdateDataViewModel = viewModel()) {
+fun ActualizarDatosScreen(viewModel: UpdateDataViewModel = viewModel(), navController: NavHostController) {
     val gabaritoFontFamily = FontFamily(Font(R.font.gabarito_regular))
 
     // Variables para almacenar los datos de entrada del usuario
@@ -87,6 +88,18 @@ fun ActualizarDatosScreen(viewModel: UpdateDataViewModel = viewModel()) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
+            // Botón "Regresar"
+            TextButton(onClick = { navController.popBackStack() }) {
+                Text(
+                    text = "< Regresar",
+                    fontSize = 14.sp,
+                    color = Color.Gray,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
             // Input de Nombre
             SimpleTextInput(
                 value = nombre,
@@ -130,28 +143,6 @@ fun ActualizarDatosScreen(viewModel: UpdateDataViewModel = viewModel()) {
                 label = "Contraseña",
                 isPassword = true
             )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Botón para editar la foto de perfil
-            Button(
-                onClick = { /* Implementar lógica para editar foto */ },
-                modifier = Modifier.fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFF2F2F2)),
-            ) {
-                Row(
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(text = "Editar foto", color = Color.Gray)
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_edit),
-                        contentDescription = "Editar icon",
-                        tint = Color.Gray
-                    )
-                }
-            }
 
             Spacer(modifier = Modifier.height(32.dp))
 

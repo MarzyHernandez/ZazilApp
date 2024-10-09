@@ -84,8 +84,6 @@ fun SimpleTextInput(
  * @param navController Controlador de navegación para moverse entre pantallas.
  * @param signInWithGoogle Función que maneja la autenticación con Google.
  *
- * @author Alberto Cebreros González
- * @author Melissa Mireles Rendón
  */
 @Composable
 fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel = viewModel(), signInWithGoogle: () -> Unit) {
@@ -151,21 +149,60 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel = vi
                 Spacer(modifier = Modifier.height(16.dp)) // Espacio entre el mensaje y el formulario
 
                 // Input de email
-                SimpleTextInput(
+                BasicTextField(
                     value = email,
                     onValueChange = { email = it },
-                    label = "Email"
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp),
+                    decorationBox = { innerTextField ->
+                        Column {
+                            Text(
+                                text = "Email",
+                                fontSize = 14.sp,
+                                color = Color.Gray
+                            )
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 4.dp, bottom = 8.dp)
+                            ) {
+                                innerTextField()
+                            }
+                            Divider(color = Color.Gray, thickness = 1.dp)
+                        }
+                    }
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
 
                 // Input de contraseña
-                SimpleTextInput(
+                BasicTextField(
                     value = password,
                     onValueChange = { password = it },
-                    label = "Contraseña",
-                    isPassword = true
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp),
+                    visualTransformation = PasswordVisualTransformation(),
+                    decorationBox = { innerTextField ->
+                        Column {
+                            Text(
+                                text = "Contraseña",
+                                fontSize = 14.sp,
+                                color = Color.Gray
+                            )
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 4.dp, bottom = 8.dp)
+                            ) {
+                                innerTextField()
+                            }
+                            Divider(color = Color.Gray, thickness = 1.dp)
+                        }
+                    }
                 )
+
 
                 Spacer(modifier = Modifier.height(16.dp))
 
@@ -263,7 +300,7 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel = vi
                 )
             }
 
-            Spacer(modifier = Modifier.height(56.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
             // Botón de registro con Google
             Button(
