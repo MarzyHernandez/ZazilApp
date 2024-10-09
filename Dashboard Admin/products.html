@@ -200,9 +200,9 @@
         function createProductCard(product) {
             return `
                 <div class="col-xxl-3 col-md-4 col-sm-6 col-12" id="product-${product.id}">
-                    <div class="product-card">
-                        <img class="product-card-img-top" src="${product.imagen}" alt="${product.nombre}">
-                        <div class="product-card-body">
+                    <div class="product-card" style="height:700px;">
+                        <img class="product-card-img-top" src="${product.imagen}" alt="${product.nombre}" style="height:300px">
+                        <div class="product-card-body" >
                             <h5 class="product-title">${product.nombre}</h5>
                             <div class="product-price">
                                 <span class="discount-price">$${product.precio_rebajado}  </span>
@@ -212,7 +212,7 @@
 
                            
 
-                            <div class="product-description">
+                            <div class="product-description" style="height:250px;">
                                 <span class="product-id">ID: ${product.id}</span><br>
                                 <span class="id-category">Categoría: ${product.id_categoria}</span><br>
                                 <span class="product-quantity">Stock: ${product.cantidad}</span>
