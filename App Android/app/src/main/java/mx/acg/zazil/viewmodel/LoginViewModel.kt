@@ -21,10 +21,10 @@ import java.io.IOException
 class LoginViewModel : ViewModel() {
 
     private val _userId = MutableLiveData<String?>()
-    val userId: MutableLiveData<String?> get() = _userId
+    val userId: LiveData<String?> get() = _userId
 
-    private val _errorMessage = MutableLiveData<String>()
-    val errorMessage: LiveData<String> get() = _errorMessage
+    private val _errorMessage = MutableLiveData<String?>()
+    val errorMessage: MutableLiveData<String?> get() = _errorMessage
 
     private val googleUser = GoogleUser()
 
@@ -54,13 +54,19 @@ class LoginViewModel : ViewModel() {
      * @param password Contraseña del usuario
      * @param onSuccess Callback que se llama cuando la autenticación es exitosa.
      */
-
     fun loginWithEmail(
         email: String,
         password: String,
-        onSuccess: () -> Unit,  // Este parámetro debe estar definido
+        onSuccess: () -> Unit,
         onFailure: (String) -> Unit
     ) {
+        // Verifica si los campos están vacíos
+        if (email.isBlank() || password.isBlank()) {
+            _errorMessage.value = "Los campos de correo y contraseña no pueden estar vacíos."
+            onFailure("Los campos de correo y contraseña no pueden estar vacíos.")
+            return
+        }
+
         FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
@@ -76,26 +82,40 @@ class LoginViewModel : ViewModel() {
                                     val userId = response.body()?.uid
                                     if (userId != null) {
                                         _userId.value = userId
-                                        onSuccess()  // Aquí rediriges o realizas acciones después del login
+                                        _errorMessage.value = null // Limpiar el mensaje de error
+                                        onSuccess() // Login exitoso
                                     } else {
-                                        _errorMessage.value = "Error al obtener el UID: Respuesta vacía"
+                                        val error = "Error al obtener el UID: Respuesta vacía"
+                                        _errorMessage.value = error
+                                        onFailure(error)
                                     }
                                 } else {
-                                    _errorMessage.value = "Error al obtener el UID: ${response.errorBody()?.string()}"
+                                    val error = "Error al obtener el UID: ${response.errorBody()?.string()}"
+                                    _errorMessage.value = error
+                                    onFailure(error)
                                 }
                             } catch (e: Exception) {
-                                _errorMessage.value = "Error de red: ${e.message}"
+                                val error = "Error de red: ${e.message}"
+                                _errorMessage.value = error
+                                onFailure(error)
                             }
                         }
                     } else {
-                        onFailure("No se pudo obtener el usuario actual.")
+                        val error = "No se pudo obtener el usuario actual."
+                        _errorMessage.value = error
+                        onFailure(error)
                     }
                 } else {
-                    onFailure("Error en la autenticación: ${task.exception?.message}")
+                    val error = task.exception?.message ?: "Error desconocido en la autenticación."
+                    _errorMessage.value = error
+                    onFailure(error)
                 }
             }
     }
 
+    /**
+     * Función para enviar datos del usuario a la API.
+     */
     fun sendUserDataToApi(email: String, uid: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -107,6 +127,10 @@ class LoginViewModel : ViewModel() {
         }
     }
 
-
-
+    /**
+     * Establece un mensaje de error personalizado.
+     */
+    fun setErrorMessage(message: String) {
+        _errorMessage.value = message
+    }
 }
