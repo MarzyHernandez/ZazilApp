@@ -3,6 +3,7 @@ package mx.acg.zazil.view
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -15,6 +16,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -24,54 +26,46 @@ import mx.acg.zazil.R
 import mx.acg.zazil.model.User
 import mx.acg.zazil.viewmodel.RegisterViewModel
 
-
 /**
  * Pantalla de registro que permite al usuario introducir sus datos personales, aceptar términos y condiciones,
  * y realizar el registro en el servidor remoto a través de Retrofit.
  *
  * @param navController Controlador de navegación para cambiar entre pantallas.
  * @author Melissa Mireles Rendón
+ * @author Alberto Cebreros González
  */
 @Composable
 fun RegisterScreen(navController: NavHostController) {
     val gabaritoFontFamily = FontFamily(Font(R.font.gabarito_regular))
 
-    // Variables para almacenar los datos de entrada del usuario
     var nombre by remember { mutableStateOf("") }
     var apellido by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var telefono by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var termsAccepted by remember { mutableStateOf(false) }  // Estado del checkbox de términos y condiciones
-    var errorMessage by remember { mutableStateOf<String?>(null) }  // Estado del checkbox de términos y condiciones
+    var termsAccepted by remember { mutableStateOf(false) }
+    var errorMessage by remember { mutableStateOf<String?>(null) }
 
-    var showDialog by remember { mutableStateOf(false) } // Estado para controlar el diálogo
-
-    // Alcance de las coroutines
-    val coroutineScope = rememberCoroutineScope()
+    var showDialog by remember { mutableStateOf(false) } // Para controlar el diálogo de éxito
+    var showTermsDialog by remember { mutableStateOf(false) } // Para el diálogo de términos y condiciones
 
     val viewModel: RegisterViewModel = viewModel()
-
     val registerResult by viewModel.registerResult.observeAsState()
 
-    // Función para validar la contraseña
     fun isPasswordValid(password: String): Boolean {
         return password.length >= 6 && password.any { it.isDigit() }
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
-        // Imagen del logo en la parte superior derecha
         Image(
             painter = painterResource(id = R.drawable.mid_logo),
             contentDescription = "Logo",
             modifier = Modifier
                 .size(height = 200.dp, width = 100.dp)
                 .align(Alignment.TopEnd),
-
             contentScale = ContentScale.Fit
         )
 
-        // Columna que contiene el formulario de registro
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -79,7 +73,6 @@ fun RegisterScreen(navController: NavHostController) {
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.Center
         ) {
-            // Título de la pantalla
             Text(
                 text = "Regístrate",
                 fontSize = 42.sp,
@@ -87,7 +80,6 @@ fun RegisterScreen(navController: NavHostController) {
                 fontFamily = gabaritoFontFamily,
                 color = Color.Black
             )
-            // Mensaje de bienvenida
             Text(
                 text = "Te damos la bienvenida a Zazil",
                 fontSize = 18.sp,
@@ -96,9 +88,8 @@ fun RegisterScreen(navController: NavHostController) {
                 modifier = Modifier.padding(top = 8.dp)
             )
 
-            Spacer(modifier = Modifier.height(16.dp)) // Espacio entre el título y el formulario
+            Spacer(modifier = Modifier.height(16.dp))
 
-            // Formulario de registro
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -108,84 +99,161 @@ fun RegisterScreen(navController: NavHostController) {
                     text = "Completa tus datos",
                     fontSize = 16.sp,
                     fontFamily = gabaritoFontFamily,
-                    color = Color.Black)
+                    color = Color.Black
+                )
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // Input de Nombre
-                SimpleTextInput(
+                // Campos de entrada utilizando OutlinedTextField con label
+                BasicTextField(
                     value = nombre,
                     onValueChange = { nombre = it },
-                    label = "Nombre(s)"
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp),
+                    decorationBox = { innerTextField ->
+                        Column {
+                            Text(
+                                text = "Nombre(s)",
+                                fontSize = 14.sp,
+                                color = Color.Gray
+                            )
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 4.dp, bottom = 8.dp)
+                            ) {
+                                innerTextField() // Campo de entrada de texto
+                            }
+                            Divider(color = Color.Gray, thickness = 1.dp) // Línea divisoria debajo del campo
+                        }
+                    }
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
-
-                // Input de Apellido
-                SimpleTextInput(
+                BasicTextField(
                     value = apellido,
                     onValueChange = { apellido = it },
-                    label = "Apellido"
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp),
+                    decorationBox = { innerTextField ->
+                        Column {
+                            Text(
+                                text = "Apellido",
+                                fontSize = 14.sp,
+                                color = Color.Gray
+                            )
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 4.dp, bottom = 8.dp)
+                            ) {
+                                innerTextField()
+                            }
+                            Divider(color = Color.Gray, thickness = 1.dp)
+                        }
+                    }
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
-
-                // Input de Email
-                SimpleTextInput(
+                BasicTextField(
                     value = email,
                     onValueChange = { email = it },
-                    label = "Correo"
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp),
+                    decorationBox = { innerTextField ->
+                        Column {
+                            Text(
+                                text = "Correo",
+                                fontSize = 14.sp,
+                                color = Color.Gray
+                            )
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 4.dp, bottom = 8.dp)
+                            ) {
+                                innerTextField()
+                            }
+                            Divider(color = Color.Gray, thickness = 1.dp)
+                        }
+                    }
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
-
-                // Input de Teléfono
-                SimpleTextInput(
+                BasicTextField(
                     value = telefono,
                     onValueChange = { telefono = it },
-                    label = "Teléfono"
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp),
+                    decorationBox = { innerTextField ->
+                        Column {
+                            Text(
+                                text = "Teléfono",
+                                fontSize = 14.sp,
+                                color = Color.Gray
+                            )
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 4.dp, bottom = 8.dp)
+                            ) {
+                                innerTextField()
+                            }
+                            Divider(color = Color.Gray, thickness = 1.dp)
+                        }
+                    }
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
-
-                // Input de Contraseña
-                SimpleTextInput(
+                BasicTextField(
                     value = password,
                     onValueChange = {
                         password = it
                         if (!isPasswordValid(it)) {
                             errorMessage = "La contraseña debe tener al menos 6 caracteres e incluir al menos un número."
                         } else {
-                            errorMessage = null  // La contraseña es válida
+                            errorMessage = null
                         }
                     },
-                    label = "Contraseña",
-                    isPassword = true
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp),
+                    visualTransformation = PasswordVisualTransformation(),
+                    decorationBox = { innerTextField ->
+                        Column {
+                            Text(
+                                text = "Contraseña",
+                                fontSize = 14.sp,
+                                color = Color.Gray
+                            )
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 4.dp, bottom = 8.dp)
+                            ) {
+                                innerTextField()
+                            }
+                            Divider(color = Color.Gray, thickness = 1.dp)
+                        }
+                    }
                 )
+
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // Checkbox para aceptar términos y condiciones
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Checkbox(
                         checked = termsAccepted,
                         onCheckedChange = { termsAccepted = it },
                         colors = CheckboxDefaults.colors(checkedColor = Color(0xFFE27F61))
                     )
-                    Text(
-                        text = "Acepto",
-                        fontSize = 14.sp,
-                        fontFamily = gabaritoFontFamily,
-                        color = Color.Black)
-
-                    // Botón de términos y condiciones que activa el diálogo
-                    TextButton(onClick = { showDialog = true }) {
-                        Text(
-                            text = "términos y condiciones",
-                            color = Color(0xFFE27F61),
-                            fontSize = 14.sp,
-                            fontFamily = gabaritoFontFamily
-                        )
+                    Text(text = "Acepto", fontSize = 14.sp, fontFamily = gabaritoFontFamily, color = Color.Black)
+                    TextButton(onClick = { showTermsDialog = true }) {
+                        Text(text = "términos y condiciones", color = Color(0xFFE27F61), fontSize = 14.sp)
                     }
                 }
 
@@ -193,31 +261,14 @@ fun RegisterScreen(navController: NavHostController) {
 
                 Button(
                     onClick = {
-                        var errorFound = false
-                        // Verificar términos y condiciones
                         if (!termsAccepted) {
                             errorMessage = "Debes aceptar los términos y condiciones"
-                            errorFound = true
-                        }
-
-                        // Verificar la contraseña
-                        if (!isPasswordValid(password)) {
+                        } else if (!isPasswordValid(password)) {
                             errorMessage = "La contraseña debe tener al menos 6 caracteres y un número"
-                            errorFound = true
-                        }
-
-                        // Si no hay errores, proceder con el registro
-                        if (!errorFound) {
-                            // Limpiar el mensaje antes de registrar
+                        } else {
                             errorMessage = null
                             viewModel.registerUser(
-                                User(
-                                    email = email,
-                                    password = password,
-                                    nombres = nombre,
-                                    apellidos = apellido,
-                                    telefono = telefono
-                                )
+                                User(email = email, password = password, nombres = nombre, apellidos = apellido, telefono = telefono)
                             )
                         }
                     },
@@ -227,112 +278,76 @@ fun RegisterScreen(navController: NavHostController) {
                     Text(text = "REGISTRAR", fontFamily = gabaritoFontFamily, fontWeight = FontWeight.Bold)
                 }
 
-
-                // Mostrar el mensaje de error o éxito
-                registerResult?.let {
-                    // Si el mensaje contiene "exitoso", mostramos el mensaje de éxito y limpiamos posibles errores previos
-                    if (it.contains("exitoso")) {
-                        errorMessage = null  // Limpiar el mensaje de error
-                    }
-
-                    Text(
-                        text = it,
-                        color = if (it.contains("exitoso")) Color.Green else Color.Red,
-                        modifier = Modifier.padding(top = 8.dp)
-                    )
-                }
-
-                // Mostrar el mensaje de error si existe
-                errorMessage?.let {
-                    Text(
-                        text = it,
-                        color = Color.Red,
-                        modifier = Modifier.padding(top = 8.dp)
-                    )
-                }
-
-
-
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
+                    Text(
+                        text = "¿Ya tienes cuenta?",
+                        fontSize = 16.sp,
+                        fontFamily = gabaritoFontFamily
+                    )
+
+                    // Botón para navegar a la pantalla de registro
+                    TextButton(onClick = { navController.navigate("login") }) {
                         Text(
-                            text = "¿Ya tienes cuenta?",
+                            text = "Inicia Sesión",
+                            color = Color(0xFFE27F61),
                             fontSize = 16.sp,
                             fontFamily = gabaritoFontFamily
                         )
-
-                        TextButton(onClick = {navController.navigate("login")}) {
-                            Text(
-                                text = "Iniciar sesión",
-                                color = Color(0xFFE27F61),
-                                fontSize = 16.sp,
-                                fontFamily = gabaritoFontFamily
-                            )
-                        }
                     }
-
-                    Spacer(modifier = Modifier.height(8.dp))
-
-                    Text(
-                        text = "o regístrate vía",
-                        fontFamily = gabaritoFontFamily,
-                        fontSize = 16.sp,
-                        color = Color.Black,
-                        modifier = Modifier.align(Alignment.CenterHorizontally)
-                    )
                 }
 
-                Spacer(modifier = Modifier.height(16.dp))
-
-                // Botón de registro con Google
-                Button(
-                    onClick = { /* Lógica para registro con Google */ },
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFEE1D6))
-                ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(text = "Google", color = Color.Black, fontFamily = gabaritoFontFamily,fontSize = 16.sp)
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_google),
-                            contentDescription = "Google Icon",
-                            modifier = Modifier.size(24.dp),
-                            tint = Color.Unspecified
-                        )
+                registerResult?.let {
+                    if (it.contains("exitoso")) {
+                        showDialog = true // Mostrar el diálogo de éxito
                     }
+                }
+
+                errorMessage?.let {
+                    Text(text = it, color = Color.Red, modifier = Modifier.padding(top = 8.dp))
                 }
             }
         }
     }
 
-    // Mostrar el AlertDialog con los términos y condiciones
+    // Diálogo de registro exitoso
     if (showDialog) {
         AlertDialog(
             onDismissRequest = { showDialog = false },
-            title = {
-                Text(
-                    text = "Términos y Condiciones",
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold
-                )
+            title = { Text(text = "Registro Exitoso", color = Color(0xFFE17F61)) },
+            text = { Text(text = "Tu cuenta ha sido creada exitosamente.", color = Color(0xFF191919)) },
+            confirmButton = {
+                Box(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Button(
+                        onClick = {
+                            navController.navigate("login")
+                            showDialog = false
+                        },
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFE17F61))
+                    ) {
+                        Text(text = "Iniciar sesión", color = Color.White)
+                    }
+                }
             },
+            containerColor = Color.White
+        )
+    }
+
+    // Diálogo de términos y condiciones
+    if (showTermsDialog) {
+        AlertDialog(
+            onDismissRequest = { showTermsDialog = false },
+            title = { Text(text = "Términos y Condiciones", fontSize = 18.sp, fontWeight = FontWeight.Bold) },
             text = {
                 Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                     Text(
-                        text = "Al utilizar nuestra aplicación de tienda en línea, usted acepta cumplir con los siguientes términos y condiciones. Nuestra plataforma proporciona un espacio para la compra de productos a través de su dispositivo Android. Los precios, la disponibilidad de productos, y las ofertas especiales están sujetos a cambios sin previo aviso. Nos reservamos el derecho de modificar o descontinuar la aplicación en cualquier momento sin responsabilidad alguna hacia usted. Es su responsabilidad asegurarse de que la información de su cuenta y los datos proporcionados para la compra sean precisos y estén actualizados. El uso indebido de nuestra aplicación, como el intento de fraude o cualquier otra actividad ilegal, resultará en la cancelación de su cuenta y podría ser reportado a las autoridades competentes.",
+                        text = "Al utilizar nuestra aplicación...",
                         fontSize = 14.sp,
                         lineHeight = 22.sp,
                         textAlign = TextAlign.Justify
@@ -340,7 +355,7 @@ fun RegisterScreen(navController: NavHostController) {
                 }
             },
             confirmButton = {
-                TextButton(onClick = { showDialog = false }) {
+                TextButton(onClick = { showTermsDialog = false }) {
                     Text("Cerrar", color = Color(0xFFE27F61))
                 }
             }
