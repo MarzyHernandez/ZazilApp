@@ -61,43 +61,31 @@ fun CatalogScreen(
     Box(
         modifier = modifier
             .fillMaxSize()
-            .background(Color(0xFFFEE1D6)) // Color de fondo rosa para la parte superior
+            .background(Color.White) // Color de fondo rosa para la parte superior
+            .clip(RoundedCornerShape(topStart = 0.dp, topEnd = 0.dp))
     ) {
         Column {
             // Encabezado con logo y texto "ZAZIL"
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clip(RoundedCornerShape(bottomEnd = 16.dp, bottomStart = 16.dp))
+                    .clip(RoundedCornerShape(bottomEnd = 18.dp, bottomStart = 18.dp))
                     .background(Color(0xFFFEE1D6))
-                    .padding(vertical = 16.dp)
+                    .padding(vertical = 32.dp)
             ) {
                 Row(
                     modifier = Modifier
-                        .align(Alignment.CenterStart)
-                        .padding(start = 8.dp),
+                        .fillMaxWidth()
+                        .padding(start = 16.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Box(
-                        modifier = Modifier
-                            .size(50.dp)
-                            .clip(CircleShape)
-                            .background(Color.White)
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.logo),
-                            contentDescription = "Logotipo",
-                            modifier = Modifier
-                                .size(40.dp)
-                                .align(Alignment.Center)
-                        )
-                    }
-                    Spacer(modifier = Modifier.width(10.dp))
                     Text(
-                        text = "ZAZIL",
-                        fontSize = 24.sp,
+                        text = "Productos",
+                        fontSize = 36.sp,
                         fontWeight = FontWeight.Bold,
+                        fontFamily = gabaritoFontFamily,
                         color = Color(0xFF191919)
+
                     )
                 }
             }
@@ -108,14 +96,11 @@ fun CatalogScreen(
                     .fillMaxSize()
                     .background(Color.White) // Fondo blanco desde esta sección
                     .padding(16.dp)
+                    .clip(RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp))
+
+
             ) {
                 Column {
-                    Text(
-                        text = "Productos",
-                        fontSize = 28.sp,
-                        color = Color(0xFFE17F61),
-                        modifier = Modifier.padding(start = 8.dp, bottom = 16.dp)
-                    )
                     // Barra de búsqueda
                     OutlinedTextField(
                         value = searchQuery,
@@ -130,8 +115,10 @@ fun CatalogScreen(
                                 imageVector = androidx.compose.material.icons.Icons.Default.Search,
                                 contentDescription = "Buscar"
                             )
-                        }
+                        },
+                        shape = RoundedCornerShape(64.dp) // Bordes redondeados
                     )
+
 
                     // Grid de productos con 2 columnas
                     LazyVerticalGrid(
@@ -168,8 +155,8 @@ fun ProductItem(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .height(300.dp)  // Altura fija para las tarjetas
-            .background(Color.White, shape = RoundedCornerShape(16.dp))
+            .height(280.dp)  // Altura fija para las tarjetas
+            .background(Color(0xFFEDEDED), shape = RoundedCornerShape(16.dp))
             .padding(16.dp)
             .clickable { onClick() }  // Se ejecuta cuando el usuario hace clic en la tarjeta
     ) {
@@ -179,7 +166,7 @@ fun ProductItem(
             contentDescription = "Imagen del Producto",
             modifier = Modifier
                 .fillMaxWidth()
-                .height(140.dp)  // Altura fija para las imágenes
+                .height(120.dp)  // Altura fija para las imágenes
                 .clip(RoundedCornerShape(8.dp)),
             contentScale = ContentScale.Crop
         )
@@ -191,6 +178,7 @@ fun ProductItem(
             text = title,
             fontSize = 18.sp,
             color = Color(0xFF545454),
+            fontFamily = gabaritoFontFamily,
             maxLines = 3 // Limita las líneas del título para que no afecte el layout
         )
 
@@ -199,7 +187,9 @@ fun ProductItem(
         // Precio del producto
         Text(
             text = price,
-            fontSize = 16.sp,
+            fontSize = 24.sp,
+            fontWeight = FontWeight.Bold,
+            fontFamily = gabaritoFontFamily,
             color = Color(0xFFE17F61)
         )
     }

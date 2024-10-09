@@ -97,22 +97,24 @@ fun CartScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 8.dp),
+                    .padding(start = 16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
                     text = "Carrito",
-                    fontSize = 28.sp,
+                    fontSize = 36.sp,
                     fontWeight = FontWeight.Bold,
                     fontFamily = gabaritoFontFamily,
                     color = Color(0xFF191919)
+
                 )
                 Icon(
                     painter = painterResource(id = R.drawable.ic_cart_w),
                     contentDescription = "Carrito",
                     modifier = Modifier
-                        .size(28.dp)
+                        .size(50.dp)
                         .align(Alignment.CenterVertically)
+                        .padding(horizontal = 8.dp),
                 )
             }
         }
@@ -143,7 +145,7 @@ fun CartScreen(
                                 productName = product.nombre,
                                 productImageUrl = product.imagen,
                                 quantity = cartProduct.cantidad,
-                                price = product.precio_normal,
+                                price = product.precio_rebajado,
                                 onAddClicked = { /* Acción para aumentar la cantidad */ },
                                 onRemoveClicked = { /* Acción para disminuir la cantidad */ }
                             )
@@ -296,6 +298,7 @@ fun CartTotal(navController: NavHostController, total: Double) {
                 modifier = Modifier
                     .weight(1f)
                     .height(52.dp)
+                    .padding(8.dp)
             ) {
                 Text(text = "SEGUIR COMPRANDO",
                     fontSize = 16.sp,
@@ -325,6 +328,7 @@ fun CartTotal(navController: NavHostController, total: Double) {
                 Text(text = "CONTINUAR",
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
+                    fontFamily = gabaritoFontFamily,
                     color = Color.White)
             }
         }

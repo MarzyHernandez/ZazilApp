@@ -36,7 +36,7 @@ fetchOrderData().then(orders => {
         totalOrders += 1;
         
         // Contar órdenes según el estado
-        if (order.estado === "Pendiente") {
+        if (order.estado === "Pendiente" || order.estado === "pendiente") {
             pendingOrders += 1;
         } else if (order.estado === "Enviado") {
             shippedOrders += 1;

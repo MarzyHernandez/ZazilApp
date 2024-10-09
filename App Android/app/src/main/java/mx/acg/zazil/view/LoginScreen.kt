@@ -2,6 +2,7 @@ package mx.acg.zazil.view
 
 import android.util.Log
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.BasicTextField
@@ -104,12 +105,13 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel = vi
     Box(modifier = Modifier.fillMaxSize()) {
         // Imagen de logo
         Image(
-            painter = painterResource(id = R.drawable.logo),
+            painter = painterResource(id = R.drawable.mid_logo),
             contentDescription = "Logo",
             modifier = Modifier
-                .size(200.dp)
+                .size(height = 300.dp, width = 150.dp)
                 .align(Alignment.TopEnd),
-            contentScale = ContentScale.Crop
+
+            contentScale = ContentScale.Fit
         )
 
         // Contenido de la pantalla
@@ -123,14 +125,14 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel = vi
             // Mensaje de bienvenida
             Text(
                 text = "¡Hola!",
-                fontSize = 32.sp,
+                fontSize = 45.sp,
                 fontWeight = FontWeight.Bold,
                 fontFamily = gabaritoFontFamily,
                 color = Color.Black
             )
             Text(
                 text = "Te damos la bienvenida a Zazil",
-                fontSize = 16.sp,
+                fontSize = 18.sp,
                 fontFamily = gabaritoFontFamily,
                 color = Color(0xFFE27F61),
                 modifier = Modifier.padding(top = 8.dp)
@@ -145,7 +147,7 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel = vi
                     .padding(16.dp)
             ) {
 
-                Text(text = "Completa tus datos", fontSize = 14.sp, color = Color.Black)
+                Text(text = "Completa tus datos", fontSize = 16.sp,fontFamily = gabaritoFontFamily, color = Color.Black)
 
                 Spacer(modifier = Modifier.height(16.dp)) // Espacio entre el mensaje y el formulario
 
@@ -178,6 +180,10 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel = vi
                         .fillMaxWidth()
                         .padding(top = 16.dp)
                         .wrapContentWidth(Alignment.End)
+                        .clickable {
+                            // Navega a la pantalla de recuperar contraseña
+                            navController.navigate("recuperarContrasena")
+                        }
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -204,7 +210,7 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel = vi
                     modifier = Modifier.fillMaxWidth(),
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFEBB7A7))
                 ) {
-                    Text(text = "INICIAR SESIÓN")
+                    Text(text = "INICIAR SESIÓN", fontFamily = gabaritoFontFamily, fontWeight = FontWeight.Bold)
                 }
 
                 // Muestra el id del usuario o error
@@ -227,7 +233,7 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel = vi
                 ) {
                     Text(
                         text = "¿No tienes cuenta?",
-                        fontSize = 14.sp,
+                        fontSize = 16.sp,
                         fontFamily = gabaritoFontFamily
                     )
 
@@ -236,7 +242,7 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel = vi
                         Text(
                             text = "Regístrate",
                             color = Color(0xFFE27F61),
-                            fontSize = 14.sp,
+                            fontSize = 16.sp,
                             fontFamily = gabaritoFontFamily
                         )
                     }
@@ -247,13 +253,13 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel = vi
                 Text(
                     text = "o regístrate vía",
                     fontFamily = gabaritoFontFamily,
-                    fontSize = 14.sp,
+                    fontSize = 16.sp,
                     color = Color.Black,
                     modifier = Modifier.align(Alignment.CenterHorizontally) // Centrado
                 )
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(56.dp))
 
             // Botón de registro con Google
             Button(
@@ -266,7 +272,7 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel = vi
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(text = "Google", color = Color.Black)
+                    Text(text = "Google", color = Color.Black,fontFamily = gabaritoFontFamily,fontSize = 16.sp)
                     Icon(
                         painter = painterResource(id = R.drawable.ic_google),
                         contentDescription = "Google Icon",

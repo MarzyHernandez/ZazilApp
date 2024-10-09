@@ -29,6 +29,7 @@ class MakeOrderViewModel : ViewModel() {
             try {
                 apiService.makeOrder(makeOrder) // Llama a la API
                 _orderState.value = OrderResult.Success // Pedido exitoso
+                println("Pedido exitoso")
             } catch (e: Exception) {
                 _orderState.value = OrderResult.Error(e.message ?: "Error desconocido")
             }

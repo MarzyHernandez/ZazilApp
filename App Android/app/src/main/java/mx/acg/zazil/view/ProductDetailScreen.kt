@@ -1,5 +1,6 @@
 package mx.acg.zazil.view
 
+import android.app.AlertDialog
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -86,12 +87,14 @@ fun ProductDetailScreen(
                             modifier = Modifier
                                 .size(40.dp)
                                 .align(Alignment.Center)
+                                .clip(RoundedCornerShape(16.dp))
                         )
                     }
                     Spacer(modifier = Modifier.width(10.dp))
                     Text(
                         text = "ZAZIL",
                         fontSize = 24.sp,
+                        fontFamily = gabaritoFontFamily,
                         fontWeight = FontWeight.Bold,
                         color = Color(0xFF191919)
                     )
@@ -104,15 +107,17 @@ fun ProductDetailScreen(
                     text = "< Regresar",
                     fontSize = 14.sp,
                     color = Color.Gray,
+                    fontFamily = gabaritoFontFamily,
                     fontWeight = FontWeight.Bold
                 )
             }
-
+            Spacer(modifier = Modifier.height(24.dp))
             // Nombre del producto
             Text(
                 text = product.nombre,
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
+                fontFamily = gabaritoFontFamily,
                 color = Color(0xFFE17F61),
                 modifier = Modifier.padding(horizontal = 16.dp)
             )
@@ -126,8 +131,8 @@ fun ProductDetailScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
-                    .clip(RoundedCornerShape(8.dp))
                     .aspectRatio(1.5f)
+                    .clip(RoundedCornerShape(24.dp))
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -146,6 +151,7 @@ fun ProductDetailScreen(
                         text = "$${product.precio_rebajado}",
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold,
+                        fontFamily = gabaritoFontFamily,
                         color = Color(0xFF191919)
                     )
                     product.precio_normal?.let {
@@ -153,7 +159,40 @@ fun ProductDetailScreen(
                             text = "$$it",
                             fontSize = 16.sp,
                             color = Color(0xFFFF5757),
+                            fontFamily = gabaritoFontFamily,
                             textDecoration = TextDecoration.LineThrough
+                        )
+                    }
+                }
+
+                var showConfirmationMessage by remember { mutableStateOf(false) }// Estado para controlar el AlertDialog
+                // Muestra un mensaje emergente si showConfirmationMessage es true
+                if (showConfirmationMessage) {
+                    LaunchedEffect(Unit) {
+                        // Espera 3 segundos antes de ocultar el mensaje
+                        kotlinx.coroutines.delay(2000)
+                        showConfirmationMessage = false
+                    }
+
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.check_icon),
+                            contentDescription = "Carrito",
+                            modifier = Modifier.size(25.dp)
+                        )
+
+                        Spacer(modifier = Modifier.width(8.dp))
+
+                        Text(
+                            text = "Agregado",
+                            color = Color(0xFF39B54A),
+                            fontSize = 18.sp,
+                            fontFamily = gabaritoFontFamily,
+                            textAlign = TextAlign.Center
+
                         )
                     }
                 }
@@ -167,6 +206,10 @@ fun ProductDetailScreen(
                         if (uid != null) {
                             // Llama al método para agregar el producto al carrito
                             cartViewModel.addToCart(productId, uid)
+
+                            // Cambia el estado para mostrar el mensaje de confirmación
+                            showConfirmationMessage = true
+
                         } else {
                             Log.e("ProductDetailScreen", "Error: No se pudo obtener el UID del usuario.")
                         }
@@ -192,8 +235,10 @@ fun ProductDetailScreen(
                         Text(
                             text = "Agregar al carrito",
                             color = Color.White,
-                            fontSize = 14.sp,
+                            fontSize = 18.sp,
+                            fontFamily = gabaritoFontFamily,
                             textAlign = TextAlign.Center
+
                         )
                     }
                 }
@@ -206,12 +251,15 @@ fun ProductDetailScreen(
                 text = "Descripción",
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
+                fontFamily = gabaritoFontFamily,
                 modifier = Modifier.padding(horizontal = 16.dp)
+
             )
 
             Text(
                 text = product.descripcion,
-                fontSize = 16.sp,
+                fontSize = 18.sp,
+                fontFamily = gabaritoFontFamily,
                 color = Color(0xFF191919),
                 modifier = Modifier.padding(16.dp)
             )

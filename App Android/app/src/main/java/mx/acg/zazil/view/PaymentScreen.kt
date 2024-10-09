@@ -30,6 +30,12 @@ import mx.acg.zazil.viewmodel.MakeOrderViewModel
 
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
+import com.stripe.android.paymentsheet.PaymentSheet
+import com.stripe.android.paymentsheet.PaymentSheetResult
+import com.stripe.android.paymentsheet.rememberPaymentSheet
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
+import mx.acg.zazil.CheckoutViewModel // Importa tu ViewModel
 
 @Composable
 fun PaymentScreen(
@@ -43,8 +49,57 @@ fun PaymentScreen(
     estado: String,
     pais: String,
     modifier: Modifier = Modifier,
-    makeOrderViewModel: MakeOrderViewModel = viewModel() // Inyectamos el ViewModel
+    makeOrderViewModel: MakeOrderViewModel = viewModel(), // Inyectamos el ViewModel
+    checkoutViewModel: CheckoutViewModel = viewModel() // Inyectamos el CheckoutViewModel
 ) {
+    val context = LocalContext.current
+
+    // Crear instancia de PaymentSheet
+    val paymentSheet = rememberPaymentSheet { paymentSheetResult ->
+        when (paymentSheetResult) {
+            is PaymentSheetResult.Completed -> {
+                Log.d("PaymentScreen", "Pago completado con éxito")
+
+                // Aquí colocamos el resto del código del onClick original
+                // Obtener el uid directamente desde Firebase
+                val currentUser = FirebaseAuth.getInstance().currentUser
+                val uid = currentUser?.uid
+
+                if (uid != null) {
+                    // Crear objeto MakeOrder con los datos
+                    val makeOrder = MakeOrder(
+                        uid = uid,
+                        codigo_postal = codigoPostal.toInt(),
+                        estado = estado,
+                        ciudad = ciudad,
+                        calle = calle,
+                        numero_interior = numeroInterior,
+                        pais = pais,
+                        colonia = colonia
+                    )
+
+                    Log.d("PaymentScreen", "MakeOrder creado: $makeOrder")
+
+                    // Llamar a la API para hacer el pedido
+                    makeOrderViewModel.makeOrder(makeOrder)
+
+                    Log.d("PaymentScreen", "Solicitud de orden enviada")
+
+                    // Redirigir al historial de compras
+                    navController.navigate("myShopping/$uid")
+                } else {
+                    Log.e("PaymentScreen", "Error: Usuario no autenticado, uid es null.")
+                }
+            }
+            is PaymentSheetResult.Failed -> {
+                Log.e("PaymentScreen", "Pago fallido: ${paymentSheetResult.error}")
+            }
+            is PaymentSheetResult.Canceled -> {
+                Log.d("PaymentScreen", "Pago cancelado por el usuario")
+            }
+        }
+    }
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -153,34 +208,13 @@ fun PaymentScreen(
         // Botón de finalizar compra
         Button(
             onClick = {
-                Log.d("PaymentScreen", "Finalizando compra...")
+                Log.d("PaymentScreen", "Iniciando proceso de pago...")
 
-                // Obtener el uid directamente desde Firebase
-                val currentUser = FirebaseAuth.getInstance().currentUser
-                val uid = currentUser?.uid
+                // Establecer el monto en el ViewModel
+                checkoutViewModel.onAmountChange(total)
 
-                if (uid != null) {
-                    // Crear objeto MakeOrder con los datos
-                    val makeOrder = MakeOrder(
-                        uid = uid,
-                        codigo_postal = codigoPostal.toInt(),
-                        estado = estado,
-                        ciudad = ciudad,
-                        calle = calle,
-                        numero_interior = numeroInterior,
-                        pais = pais,
-                        colonia = colonia
-                    )
-
-                    Log.d("PaymentScreen", "MakeOrder creado: $makeOrder")
-
-                    // Llamar a la API para hacer el pedido
-                    makeOrderViewModel.makeOrder(makeOrder)
-
-                    Log.d("PaymentScreen", "Solicitud de orden enviada")
-                } else {
-                    Log.e("PaymentScreen", "Error: Usuario no autenticado, uid es null.")
-                }
+                // Iniciar el proceso de pago con Stripe
+                checkoutViewModel.onStripePayment(context, paymentSheet)
             },
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFE17F61)),
             modifier = Modifier

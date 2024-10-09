@@ -55,12 +55,16 @@ android {
 dependencies {
     implementation(platform("com.google.firebase:firebase-bom:33.3.0"))
     implementation(platform("com.google.firebase:firebase-auth"))
-    implementation ("com.google.android.gms:play-services-auth:19.2.0")
-    implementation ("com.stripe:stripe-android:20.50.1")
-    implementation ("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.2")
-    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.google.android.gms:play-services-auth:19.2.0")
+    implementation("com.stripe:stripe-android:20.50.1")
+    implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.2")
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
+
+    implementation("com.stripe:stripe-android:20.51.0")
+    implementation("com.github.kittinunf.fuel:fuel:2.3.1")
+    implementation("com.github.kittinunf.fuel:fuel-json:2.3.1")
 
 
 
@@ -84,6 +88,9 @@ dependencies {
     implementation(libs.firebase.auth.ktx)
     implementation(libs.androidx.navigation.runtime.ktx)
     implementation(libs.androidx.material.icons.extended)
+    implementation("androidx.compose.material:material:1.4.3")
+
+
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -92,5 +99,7 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+
 
 }
