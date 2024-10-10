@@ -22,6 +22,18 @@ import coil.compose.rememberImagePainter
 import mx.acg.zazil.model.Order
 import mx.acg.zazil.viewmodel.OrderViewModel
 
+/**
+ * Pantalla que muestra los detalles de una orden específica, incluyendo los productos
+ * y el resumen del pedido. También permite agregar productos al carrito.
+ *
+ * @param navController Controlador de navegación para moverse entre pantallas.
+ * @param orderId ID de la orden que se mostrará.
+ * @param uid ID del usuario que realizó la orden.
+ * @param viewModel ViewModel que maneja la lógica de la orden.
+ *
+ * @author Melissa Mireles Rendón
+ * @author Alberto Cebreros González
+ */
 @Composable
 fun MyShoppingDetailsScreen(
     navController: NavHostController,
@@ -41,6 +53,7 @@ fun MyShoppingDetailsScreen(
     // Mostrar mensaje de error si existe
     val errorMessage by viewModel.errorMessage.observeAsState()
 
+    // Mostrar el mensaje de error si está presente
     if (errorMessage != null) {
         Text(errorMessage ?: "", color = Color.Red)
     } else {

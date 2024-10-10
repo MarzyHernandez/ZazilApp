@@ -1,6 +1,5 @@
 package mx.acg.zazil.view
 
-import android.app.AlertDialog
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -24,7 +23,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberImagePainter
-import mx.acg.zazil.viewmodel.ProductViewModel
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
@@ -36,6 +34,18 @@ import mx.acg.zazil.R
 import mx.acg.zazil.viewmodel.CartViewModel
 import mx.acg.zazil.viewmodel.ProductDetailViewModel
 
+/**
+ * Composable para mostrar los detalles de un producto.
+ * Incluye la imagen, precio, descripción y un botón para agregar el producto al carrito.
+ *
+ * @param productId El ID del producto que se va a mostrar.
+ * @param productDetailViewModel ViewModel para manejar la lógica de los detalles del producto.
+ * @param navController Controlador de navegación para mover entre pantallas.
+ * @param modifier Modificador para ajustar el diseño de la pantalla.
+ *
+ * @author Melissa Mireles Rendón
+ * @author Alberto Cebreros González
+ */
 @Composable
 fun ProductDetailScreen(
     productId: Int,
@@ -46,7 +56,7 @@ fun ProductDetailScreen(
     // Observar el producto seleccionado
     val selectedProduct by productDetailViewModel.selectedProduct.observeAsState()
     val cartViewModel = viewModel<CartViewModel>()
-    val cartUpdated by cartViewModel.cartUpdated.observeAsState()
+    var showConfirmationMessage by remember { mutableStateOf(false) }
 
     // Llama al ViewModel para cargar el producto por su ID
     LaunchedEffect(productId) {
@@ -69,6 +79,7 @@ fun ProductDetailScreen(
                     .background(Color(0xFFFEE1D6))
                     .padding(vertical = 16.dp)
             ) {
+                // Logotipo de la aplicación y nombre
                 Row(
                     modifier = Modifier
                         .align(Alignment.CenterStart)
@@ -102,7 +113,7 @@ fun ProductDetailScreen(
             }
 
             // Botón "Regresar"
-            TextButton(onClick = {navController.navigate("catalog")}) {
+            TextButton(onClick = { navController.navigate("catalog") }) {
                 Text(
                     text = "< Regresar",
                     fontSize = 14.sp,
@@ -111,7 +122,9 @@ fun ProductDetailScreen(
                     fontWeight = FontWeight.Bold
                 )
             }
+
             Spacer(modifier = Modifier.height(24.dp))
+
             // Nombre del producto
             Text(
                 text = product.nombre,
@@ -124,127 +137,164 @@ fun ProductDetailScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Imagen del producto
-            Image(
-                painter = rememberImagePainter(data = product.imagen),
-                contentDescription = "Imagen del Producto",
+            // Sección de la imagen del producto
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
-                    .aspectRatio(1.5f)
-                    .clip(RoundedCornerShape(24.dp))
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Precio y botón de agregar al carrito
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
             ) {
-                Column {
-                    // Precio del producto
-                    Text(
-                        text = "$${product.precio_rebajado}",
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold,
-                        fontFamily = gabaritoFontFamily,
-                        color = Color(0xFF191919)
-                    )
-                    product.precio_normal?.let {
-                        Text(
-                            text = "$$it",
-                            fontSize = 16.sp,
-                            color = Color(0xFFFF5757),
-                            fontFamily = gabaritoFontFamily,
-                            textDecoration = TextDecoration.LineThrough
-                        )
-                    }
-                }
-
-                var showConfirmationMessage by remember { mutableStateOf(false) }// Estado para controlar el AlertDialog
-                // Muestra un mensaje emergente si showConfirmationMessage es true
-                if (showConfirmationMessage) {
-                    LaunchedEffect(Unit) {
-                        // Espera 3 segundos antes de ocultar el mensaje
-                        kotlinx.coroutines.delay(2000)
-                        showConfirmationMessage = false
-                    }
-
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.check_icon),
-                            contentDescription = "Carrito",
-                            modifier = Modifier.size(25.dp)
-                        )
-
-                        Spacer(modifier = Modifier.width(8.dp))
-
-                        Text(
-                            text = "Agregado",
-                            color = Color(0xFF39B54A),
-                            fontSize = 18.sp,
-                            fontFamily = gabaritoFontFamily,
-                            textAlign = TextAlign.Center
-
-                        )
-                    }
-                }
-
-                // Botón de agregar al carrito
-                Button(
-                    onClick = {
-                        val user = FirebaseAuth.getInstance().currentUser
-                        val uid = user?.uid
-
-                        if (uid != null) {
-                            // Llama al método para agregar el producto al carrito
-                            cartViewModel.addToCart(productId, uid)
-
-                            // Cambia el estado para mostrar el mensaje de confirmación
-                            showConfirmationMessage = true
-
-                        } else {
-                            Log.e("ProductDetailScreen", "Error: No se pudo obtener el UID del usuario.")
-                        }
-                    },
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFE17F61)),
+                // Imagen
+                Image(
+                    painter = rememberImagePainter(data = product.imagen),
+                    contentDescription = "Imagen del Producto",
                     modifier = Modifier
-                        .height(40.dp)
-                        .clip(RoundedCornerShape(8.dp))
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
+                        .aspectRatio(1.5f)
+                        .clip(RoundedCornerShape(24.dp))
+                )
+
+                // Texto "Ir al carrito"
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    contentAlignment = Alignment.CenterEnd // Alinea el texto a la derecha
                 ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_cart_w),
-                            contentDescription = "Carrito",
-                            tint = Color.White,
-                            modifier = Modifier.size(20.dp)
-                        )
-
-                        Spacer(modifier = Modifier.width(8.dp))
-
+                    TextButton(onClick = { navController.navigate("carrito") }) {
                         Text(
-                            text = "Agregar al carrito",
-                            color = Color.White,
-                            fontSize = 18.sp,
+                            text = "Ir al carrito",
+                            fontSize = 13.sp,
+                            color = Color.Gray,
                             fontFamily = gabaritoFontFamily,
-                            textAlign = TextAlign.Center
-
+                            fontWeight = FontWeight.Bold,
+                            textDecoration = TextDecoration.Underline
                         )
                     }
                 }
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            // Sección de precio y botón de agregar al carrito
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column {
+                        // Precio del producto
+                        Text(
+                            text = String.format("$%.2f", product.precio_rebajado),
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight.Bold,
+                            fontFamily = gabaritoFontFamily,
+                            color = Color(0xFF191919)
+                        )
+                        product.precio_normal?.let {
+                            Text(
+                                text = String.format("$%.2f", it),
+                                fontSize = 16.sp,
+                                color = Color(0xFFFF5757),
+                                fontFamily = gabaritoFontFamily,
+                                textDecoration = TextDecoration.LineThrough
+                            )
+                        }
+                    }
+
+                    // Botón de agregar al carrito
+                    Button(
+                        onClick = {
+                            val user = FirebaseAuth.getInstance().currentUser
+                            val uid = user?.uid
+
+                            if (uid != null) {
+                                // Llama al método para agregar el producto al carrito
+                                cartViewModel.addToCart(productId, uid)
+
+                                // Cambia el estado para mostrar el mensaje de confirmación
+                                showConfirmationMessage = true
+
+                            } else {
+                                Log.e(
+                                    "ProductDetailScreen",
+                                    "Error: No se pudo obtener el UID del usuario."
+                                )
+                            }
+                        },
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFE17F61)),
+                        modifier = Modifier
+                            .height(40.dp)
+                            .clip(RoundedCornerShape(8.dp))
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_cart_w),
+                                contentDescription = "Carrito",
+                                tint = Color.White,
+                                modifier = Modifier.size(20.dp)
+                            )
+
+                            Spacer(modifier = Modifier.width(8.dp))
+
+                            Text(
+                                text = "Agregar al carrito",
+                                color = Color.White,
+                                fontSize = 18.sp,
+                                fontFamily = gabaritoFontFamily,
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(2.dp)) // Espacio entre el botón y el aviso de agregado
+
+                // Muestra el mensaje de confirmación "Agregado"
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(40.dp), // Reserva espacio para el mensaje "Agregado"
+                    contentAlignment = Alignment.CenterEnd // Coloca el mensaje alineado a la derecha
+                ) {
+                    // Muestra un mensaje emergente si showConfirmationMessage es true
+                    if (showConfirmationMessage) {
+                        LaunchedEffect(Unit) {
+                            // Espera 3 segundos antes de ocultar el mensaje
+                            kotlinx.coroutines.delay(2000)
+                            showConfirmationMessage = false
+                        }
+
+                        // Aviso de agregado
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.End, // Alinea al centro
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.check_icon),
+                                contentDescription = "Agregado",
+                                modifier = Modifier.size(15.dp)
+                            )
+
+                            Spacer(modifier = Modifier.width(4.dp)) // Ajusta el valor para reducir el espacio
+
+                            Text(
+                                text = "Agregado",
+                                color = Color(0xFF39B54A),
+                                fontSize = 18.sp,
+                                fontFamily = gabaritoFontFamily,
+                                textAlign = TextAlign.End
+                            )
+                        }
+                    }
+                }
+            }
 
             // Descripción del producto
             Text(
@@ -253,9 +303,7 @@ fun ProductDetailScreen(
                 fontWeight = FontWeight.Bold,
                 fontFamily = gabaritoFontFamily,
                 modifier = Modifier.padding(horizontal = 16.dp)
-
             )
-
             Text(
                 text = product.descripcion,
                 fontSize = 18.sp,
@@ -271,6 +319,3 @@ fun ProductDetailScreen(
         }
     }
 }
-
-
-
