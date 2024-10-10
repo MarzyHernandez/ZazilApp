@@ -15,6 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -48,6 +50,9 @@ fun CartScreen(
     cartViewModel: CartViewModel = viewModel(),
     productViewModel: ProductViewModel = viewModel()
 ) {
+    // Fuente personalizada utilizada en toda la pantalla
+    val gabaritoFontFamily = FontFamily(Font(R.font.gabarito_regular))
+
     // Observar el estado del carrito
     val cart by cartViewModel.cart.observeAsState()
 

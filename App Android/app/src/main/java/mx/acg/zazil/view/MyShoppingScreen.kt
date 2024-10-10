@@ -15,6 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -23,12 +25,30 @@ import mx.acg.zazil.R
 import mx.acg.zazil.model.ShoppingHistory
 import mx.acg.zazil.viewmodel.ShoppingHistoryViewModel
 
+/**
+ * Pantalla para mostrar el historial de compras del usuario.
+ *
+ * Esta pantalla muestra una lista de todas las compras que ha realizado el usuario.
+ * Cada elemento de la lista incluye el número de pedido, la cantidad de productos,
+ * la fecha y el monto total del pedido. También permite navegar a los detalles del pedido.
+ *
+ * @param navController Controlador de navegación para cambiar entre pantallas.
+ * @param viewModel ViewModel que gestiona la lógica del historial de compras.
+ * @param uid ID del usuario autenticado para recuperar su historial de compras.
+ *
+ * @author Melissa Mireles Rendón
+ * @author Alberto Cebreros González
+ */
 @Composable
 fun MyShoppingScreen(
     navController: NavHostController,
     viewModel: ShoppingHistoryViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
     uid: String
 ) {
+    // Fuente personalizada utilizada en toda la pantalla
+    val gabaritoFontFamily = FontFamily(Font(R.font.gabarito_regular))
+
+
     // Obteniendo el historial de compras desde el ViewModel
     val shoppingHistory by viewModel.shoppingHistory.observeAsState(initial = emptyList())
     val errorMessage by viewModel.errorMessage.observeAsState()
@@ -38,6 +58,7 @@ fun MyShoppingScreen(
         viewModel.getShoppingHistory(uid)
     }
 
+    // Diseño de la pantalla
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -102,6 +123,16 @@ fun MyShoppingScreen(
     }
 }
 
+/**
+ * Elemento de la lista que muestra un pedido en el historial de compras.
+ *
+ * Cada fila incluye información como el número de pedido, la cantidad de productos,
+ * la fecha del pedido y el monto total. Al hacer clic en la fila, se navega a los detalles del pedido.
+ *
+ * @param navController Controlador de navegación para cambiar entre pantallas.
+ * @param order Pedido del historial de compras.
+ * @param uid ID del usuario autenticado.
+ */
 @Composable
 fun OrderItemRow(
     navController: NavHostController,
@@ -134,17 +165,21 @@ fun OrderItemRow(
         Column(
             modifier = Modifier.weight(1f)
         ) {
+            // Número de pedido
             Text(
                 text = "Pedido #${order.id}",
                 fontWeight = FontWeight.Bold,
                 fontSize = 18.sp,
                 color = Color(0xFFE17F61)
             )
+            // Cantidad de productos
             Text(text = "Productos: ${order.productos.size}")
 
+            // Fecha del pedido, recortando la hora
             val formattedDate = order.fecha_pedido.substringBefore("T")
             Text(text = "Fecha: $formattedDate")
 
+            // Monto total del pedido
             Text(
                 text = "Total: $${order.monto_total}",
                 fontSize = 16.sp,
