@@ -10,6 +10,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.LiveData
 import mx.acg.zazil.model.RegisterResponse
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -23,8 +24,8 @@ import retrofit2.Response
  */
 class RegisterViewModel : ViewModel() {
 
-    private val _registerResult = MutableLiveData<String>()
-    val registerResult: LiveData<String> get() = _registerResult
+    private val _registerResult = MutableLiveData<String?>()
+    val registerResult: MutableLiveData<String?> get() = _registerResult
 
     private val registerApi: RegisterApi by lazy {
         val loggingInterceptor = HttpLoggingInterceptor().apply {
@@ -55,7 +56,16 @@ class RegisterViewModel : ViewModel() {
                 if (response.isSuccessful) {
                     _registerResult.value = "Registro exitoso"
                 } else {
-                    _registerResult.value = "Error en el registro: ${response.body()?.message ?: response.message()}"
+                    // Si no es exitoso, intenta extraer el mensaje de error del cuerpo de la respuesta
+                    val errorBody = response.errorBody()?.string()
+                    val errorMessage = try {
+                        val jsonObject = errorBody?.let { JSONObject(it) }
+                        jsonObject?.getString("error")
+                    } catch (e: Exception) {
+                        "Error en el registro: ${response.message()}"
+                    }
+
+                    _registerResult.value = errorMessage
                 }
             }
 
@@ -64,4 +74,5 @@ class RegisterViewModel : ViewModel() {
             }
         })
     }
+
 }

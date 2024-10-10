@@ -9,7 +9,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
 import com.google.firebase.auth.FirebaseAuth
 
 @Composable
@@ -175,7 +174,7 @@ fun AppNavHost(
             composable("settings") { SettingsScreen(navController) }
 
             composable("updateData") {
-                ActualizarDatosScreen(navController = navController)  // Aquí llamamos a la pantalla de ActualizarDatos
+                UpdateDataScreen(navController = navController)  // Aquí llamamos a la pantalla de ActualizarDatos
             }
 
             composable("TyC") { TyC(navController) }

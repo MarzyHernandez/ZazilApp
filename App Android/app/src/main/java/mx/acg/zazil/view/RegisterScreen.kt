@@ -30,7 +30,26 @@ import mx.acg.zazil.viewmodel.RegisterViewModel
  * Pantalla de registro que permite al usuario introducir sus datos personales, aceptar términos y condiciones,
  * y realizar el registro en el servidor remoto a través de Retrofit.
  *
+ * La pantalla de registro incluye campos para el nombre, apellido, correo, teléfono y contraseña del usuario.
+ * Además, permite la aceptación de los términos y condiciones antes de proceder con el registro.
+ *
+ * En caso de que el registro sea exitoso, se muestra un diálogo de confirmación y la opción para iniciar sesión.
+ * En caso de errores, se notifica al usuario del problema.
+ *
  * @param navController Controlador de navegación para cambiar entre pantallas.
+ * @property gabaritoFontFamily Fuente personalizada utilizada en la interfaz.
+ * @property nombre Estado mutable para almacenar el nombre del usuario.
+ * @property apellido Estado mutable para almacenar el apellido del usuario.
+ * @property email Estado mutable para almacenar el correo del usuario.
+ * @property telefono Estado mutable para almacenar el teléfono del usuario.
+ * @property password Estado mutable para almacenar la contraseña del usuario.
+ * @property termsAccepted Estado mutable para verificar si los términos han sido aceptados.
+ * @property errorMessage Estado mutable para mostrar mensajes de error al usuario.
+ * @property showDialog Estado mutable para controlar la visibilidad del diálogo de éxito.
+ * @property showTermsDialog Estado mutable para controlar la visibilidad del diálogo de términos y condiciones.
+ * @property registerResult Resultado del registro observado desde el ViewModel.
+ * @property isPasswordValid Función que verifica si la contraseña cumple con los requisitos mínimos.
+ *
  * @author Melissa Mireles Rendón
  * @author Alberto Cebreros González
  */
@@ -46,12 +65,20 @@ fun RegisterScreen(navController: NavHostController) {
     var termsAccepted by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
 
-    var showDialog by remember { mutableStateOf(false) } // Para controlar el diálogo de éxito
-    var showTermsDialog by remember { mutableStateOf(false) } // Para el diálogo de términos y condiciones
+    var showDialog by remember { mutableStateOf(false) }
+    var showTermsDialog by remember { mutableStateOf(false) }
 
     val viewModel: RegisterViewModel = viewModel()
     val registerResult by viewModel.registerResult.observeAsState()
 
+    /**
+     * Función para validar la contraseña.
+     *
+     * La contraseña debe tener al menos 6 caracteres e incluir al menos un número.
+     *
+     * @param password Contraseña a validar.
+     * @return Verdadero si la contraseña es válida, falso en caso contrario.
+     */
     fun isPasswordValid(password: String): Boolean {
         return password.length >= 6 && password.any { it.isDigit() }
     }
@@ -104,7 +131,7 @@ fun RegisterScreen(navController: NavHostController) {
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // Campos de entrada utilizando OutlinedTextField con label
+                // Campos de entrada de datos
                 BasicTextField(
                     value = nombre,
                     onValueChange = { nombre = it },
@@ -113,19 +140,15 @@ fun RegisterScreen(navController: NavHostController) {
                         .padding(vertical = 8.dp),
                     decorationBox = { innerTextField ->
                         Column {
-                            Text(
-                                text = "Nombre(s)",
-                                fontSize = 14.sp,
-                                color = Color.Gray
-                            )
+                            Text("Nombre(s)", fontSize = 14.sp, color = Color.Gray)
                             Box(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(top = 4.dp, bottom = 8.dp)
                             ) {
-                                innerTextField() // Campo de entrada de texto
+                                innerTextField()
                             }
-                            Divider(color = Color.Gray, thickness = 1.dp) // Línea divisoria debajo del campo
+                            Divider(color = Color.Gray, thickness = 1.dp)
                         }
                     }
                 )
@@ -139,11 +162,7 @@ fun RegisterScreen(navController: NavHostController) {
                         .padding(vertical = 8.dp),
                     decorationBox = { innerTextField ->
                         Column {
-                            Text(
-                                text = "Apellido",
-                                fontSize = 14.sp,
-                                color = Color.Gray
-                            )
+                            Text("Apellido", fontSize = 14.sp, color = Color.Gray)
                             Box(
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -165,11 +184,7 @@ fun RegisterScreen(navController: NavHostController) {
                         .padding(vertical = 8.dp),
                     decorationBox = { innerTextField ->
                         Column {
-                            Text(
-                                text = "Correo",
-                                fontSize = 14.sp,
-                                color = Color.Gray
-                            )
+                            Text("Correo", fontSize = 14.sp, color = Color.Gray)
                             Box(
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -191,11 +206,7 @@ fun RegisterScreen(navController: NavHostController) {
                         .padding(vertical = 8.dp),
                     decorationBox = { innerTextField ->
                         Column {
-                            Text(
-                                text = "Teléfono",
-                                fontSize = 14.sp,
-                                color = Color.Gray
-                            )
+                            Text("Teléfono", fontSize = 14.sp, color = Color.Gray)
                             Box(
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -225,11 +236,7 @@ fun RegisterScreen(navController: NavHostController) {
                     visualTransformation = PasswordVisualTransformation(),
                     decorationBox = { innerTextField ->
                         Column {
-                            Text(
-                                text = "Contraseña",
-                                fontSize = 14.sp,
-                                color = Color.Gray
-                            )
+                            Text("Contraseña", fontSize = 14.sp, color = Color.Gray)
                             Box(
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -241,7 +248,6 @@ fun RegisterScreen(navController: NavHostController) {
                         }
                     }
                 )
-
 
                 Spacer(modifier = Modifier.height(16.dp))
 
@@ -255,6 +261,21 @@ fun RegisterScreen(navController: NavHostController) {
                     TextButton(onClick = { showTermsDialog = true }) {
                         Text(text = "términos y condiciones", color = Color(0xFFE27F61), fontSize = 14.sp)
                     }
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // Mensaje de resultado del registro
+                registerResult?.let {
+                    if (it.contains("exitoso")) {
+                        showDialog = true
+                    } else {
+                        errorMessage = it
+                    }
+                }
+
+                errorMessage?.let {
+                    Text(text = it, color = Color.Red, modifier = Modifier.padding(top = 8.dp))
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -276,38 +297,6 @@ fun RegisterScreen(navController: NavHostController) {
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFEBB7A7))
                 ) {
                     Text(text = "REGISTRAR", fontFamily = gabaritoFontFamily, fontWeight = FontWeight.Bold)
-                }
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = "¿Ya tienes cuenta?",
-                        fontSize = 16.sp,
-                        fontFamily = gabaritoFontFamily
-                    )
-
-                    // Botón para navegar a la pantalla de registro
-                    TextButton(onClick = { navController.navigate("login") }) {
-                        Text(
-                            text = "Inicia Sesión",
-                            color = Color(0xFFE27F61),
-                            fontSize = 16.sp,
-                            fontFamily = gabaritoFontFamily
-                        )
-                    }
-                }
-
-                registerResult?.let {
-                    if (it.contains("exitoso")) {
-                        showDialog = true // Mostrar el diálogo de éxito
-                    }
-                }
-
-                errorMessage?.let {
-                    Text(text = it, color = Color.Red, modifier = Modifier.padding(top = 8.dp))
                 }
             }
         }
