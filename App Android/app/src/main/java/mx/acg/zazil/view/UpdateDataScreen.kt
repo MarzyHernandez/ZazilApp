@@ -29,6 +29,9 @@ import mx.acg.zazil.viewmodel.UpdateDataViewModel
  *
  * @param viewModel ViewModel para manejar la lógica de actualización.
  * @param navController Controlador de navegación para cambiar entre pantallas.
+ *
+ * @author Alberto Cebreros González
+ * @author Melissa Mireles Rendón
  */
 @Composable
 fun UpdateDataScreen(viewModel: UpdateDataViewModel = viewModel(), navController: NavHostController) {

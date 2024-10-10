@@ -5,12 +5,14 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,6 +26,25 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavHostController
 import com.google.firebase.auth.FirebaseAuth
 
+/**
+ * Pantalla para finalizar la compra, donde el usuario puede revisar y editar
+ * la información de envío antes de proceder al pago.
+ * Los campos incluyen dirección, ciudad, estado, país, etc., con valores pre-llenados.
+ *
+ * @param navController Controlador de navegación para cambiar entre pantallas.
+ * @param total Total del carrito de compra.
+ * @param calle Dirección del cliente.
+ * @param numeroInterior Número interior del domicilio.
+ * @param colonia Colonia del domicilio.
+ * @param codigoPostal Código postal del domicilio.
+ * @param ciudad Ciudad del domicilio.
+ * @param estado Estado del domicilio.
+ * @param pais País del domicilio.
+ * @param modifier Modificador para personalizar el componente.
+ *
+ * @author Alberto Cebreros González
+ * @author Melissa Mireles Rendón
+ */
 @Composable
 fun EndShoppingScreen(
     navController: NavHostController,
@@ -37,11 +58,13 @@ fun EndShoppingScreen(
     pais: String,
     modifier: Modifier = Modifier
 ) {
+    // Estado para manejar el mensaje de error
+    var errorMessage by remember { mutableStateOf<String?>(null) }
+
     Column(
         modifier = modifier
             .fillMaxSize()
             .background(Color.White)
-            .padding(16.dp)
             .verticalScroll(rememberScrollState())
     ) {
         // Encabezado con título
@@ -57,11 +80,23 @@ fun EndShoppingScreen(
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color(0xFF191919),
-                modifier = Modifier.align(Alignment.CenterStart).padding(start = 16.dp)
+                modifier = Modifier
+                    .align(Alignment.CenterStart)
+                    .padding(start = 16.dp)
             )
         }
 
         Spacer(modifier = Modifier.height(16.dp))
+
+        // Botón "Regresar" para volver al carrito
+        TextButton(onClick = { navController.navigate("cart") }) {
+            Text(
+                text = "< Regresar",
+                fontSize = 14.sp,
+                color = Color.Gray,
+                fontWeight = FontWeight.Bold
+            )
+        }
 
         // Datos del cliente
         Column(modifier = Modifier.fillMaxWidth()) {
@@ -69,89 +104,215 @@ fun EndShoppingScreen(
                 text = "Datos del cliente",
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color(0xFF191919)
+                color = Color(0xFF191919),
+                modifier = Modifier.padding(8.dp)
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Campos de texto con datos pre-llenados
+            // Variables para los campos de texto
             var updatedCalle by remember { mutableStateOf(calle) }
             var updatedNumeroInterior by remember { mutableStateOf(numeroInterior) }
             var updatedColonia by remember { mutableStateOf(colonia) }
             var updatedCodigoPostal by remember { mutableStateOf(codigoPostal) }
             var updatedCiudad by remember { mutableStateOf(ciudad) }
             var updatedEstado by remember { mutableStateOf(estado) }
-            var updatedPais by remember { mutableStateOf(pais) }
+            var updatedPais by remember { mutableStateOf(if (pais.isNotBlank()) pais else "México") }
 
-            TextField(
+            // Campo de texto personalizado para cada dato
+            BasicTextField(
                 value = updatedCalle,
                 onValueChange = { updatedCalle = it },
-                label = { Text("Calle") },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp, horizontal = 16.dp),
+                decorationBox = { innerTextField ->
+                    Column {
+                        Text("Calle", fontSize = 14.sp, color = Color.Gray)
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 4.dp, bottom = 8.dp)
+                        ) {
+                            innerTextField()
+                        }
+                        Divider(color = Color.Gray, thickness = 1.dp)
+                    }
+                }
             )
             Spacer(modifier = Modifier.height(8.dp))
-            TextField(
+
+            BasicTextField(
                 value = updatedNumeroInterior,
                 onValueChange = { updatedNumeroInterior = it },
-                label = { Text("Número Interior") },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp, horizontal = 16.dp),
+                decorationBox = { innerTextField ->
+                    Column {
+                        Text("Número Interior (Opcional)", fontSize = 14.sp, color = Color.Gray)
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 4.dp, bottom = 8.dp)
+                        ) {
+                            innerTextField()
+                        }
+                        Divider(color = Color.Gray, thickness = 1.dp)
+                    }
+                }
             )
             Spacer(modifier = Modifier.height(8.dp))
-            TextField(
+
+            BasicTextField(
                 value = updatedColonia,
                 onValueChange = { updatedColonia = it },
-                label = { Text("Colonia") },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp, horizontal = 16.dp),
+                decorationBox = { innerTextField ->
+                    Column {
+                        Text("Colonia", fontSize = 14.sp, color = Color.Gray)
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 4.dp, bottom = 8.dp)
+                        ) {
+                            innerTextField()
+                        }
+                        Divider(color = Color.Gray, thickness = 1.dp)
+                    }
+                }
             )
             Spacer(modifier = Modifier.height(8.dp))
-            TextField(
+
+            BasicTextField(
                 value = updatedCodigoPostal,
                 onValueChange = { updatedCodigoPostal = it },
-                label = { Text("Código Postal") },
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp, horizontal = 16.dp),
+                decorationBox = { innerTextField ->
+                    Column {
+                        Text("Código Postal", fontSize = 14.sp, color = Color.Gray)
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 4.dp, bottom = 8.dp)
+                        ) {
+                            innerTextField()
+                        }
+                        Divider(color = Color.Gray, thickness = 1.dp)
+                    }
+                },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
             Spacer(modifier = Modifier.height(8.dp))
-            TextField(
+
+            BasicTextField(
                 value = updatedCiudad,
                 onValueChange = { updatedCiudad = it },
-                label = { Text("Ciudad") },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp, horizontal = 16.dp),
+                decorationBox = { innerTextField ->
+                    Column {
+                        Text("Ciudad", fontSize = 14.sp, color = Color.Gray)
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 4.dp, bottom = 8.dp)
+                        ) {
+                            innerTextField()
+                        }
+                        Divider(color = Color.Gray, thickness = 1.dp)
+                    }
+                }
             )
             Spacer(modifier = Modifier.height(8.dp))
-            TextField(
+
+            BasicTextField(
                 value = updatedEstado,
                 onValueChange = { updatedEstado = it },
-                label = { Text("Estado") },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp, horizontal = 16.dp),
+                decorationBox = { innerTextField ->
+                    Column {
+                        Text("Estado", fontSize = 14.sp, color = Color.Gray)
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 4.dp, bottom = 8.dp)
+                        ) {
+                            innerTextField()
+                        }
+                        Divider(color = Color.Gray, thickness = 1.dp)
+                    }
+                }
             )
             Spacer(modifier = Modifier.height(8.dp))
-            TextField(
+
+            BasicTextField(
                 value = updatedPais,
                 onValueChange = { updatedPais = it },
-                label = { Text("País") },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp, horizontal = 16.dp),
+                decorationBox = { innerTextField ->
+                    Column {
+                        Text("País", fontSize = 14.sp, color = Color.Gray)
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 4.dp, bottom = 8.dp)
+                        ) {
+                            innerTextField()
+                        }
+                        Divider(color = Color.Gray, thickness = 1.dp)
+                    }
+                }
             )
+
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Botón de continuar
+            // Mostrar mensaje de error si hay campos vacíos
+            errorMessage?.let {
+                Text(
+                    text = it,
+                    color = Color.Red,
+                    modifier = Modifier.padding(horizontal = 16.dp)
+                )
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // Botón para proceder al pago
             Button(
                 onClick = {
-                    val currentUser = FirebaseAuth.getInstance().currentUser
-                    val uid = currentUser?.uid
-                    if (uid != null) {
-                        // Navegar a la pantalla de pago con los valores actualizados
-                        navController.navigate(
-                            "payment/$total/$updatedCalle/$updatedNumeroInterior/$updatedColonia/$updatedCodigoPostal/$updatedCiudad/$updatedEstado/$updatedPais"
-                        )
+                    // Validar que los campos requeridos no estén vacíos
+                    if (updatedCalle.isBlank() || updatedColonia.isBlank() ||
+                        updatedCodigoPostal.isBlank() || updatedCiudad.isBlank() ||
+                        updatedEstado.isBlank() || updatedPais.isBlank()
+                    ) {
+                        errorMessage = "Por favor, llena todos los campos obligatorios."
                     } else {
-                        Log.e("EndShoppingScreen", "Error: Usuario no autenticado, uid es null.")
+                        errorMessage = null
+                        val currentUser = FirebaseAuth.getInstance().currentUser
+                        val uid = currentUser?.uid
+                        if (uid != null) {
+                            navController.navigate(
+                                "payment/$total/$updatedCalle/$updatedNumeroInterior/$updatedColonia/$updatedCodigoPostal/$updatedCiudad/$updatedEstado/$updatedPais"
+                            )
+                        } else {
+                            Log.e("EndShoppingScreen", "Error: Usuario no autenticado, uid es null.")
+                        }
                     }
                 },
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFE17F61)),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 8.dp)
+                    .padding(vertical = 8.dp, horizontal = 16.dp)
                     .height(50.dp),
                 shape = RoundedCornerShape(10.dp)
             ) {
