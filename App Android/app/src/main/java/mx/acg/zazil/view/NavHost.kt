@@ -85,7 +85,7 @@ fun AppNavHost(
                 UpdateDataScreen(navController = navController)
             }
 
-            composable("carrito") {
+            composable("cart") {
                 // Obtener el uid del usuario autenticado en Firebase
                 val currentUser = auth.currentUser
                 val uid = currentUser?.uid

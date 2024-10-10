@@ -28,10 +28,23 @@ import mx.acg.zazil.model.Product
 import mx.acg.zazil.viewmodel.CartViewModel
 import mx.acg.zazil.viewmodel.ProductViewModel
 
+/**
+ * Pantalla de carrito de compras que muestra los productos añadidos por el usuario,
+ * permite incrementar o disminuir la cantidad, y proceder al pago.
+ * Incluye también la opción de mostrar un mensaje de "Carrito Vacío" si no hay productos.
+ *
+ * @param navController Controlador de navegación para cambiar entre pantallas.
+ * @param uid UID del usuario actual para cargar su carrito.
+ * @param cartViewModel ViewModel para manejar la lógica del carrito.
+ * @param productViewModel ViewModel para manejar la lógica de los productos.
+ *
+ * @author Alberto Cebreros González
+ * @autor Melissa Mireles Rendón
+ */
 @Composable
 fun CartScreen(
     navController: NavHostController,
-    uid: String,  // UID del usuario
+    uid: String,
     cartViewModel: CartViewModel = viewModel(),
     productViewModel: ProductViewModel = viewModel()
 ) {
@@ -60,12 +73,11 @@ fun CartScreen(
             if (productos.isNotEmpty() && !isProductLoadingStarted) {
                 // Marcamos que la carga de productos ha comenzado
                 isProductLoadingStarted = true
-                isLoading = true  // Empezamos cargando
+                isLoading = true
 
                 // Hacemos las solicitudes de productos
                 productos.forEach { cartProduct ->
                     if (!loadedProducts.containsKey(cartProduct.id_producto)) {
-                        // Cargamos el producto y lo añadimos al mapa
                         productViewModel.loadProductById(cartProduct.id_producto) { product ->
                             loadedProducts[cartProduct.id_producto] = product
 
@@ -76,6 +88,9 @@ fun CartScreen(
                         }
                     }
                 }
+            } else {
+                // Si no hay productos, no está cargando más
+                isLoading = false
             }
         }
     }
@@ -106,7 +121,6 @@ fun CartScreen(
                     fontWeight = FontWeight.Bold,
                     fontFamily = gabaritoFontFamily,
                     color = Color(0xFF191919)
-
                 )
                 Icon(
                     painter = painterResource(id = R.drawable.ic_cart_w),
@@ -121,7 +135,6 @@ fun CartScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -132,24 +145,35 @@ fun CartScreen(
             if (isLoading) {
                 CircularProgressIndicator(color = Color(0xFFE17F61), modifier = Modifier.align(Alignment.CenterHorizontally))
             } else {
-                // Usamos LazyColumn para que la lista de productos sea desplazable
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f)  // Esto asegura que la lista de productos ocupe solo el espacio restante
-                ) {
-                    items(cart?.productos ?: emptyList()) { cartProduct ->
-                        loadedProducts[cartProduct.id_producto]?.let { product ->
-                            CartItemRow(
-                                productId = cartProduct.id_producto,
-                                productName = product.nombre,
-                                productImageUrl = product.imagen,
-                                quantity = cartProduct.cantidad,
-                                price = product.precio_rebajado,
-                                onAddClicked = { /* Acción para aumentar la cantidad */ },
-                                onRemoveClicked = { /* Acción para disminuir la cantidad */ }
-                            )
-                            Spacer(modifier = Modifier.height(16.dp))
+                if (cart?.productos.isNullOrEmpty()) {
+                    // Mostrar mensaje de carrito vacío si no hay productos
+                    Text(
+                        text = "Carrito Vacío",
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Gray,
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                    )
+                } else {
+                    // Usamos LazyColumn para que la lista de productos sea desplazable
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
+                    ) {
+                        items(cart?.productos ?: emptyList()) { cartProduct ->
+                            loadedProducts[cartProduct.id_producto]?.let { product ->
+                                CartItemRow(
+                                    productId = cartProduct.id_producto,
+                                    productName = product.nombre,
+                                    productImageUrl = product.imagen,
+                                    quantity = cartProduct.cantidad,
+                                    price = product.precio_rebajado,
+                                    onAddClicked = { /* Acción para aumentar la cantidad */ },
+                                    onRemoveClicked = { /* Acción para disminuir la cantidad */ }
+                                )
+                                Spacer(modifier = Modifier.height(16.dp))
+                            }
                         }
                     }
                 }
@@ -157,18 +181,29 @@ fun CartScreen(
 
             // Total del carrito y botones de acción
             cart?.let {
-                CartTotal(navController = navController, total = it.monto_total)
+                if (!cart!!.productos.isNullOrEmpty()) {
+                    CartTotal(navController = navController, total = it.monto_total)
+                }
             }
         }
     }
 }
 
-
-
-
+/**
+ * Composable que representa una fila en la lista del carrito, mostrando el producto y
+ * opciones para ajustar la cantidad.
+ *
+ * @param productId Identificador del producto.
+ * @param productName Nombre del producto.
+ * @param productImageUrl URL de la imagen del producto.
+ * @param quantity Cantidad del producto en el carrito.
+ * @param price Precio del producto.
+ * @param onAddClicked Acción cuando se aumenta la cantidad.
+ * @param onRemoveClicked Acción cuando se disminuye la cantidad.
+ */
 @Composable
 fun CartItemRow(
-    productId: Int,  // Añadimos el productId como parámetro
+    productId: Int,
     productName: String,
     productImageUrl: String,
     quantity: Int,
@@ -202,9 +237,9 @@ fun CartItemRow(
 
         // Detalles del producto
         Column(
-            modifier = Modifier.weight(1f)
-                .padding(vertical = 8.dp)
-                .padding(horizontal = 16.dp)
+            modifier = Modifier
+                .weight(1f)
+                .padding(vertical = 8.dp, horizontal = 16.dp)
         ) {
             Text(
                 text = productName,
@@ -215,7 +250,7 @@ fun CartItemRow(
             )
             Text(text = "Cantidad: $quantity")
             Text(
-                text = "Precio: $$price",
+                text = "Precio: \$${String.format("%.2f", price)}",
                 fontWeight = FontWeight.Bold,
                 fontFamily = gabaritoFontFamily,
             )
@@ -226,13 +261,12 @@ fun CartItemRow(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.padding(end = 20.dp)
         ) {
-            // Botón añadir (ic_add)
+            // Botón añadir
             IconButton(
                 onClick = {
                     if (uid != null) {
                         cartViewModel.addToCart(productId, uid)
                     } else {
-                        // Manejo del caso en que el usuario no esté autenticado
                         Log.e("CartItemRow", "Error: No se pudo obtener el UID del usuario.")
                     }
                 },
@@ -247,13 +281,12 @@ fun CartItemRow(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Botón quitar (ic_remove)
+            // Botón quitar
             IconButton(
                 onClick = {
                     if (uid != null) {
-                        cartViewModel.removeFromCart(productId, uid)  // Llama a removeFromCart cuando se hace clic en quitar
+                        cartViewModel.removeFromCart(productId, uid)
                     } else {
-                        // Manejo del caso en que el usuario no esté autenticado
                         Log.e("CartItemRow", "Error: No se pudo obtener el UID del usuario.")
                     }
                 },
@@ -269,13 +302,17 @@ fun CartItemRow(
     }
 }
 
-
-
+/**
+ * Composable que muestra el total del carrito y botones para seguir comprando o proceder al pago.
+ *
+ * @param navController Controlador de navegación para redirigir a otras pantallas.
+ * @param total Total del monto en el carrito.
+ */
 @Composable
 fun CartTotal(navController: NavHostController, total: Double) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
-            text = "Total: \$$total",
+            text = "Total: \$${String.format("%.2f", total)}",
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold,
             fontFamily = gabaritoFontFamily,
@@ -298,19 +335,20 @@ fun CartTotal(navController: NavHostController, total: Double) {
                 modifier = Modifier
                     .weight(1f)
                     .height(52.dp)
-                    .padding(8.dp)
             ) {
-                Text(text = "SEGUIR COMPRANDO",
+                Text(
+                    text = "SEGUIR COMPRANDO",
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
                     fontFamily = gabaritoFontFamily,
                     textAlign = TextAlign.Center,
-                    color = Color.Black)
+                    color = Color.Black
+                )
             }
 
             Button(
                 onClick = {
-                    val calle = ""  // Puedes reemplazar estos valores por los reales cuando se obtengan
+                    val calle = ""
                     val numeroInterior = ""
                     val colonia = ""
                     val codigoPostal = ""
@@ -325,11 +363,13 @@ fun CartTotal(navController: NavHostController, total: Double) {
                     .weight(1f)
                     .height(52.dp)
             ) {
-                Text(text = "CONTINUAR",
-                    fontSize = 18.sp,
+                Text(
+                    text = "CONTINUAR",
+                    fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
                     fontFamily = gabaritoFontFamily,
-                    color = Color.White)
+                    color = Color.White
+                )
             }
         }
     }

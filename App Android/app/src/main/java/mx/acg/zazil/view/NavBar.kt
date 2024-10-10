@@ -32,7 +32,7 @@ fun NavBar(navController: NavHostController, modifier: Modifier = Modifier) {
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        IconButton(onClick = { navController.navigate("carrito") }) {
+        IconButton(onClick = { navController.navigate("cart") }) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_cart_w),
                 contentDescription = "Carrito",
