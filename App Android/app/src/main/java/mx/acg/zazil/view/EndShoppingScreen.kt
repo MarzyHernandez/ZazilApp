@@ -58,6 +58,9 @@ fun EndShoppingScreen(
     pais: String,
     modifier: Modifier = Modifier
 ) {
+    // Estado para manejar el mensaje de error
+    var errorMessage by remember { mutableStateOf<String?>(null) }
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -114,7 +117,7 @@ fun EndShoppingScreen(
             var updatedCodigoPostal by remember { mutableStateOf(codigoPostal) }
             var updatedCiudad by remember { mutableStateOf(ciudad) }
             var updatedEstado by remember { mutableStateOf(estado) }
-            var updatedPais by remember { mutableStateOf(if (pais.isNotBlank()) pais else "México") } // Valor por defecto
+            var updatedPais by remember { mutableStateOf(if (pais.isNotBlank()) pais else "México") }
 
             // Campo de texto personalizado para cada dato
             BasicTextField(
@@ -147,7 +150,7 @@ fun EndShoppingScreen(
                     .padding(vertical = 8.dp, horizontal = 16.dp),
                 decorationBox = { innerTextField ->
                     Column {
-                        Text("Número Interior", fontSize = 14.sp, color = Color.Gray)
+                        Text("Número Interior (Opcional)", fontSize = 14.sp, color = Color.Gray)
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -273,17 +276,37 @@ fun EndShoppingScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
+            // Mostrar mensaje de error si hay campos vacíos
+            errorMessage?.let {
+                Text(
+                    text = it,
+                    color = Color.Red,
+                    modifier = Modifier.padding(horizontal = 16.dp)
+                )
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
             // Botón para proceder al pago
             Button(
                 onClick = {
-                    val currentUser = FirebaseAuth.getInstance().currentUser
-                    val uid = currentUser?.uid
-                    if (uid != null) {
-                        navController.navigate(
-                            "payment/$total/$updatedCalle/$updatedNumeroInterior/$updatedColonia/$updatedCodigoPostal/$updatedCiudad/$updatedEstado/$updatedPais"
-                        )
+                    // Validar que los campos requeridos no estén vacíos
+                    if (updatedCalle.isBlank() || updatedColonia.isBlank() ||
+                        updatedCodigoPostal.isBlank() || updatedCiudad.isBlank() ||
+                        updatedEstado.isBlank() || updatedPais.isBlank()
+                    ) {
+                        errorMessage = "Por favor, llena todos los campos obligatorios."
                     } else {
-                        Log.e("EndShoppingScreen", "Error: Usuario no autenticado, uid es null.")
+                        errorMessage = null
+                        val currentUser = FirebaseAuth.getInstance().currentUser
+                        val uid = currentUser?.uid
+                        if (uid != null) {
+                            navController.navigate(
+                                "payment/$total/$updatedCalle/$updatedNumeroInterior/$updatedColonia/$updatedCodigoPostal/$updatedCiudad/$updatedEstado/$updatedPais"
+                            )
+                        } else {
+                            Log.e("EndShoppingScreen", "Error: Usuario no autenticado, uid es null.")
+                        }
                     }
                 },
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFE17F61)),

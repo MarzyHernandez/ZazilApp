@@ -23,13 +23,23 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
-import coil.compose.rememberImagePainter
 import mx.acg.zazil.R
 import mx.acg.zazil.viewmodel.PostViewModel
 
+/**
+ * Pantalla principal del blog que muestra una lista de publicaciones.
+ * Cada publicación contiene un título, autor, fecha, descripción y una imagen.
+ * La pantalla se carga desplazable y muestra un indicador de carga
+ * mientras se obtienen las publicaciones desde el ViewModel.
+ *
+ * @param postViewModel ViewModel que maneja la lógica de carga de publicaciones.
+ *
+ * @author Alberto Cebreros González
+ * @author Melissa Mireles Rendón
+ */
 @Composable
 fun BlogScreen(
-    postViewModel: PostViewModel = viewModel()  // Usamos el ViewModel
+    postViewModel: PostViewModel = viewModel()  // Usamos el ViewModel para cargar los posts
 ) {
     // Obtenemos el estado actual de los posts desde el ViewModel
     val posts by postViewModel.posts.observeAsState(initial = emptyList())
@@ -106,7 +116,20 @@ fun BlogScreen(
     }
 }
 
-
+/**
+ * Composable para mostrar una publicación del blog.
+ * Incluye título, autor, fecha, descripción y una lista de imágenes.
+ *
+ * @param title Título de la publicación.
+ * @param author Autor de la publicación.
+ * @param timeAgo Fecha de la publicación en formato corto.
+ * @param description Descripción o contenido breve de la publicación.
+ * @param imageUrls Lista de URLs de las imágenes a mostrar en la publicación.
+ * @param modifier Modificador opcional para personalizar el componente.
+ *
+ * @author Alberto Cebreros González
+ * @author Melissa Mireles Rendón
+ */
 @Composable
 fun BlogPost(
     title: String,
