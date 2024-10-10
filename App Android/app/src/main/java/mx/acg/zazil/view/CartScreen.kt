@@ -133,6 +133,18 @@ fun CartScreen(
             }
         }
 
+        // Botón "Regresar"
+        TextButton(
+            onClick = { navController.popBackStack()},
+        ) {
+            Text(
+                text = "< Regresar",
+                fontSize = 14.sp,
+                color = Color.Gray,
+                fontWeight = FontWeight.Bold
+            )
+        }
+
         Spacer(modifier = Modifier.height(16.dp))
 
         Column(

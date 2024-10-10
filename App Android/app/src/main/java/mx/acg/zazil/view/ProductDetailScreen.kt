@@ -160,7 +160,7 @@ fun ProductDetailScreen(
                         .fillMaxWidth(),
                     contentAlignment = Alignment.CenterEnd // Alinea el texto a la derecha
                 ) {
-                    TextButton(onClick = { navController.navigate("carrito") }) {
+                    TextButton(onClick = { navController.navigate("cart") }) {
                         Text(
                             text = "Ir al carrito",
                             fontSize = 13.sp,
