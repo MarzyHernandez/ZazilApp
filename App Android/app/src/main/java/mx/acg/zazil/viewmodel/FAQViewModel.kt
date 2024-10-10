@@ -16,6 +16,9 @@ class FAQViewModel : ViewModel() {
     private val _faqItems = mutableStateOf<List<FAQItem>>(emptyList())
     val faqItems: State<List<FAQItem>> = _faqItems
 
+    private val _isLoading = mutableStateOf(true) // Estado de carga inicializado en verdadero
+    val isLoading: State<Boolean> = _isLoading
+
     init {
         fetchFAQs()
     }
@@ -32,11 +35,13 @@ class FAQViewModel : ViewModel() {
                 if (response.isSuccessful) {
                     _faqItems.value = response.body() ?: emptyList()
                 }
+                _isLoading.value = false // Ocultar el loader cuando se completa la carga
             }
 
             override fun onFailure(call: Call<List<FAQItem>>, t: Throwable) {
                 // Manejo de errores
                 t.printStackTrace()
+                _isLoading.value = false // Ocultar el loader incluso si hay un error
             }
         })
     }

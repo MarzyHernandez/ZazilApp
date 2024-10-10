@@ -36,7 +36,7 @@ fun TyC(navController: NavHostController, modifier: Modifier = Modifier) {
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(bottomEnd = 18.dp, bottomStart = 18.dp))
                     .background(Color(0xFFFEE1D6))
-                    .padding(vertical = 32.dp)
+                    .padding(vertical = 24.dp)
             ) {
                 Row(
                     modifier = Modifier

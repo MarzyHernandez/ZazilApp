@@ -44,7 +44,13 @@ fun CreditsScreen(navController: NavHostController) {
         HeaderWithGradientLogo()
 
         Spacer(modifier = Modifier.height(16.dp))
-
+        // Botón "Regresar"
+        TextButton(
+            onClick = { navController.navigate("profile") },
+            modifier = Modifier.padding(top = 16.dp)
+        ) {
+            Text(text = "< Regresar", color = Color.Gray, fontWeight = FontWeight.Bold)
+        }
         // Sección central con tarjetas deslizable tipo "story" para los integrantes del equipo
         StoryTeamSection()
 

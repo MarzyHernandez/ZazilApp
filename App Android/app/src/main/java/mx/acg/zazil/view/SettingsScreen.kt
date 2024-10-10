@@ -28,34 +28,42 @@ import mx.acg.zazil.R
 import androidx.lifecycle.viewmodel.compose.viewModel
 import mx.acg.zazil.viewmodel.SettingsViewModel
 
+/**
+ * Pantalla de ajustes para la aplicación. Permite al usuario realizar acciones como
+ * cerrar sesión, actualizar datos, eliminar la cuenta, y acceder a información sobre
+ * la aplicación. También incluye opciones para navegar a secciones de la app
+ * relacionadas con términos, créditos, y aviso de privacidad.
+ *
+ * @param navController Controlador de navegación para cambiar entre pantallas.
+ * @param modifier Modificador opcional para personalizar el diseño de la pantalla.
+ * @param settingsViewModel ViewModel para manejar la lógica relacionada con las configuraciones.
+ *
+ * @author Alberto Cebreros González
+ * @autor Melissa Mireles Rendón
+ */
 @Composable
 fun SettingsScreen(
     navController: NavHostController,
     modifier: Modifier = Modifier,
-    settingsViewModel: SettingsViewModel = viewModel()  // Inyectamos el ViewModel
+    settingsViewModel: SettingsViewModel = viewModel()
 ) {
-    // Obtén la instancia de FirebaseAuth
     val auth = FirebaseAuth.getInstance()
     val currentUser = auth.currentUser
     val uid = currentUser?.uid
-
-    // Estado para controlar el diálogo de confirmación
     var showDialog by remember { mutableStateOf(false) }
 
     Box(
         modifier = modifier
             .fillMaxSize()
-            .background(Color.White)  // Fondo color blanco
+            .background(Color.White)
             .padding(0.dp)
     ) {
-
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .verticalScroll(rememberScrollState())  // Hacemos la columna scrolleable
+                .verticalScroll(rememberScrollState())
         ) {
-
-            // Encabezado del carrito
+            // Encabezado
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -75,14 +83,11 @@ fun SettingsScreen(
                         fontWeight = FontWeight.Bold,
                         fontFamily = gabaritoFontFamily,
                         color = Color(0xFF191919)
-
                     )
                 }
             }
 
-            Column( modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)) {
+            Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
                 // Opción "Cerrar sesión"
                 Row(
                     modifier = Modifier
@@ -119,20 +124,11 @@ fun SettingsScreen(
                     modifier = Modifier.padding(vertical = 8.dp)
                 )
 
-
-                SettingOption(
-                    title = "Actualizar Datos",
-                    iconResId = R.drawable.ic_edit
-                ) {
-                    navController.navigate("updateData")  // Navega a la pantalla de actualización de datos
+                SettingOption(title = "Actualizar Datos", iconResId = R.drawable.ic_edit) {
+                    navController.navigate("updateData")
                 }
 
-
-                SettingOption(
-                    title = "Eliminar Cuenta",
-                    iconResId = R.drawable.ic_delete
-                ) {
-                    // Mostrar diálogo de confirmación antes de eliminar la cuenta
+                SettingOption(title = "Eliminar Cuenta", iconResId = R.drawable.ic_delete) {
                     showDialog = true
                 }
 
@@ -161,27 +157,16 @@ fun SettingsScreen(
                 }
 
                 Spacer(modifier = Modifier.height(50.dp))
+
                 // Redes Sociales
                 Row(
                     horizontalArrangement = Arrangement.SpaceEvenly,
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    SocialMediaIcon(
-                        R.drawable.ic_facebook,
-                        "https://www.facebook.com/share/mjfnrxUW55mwTEXk/?mibextid=LQQJ4d"
-                    )
-                    SocialMediaIcon(
-                        R.drawable.ic_instagram,
-                        "https://www.instagram.com/toallas.zazil?igsh=MTdtaXRmeXk3MWxqMw=="
-                    )
-                    SocialMediaIcon(
-                        R.drawable.ic_tiktok,
-                        "https://www.tiktok.com/@todas.brillamos?_t=8qDNNVLY1kz&_r=1"
-                    )
-                    SocialMediaIcon(
-                        R.drawable.ic_web,
-                        "https://zazilrrr.org/catalogo/zazil/index.php#"
-                    )
+                    SocialMediaIcon(R.drawable.ic_facebook, "https://www.facebook.com/share/mjfnrxUW55mwTEXk/?mibextid=LQQJ4d")
+                    SocialMediaIcon(R.drawable.ic_instagram, "https://www.instagram.com/toallas.zazil?igsh=MTdtaXRmeXk3MWxqMw==")
+                    SocialMediaIcon(R.drawable.ic_tiktok, "https://www.tiktok.com/@todas.brillamos?_t=8qDNNVLY1kz&_r=1")
+                    SocialMediaIcon(R.drawable.ic_web, "https://zazilrrr.org/catalogo/zazil/index.php#")
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -196,12 +181,13 @@ fun SettingsScreen(
             }
         }
     }
+
     // Diálogo de confirmación para eliminar la cuenta
     if (showDialog) {
         AlertDialog(
             onDismissRequest = { showDialog = false },
-            title = { Text(text = "Confirmación", color = Color(0xFFE17F61)) },  // Cambia el color del título
-            text = { Text(text = "¿Estás seguro que deseas eliminar tu cuenta?", color = Color(0xFF191919)) },  // Texto del cuerpo
+            title = { Text(text = "Confirmación", color = Color(0xFFE17F61)) },
+            text = { Text(text = "¿Estás seguro que deseas eliminar tu cuenta?", color = Color(0xFF191919)) },
             confirmButton = {
                 Button(
                     onClick = {
@@ -210,7 +196,7 @@ fun SettingsScreen(
                                 uid = it,
                                 onSuccess = {
                                     Log.d("SettingsScreen", "Cuenta eliminada exitosamente")
-                                    navController.navigate("login")  // Navega a la pantalla de login tras la eliminación
+                                    navController.navigate("login")
                                 },
                                 onError = { errorMessage ->
                                     Log.e("SettingsScreen", "Error al eliminar la cuenta: $errorMessage")
@@ -219,29 +205,35 @@ fun SettingsScreen(
                         } ?: Log.e("SettingsScreen", "Error: UID no encontrado")
                         showDialog = false
                     },
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFE17F61))  // Botón de confirmación en rosita
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFE17F61))
                 ) {
                     Text(text = "Eliminar", color = Color.White)
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showDialog = false }) {
-                    Text(text = "Cancelar", color = Color(0xFFE17F61))  // Texto de cancelación en rosita
+                    Text(text = "Cancelar", color = Color(0xFFE17F61))
                 }
             },
-            containerColor = Color.White,  // Fondo del diálogo en rosita claro
+            containerColor = Color.White
         )
     }
-
 }
 
+/**
+ * Composable para mostrar una opción de configuración con un título y un icono.
+ *
+ * @param title Título de la opción.
+ * @param iconResId Identificador de recurso del icono.
+ * @param onClick Callback a ejecutar al hacer clic en la opción.
+ */
 @Composable
 fun SettingOption(title: String, iconResId: Int, onClick: () -> Unit = {}) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp)
-            .clickable { onClick() }  // Añadimos un callback para manejar clics
+            .clickable { onClick() }
             .clip(RoundedCornerShape(8.dp))
             .background(Color.White)
             .padding(16.dp),
@@ -258,19 +250,22 @@ fun SettingOption(title: String, iconResId: Int, onClick: () -> Unit = {}) {
     }
 }
 
+/**
+ * Composable para mostrar un icono de red social que abre un enlace en el navegador.
+ *
+ * @param iconResId Identificador de recurso del icono.
+ * @param url Enlace a la red social.
+ */
 @Composable
 fun SocialMediaIcon(iconResId: Int, url: String) {
     val context = LocalContext.current
     IconButton(onClick = {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
         context.startActivity(intent)
-    })
-
-    {
-        Spacer(modifier = Modifier.height(50.dp))
+    }) {
         Box(
             modifier = Modifier
-                .size(50.dp) // Ajusta el tamaño de la caja para los íconos
+                .size(50.dp)
                 .clip(CircleShape)
                 .background(Color(0xFFEBB7A7))
         ) {
