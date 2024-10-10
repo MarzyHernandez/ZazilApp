@@ -24,6 +24,7 @@ import kotlinx.coroutines.withContext
 import mx.acg.zazil.ui.theme.ZazilTheme
 import mx.acg.zazil.view.AppNavHost
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.ViewModelProvider
 import mx.acg.zazil.viewmodel.LoginViewModel
 
@@ -41,6 +42,9 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Establecer el tema de la aplicación en modo claro
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
         // Inicializar Firebase
         FirebaseApp.initializeApp(this)

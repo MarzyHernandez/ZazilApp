@@ -19,37 +19,37 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import mx.acg.zazil.R
 import mx.acg.zazil.model.FAQItem
-import mx.acg.zazil.model.FAQService
 import mx.acg.zazil.viewmodel.FAQViewModel
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-
-
 
 
 val gabaritoFontFamily = FontFamily(Font(R.font.gabarito_regular))
 
-
-
-
+/**
+ * Pantalla que muestra una lista de Preguntas Frecuentes (FAQs) utilizando datos obtenidos
+ * del `FAQViewModel`. La pantalla incluye un indicador de carga mientras se recuperan
+ * las preguntas, así como una interfaz interactiva para expandir y contraer las respuestas.
+ *
+ * @param navController Controlador de navegación para manejar la navegación entre pantallas.
+ * @param modifier Modificador opcional para personalizar el diseño de la pantalla.
+ * @param faqViewModel ViewModel que proporciona los datos de las preguntas frecuentes.
+ *
+ * @author Alberto Cebreros González
+ * @author Melissa Mireles Rendón
+ */
 @Composable
 fun FAQs(navController: NavHostController, modifier: Modifier = Modifier, faqViewModel: FAQViewModel = viewModel()) {
     val faqItems by faqViewModel.faqItems // Observa los datos obtenidos del ViewModel
+    val isLoading by faqViewModel.isLoading // Observa el estado de carga desde el ViewModel
 
     Column(
         modifier = modifier
             .fillMaxSize()
             .background(Color.White)
             .verticalScroll(rememberScrollState())
-            .padding(16.dp)
     ) {
         // Sección superior personalizada con bordes redondeados en la parte inferior
         Box(
@@ -65,16 +65,13 @@ fun FAQs(navController: NavHostController, modifier: Modifier = Modifier, faqVie
             Text(
                 text = "FAQs",
                 fontSize = 28.sp,
+                fontWeight = FontWeight.Bold,
                 color = Color(0xFF191919),
-                modifier = Modifier.padding(start = 16.dp) // Espacio a la izquierda
+                modifier = Modifier
+                    .align(Alignment.CenterStart)
+                    .padding(start = 16.dp)
             )
         }
-
-
-
-
-
-
 
         // Botón "Regresar"
         TextButton(
@@ -92,18 +89,39 @@ fun FAQs(navController: NavHostController, modifier: Modifier = Modifier, faqVie
             fontFamily = gabaritoFontFamily,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 16.dp),
+                .padding(vertical = 16.dp, horizontal = 16.dp),
             color = Color.Black
         )
 
-        // Mostrar las FAQs obtenidas del ViewModel
-        faqItems.forEach { faq ->
-            FAQCard(faq = faq)
-            Spacer(modifier = Modifier.height(8.dp)) // Menor espacio entre tarjetas
+        // Mostrar loader si las FAQs están cargando
+        if (isLoading) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 16.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator(
+                    color = Color(0xFFE17F61), // Color personalizado para el loader
+                    modifier = Modifier.size(50.dp)
+                )
+            }
+        } else {
+            // Mostrar las FAQs obtenidas del ViewModel
+            faqItems.forEach { faq ->
+                FAQCard(faq = faq)
+                Spacer(modifier = Modifier.height(8.dp)) // Menor espacio entre tarjetas
+            }
         }
     }
 }
 
+/**
+ * Composable que representa una tarjeta para mostrar una pregunta frecuente.
+ * La tarjeta se puede expandir para revelar la respuesta.
+ *
+ * @param faq Objeto `FAQItem` que contiene la pregunta y la respuesta.
+ */
 @Composable
 fun FAQCard(faq: FAQItem) {
     var expanded by remember { mutableStateOf(false) }
@@ -151,4 +169,3 @@ fun FAQCard(faq: FAQItem) {
         }
     }
 }
-

@@ -2,6 +2,7 @@ package mx.acg.zazil.view
 
 import android.util.Log
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -100,7 +101,7 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel = vi
     val userId by viewModel.userId.observeAsState()
     val errorMessage by viewModel.errorMessage.observeAsState()
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(modifier = Modifier.fillMaxSize().background(Color.White)) {
         // Imagen de logo
         Image(
             painter = painterResource(id = R.drawable.mid_logo),
@@ -275,7 +276,8 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel = vi
                     Text(
                         text = "¿No tienes cuenta?",
                         fontSize = 16.sp,
-                        fontFamily = gabaritoFontFamily
+                        fontFamily = gabaritoFontFamily,
+                        color = Color.Black
                     )
 
                     // Botón para navegar a la pantalla de registro
