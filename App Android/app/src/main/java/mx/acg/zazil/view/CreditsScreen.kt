@@ -96,7 +96,7 @@ fun StoryTeamSection() {
             .horizontalScroll(rememberScrollState()), // Habilita el desplazamiento horizontal
         horizontalArrangement = Arrangement.spacedBy(16.dp) // Espacio entre las tarjetas
     ) {
-        // Lista de miembros del equipo
+        // Lista de integrantes del equipo
         val teamMembers = listOf(
             TeamMember("ALMA CARPIO", "A01798523@tec.mx", R.drawable.alma),
             TeamMember("ALBERTO CEBREROS", "A01798671@tec.mx", R.drawable.alberto),
@@ -126,12 +126,12 @@ fun TeamMemberStoryCard(member: TeamMember) {
             .clip(RoundedCornerShape(16.dp)) // Esquinas redondeadas
             .shadow(8.dp, RoundedCornerShape(16.dp)), // Sombra para destacar la tarjeta
         shape = RoundedCornerShape(16.dp), // Forma de la tarjeta
-        colors = CardDefaults.cardColors(containerColor = Color.White) // Color de fondo blanco
+        colors = CardDefaults.cardColors(containerColor = Color(0xFFF5F5F5)) // Color de fondo blanco
     ) {
         Box(
             modifier = Modifier.fillMaxSize() //
         ) {
-            // Imagen del miembro
+            // Imagen del integrante
             Image(
                 painter = painterResource(id = member.imageRes),
                 contentDescription = member.name, // Descripción de accesibilidad
@@ -143,8 +143,9 @@ fun TeamMemberStoryCard(member: TeamMember) {
             // Nombre y correo encima de la imagen, en la parte inferior
             Column(
                 modifier = Modifier
-                    .align(Alignment.BottomStart) // Se alinea en la parte inferior de la tarjeta
-                    .background(Color(0xAA635A57)) // Fondo semitransparente para resaltar el texto
+                    .align(Alignment.BottomCenter) // Se alinea en la parte inferior de la tarjeta
+                    .offset(y = (-4).dp) // Mueve el contenedor
+                    .background(Color(0xFFEBB7A6)) // Fondo semitransparente para resaltar el texto
                     .fillMaxWidth() //
                     .padding(8.dp), // Espacio interno
                 horizontalAlignment = Alignment.CenterHorizontally // El texto está centrado horizontalmente
