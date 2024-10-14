@@ -13,6 +13,17 @@ import java.net.HttpURLConnection
 import java.net.URL
 import kotlinx.serialization.json.Json
 
+/**
+ * ViewModel para gestionar la lógica relacionada con el perfil del usuario.
+ * Se encarga de obtener los datos del perfil a través de una llamada a la API.
+ *
+ * @property _profileData Estado interno que almacena los datos del perfil del usuario.
+ * @property profileData Flows que expone los datos del perfil como un StateFlow.
+ * @property errorMessage LiveData que contiene mensajes de error relacionados con la obtención de datos.
+ *
+ * @author Alberto Cebreros González
+ * @author Melissa Mireles Rendón
+ */
 class ProfileViewModel : ViewModel() {
     private val _profileData = MutableStateFlow<UserProfile?>(null)
     val profileData: StateFlow<UserProfile?> = _profileData
@@ -20,6 +31,12 @@ class ProfileViewModel : ViewModel() {
     // Para manejar errores o mensajes
     val errorMessage = MutableLiveData<String>()
 
+    /**
+     * Método para obtener los datos del perfil del usuario a partir de su UID.
+     * Realiza la solicitud en un hilo de fondo utilizando corutinas.
+     *
+     * @param uid El ID único del usuario (UID) para obtener el perfil.
+     */
     fun fetchUserProfile(uid: String) {
         viewModelScope.launch {
             try {
@@ -34,7 +51,13 @@ class ProfileViewModel : ViewModel() {
         }
     }
 
-
+    /**
+     * Método privado que realiza una solicitud GET a la API para obtener el perfil del usuario.
+     *
+     * @param uid El ID único del usuario (UID) para obtener el perfil.
+     * @return Un objeto UserProfile que contiene los datos del usuario.
+     * @throws Exception Si ocurre un error durante la conexión o la serialización.
+     */
     private suspend fun getUserProfileFromApi(uid: String): UserProfile {
         return withContext(Dispatchers.IO) {
             val url = URL("https://getuserdata-dztx2pd2na-uc.a.run.app/?uid=$uid")
@@ -65,6 +88,4 @@ class ProfileViewModel : ViewModel() {
             }
         }
     }
-
-
 }

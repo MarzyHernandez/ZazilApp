@@ -19,6 +19,9 @@ import mx.acg.zazil.model.PostRetrofitInstance
  * mostrar publicaciones en la interfaz de usuario.
  * @property selectedPost LiveData que contiene un objeto Post seleccionado. Puede ser observado para
  * mostrar los detalles de una publicación específica.
+ *
+ * @author Alberto Cebreros González
+ * @author Melissa Mireles Rendón
  */
 class PostViewModel : ViewModel() {
 

@@ -15,12 +15,16 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-
 /**
- * Crea un cliente de Retrofit configurado con un interceptor de logging para depuración.
+ * ViewModel para manejar el registro de usuarios.
+ * Se encarga de interactuar con la API de registro y gestionar el resultado de la operación.
  *
- * @return Una instancia de Retrofit configurada con un interceptor de logging y un convertidor de JSON (GsonConverterFactory).
+ * @property _registerResult Estado interno que almacena el resultado del registro.
+ * @property registerResult LiveData que expone el resultado del registro a la interfaz de usuario.
+ * @property registerApi Instancia de la interfaz RegisterApi para realizar llamadas a la API de registro.
+ *
  * @author Melissa Mireles Rendón
+ * @author Alberto Cebreros González
  */
 class RegisterViewModel : ViewModel() {
 
@@ -45,6 +49,7 @@ class RegisterViewModel : ViewModel() {
     /**
      * Lógica para registrar un nuevo usuario.
      * Realiza la llamada al API de registro y actualiza el resultado en `_registerResult`.
+     *
      * @param user Datos del usuario a registrar.
      */
     fun registerUser(user: User) {
@@ -74,5 +79,4 @@ class RegisterViewModel : ViewModel() {
             }
         })
     }
-
 }

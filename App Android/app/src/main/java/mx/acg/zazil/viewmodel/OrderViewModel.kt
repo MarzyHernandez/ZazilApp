@@ -7,6 +7,22 @@ import mx.acg.zazil.model.OrderApi
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+/**
+ * ViewModel para manejar la lógica de obtención de órdenes.
+ *
+ * Esta clase se encarga de realizar solicitudes a la API para obtener las órdenes
+ * de un usuario utilizando su UID. Administra el estado de la lista de órdenes
+ * y los mensajes de error.
+ *
+ * @property orderApi Instancia de la interfaz OrderApi para realizar llamadas a la API.
+ * @property _orders LiveData privado que almacena la lista de órdenes.
+ * @property orders LiveData expuesto que permite acceder a la lista de órdenes.
+ * @property _errorMessage LiveData privado que maneja los mensajes de error.
+ * @property errorMessage LiveData expuesto que permite acceder a los mensajes de error.
+ *
+ * @author Alberto Cebreros González
+ * @author Melissa Mireles Rendón
+ */
 class OrderViewModel : ViewModel() {
 
     // Instancia de Retrofit para consumir la API
@@ -26,7 +42,16 @@ class OrderViewModel : ViewModel() {
     private val _errorMessage = MutableLiveData<String?>()
     val errorMessage: LiveData<String?> = _errorMessage
 
-    // Función para obtener órdenes a partir del UID
+    /**
+     * Función para obtener las órdenes a partir del UID del usuario.
+     *
+     * Realiza una solicitud a la API utilizando el UID proporcionado y
+     * actualiza el LiveData correspondiente con la lista de órdenes.
+     * Si hay un error durante la solicitud, se actualiza el LiveData
+     * de mensajes de error.
+     *
+     * @param uid El UID del usuario para el cual se desean obtener las órdenes.
+     */
     fun fetchOrders(uid: String) {
         viewModelScope.launch {
             try {

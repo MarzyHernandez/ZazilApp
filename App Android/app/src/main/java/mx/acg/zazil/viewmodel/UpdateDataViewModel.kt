@@ -13,7 +13,16 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-
+/**
+ * ViewModel para manejar la lógica de actualización de los datos del usuario.
+ * Interactúa con la API para enviar una solicitud de actualización de los datos del perfil del usuario.
+ *
+ * @property updateResult LiveData que contiene el resultado de la operación de actualización.
+ * @property updateApi Interfaz de la API utilizada para realizar la solicitud de actualización.
+ *
+ * @author Alberto Cebreros González
+ * @author Melissa Mireles Rendón
+ */
 class UpdateDataViewModel : ViewModel() {
 
     private val _updateResult = MutableLiveData<String>()
@@ -26,7 +35,7 @@ class UpdateDataViewModel : ViewModel() {
         val client = OkHttpClient.Builder().addInterceptor(loggingInterceptor).build()
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://updateuserprofilebyid-dztx2pd2na-uc.a.run.app")
+            .baseUrl("https://updateuserprofilebyid-dztx2pd2na-uc.a.run.app") // URL base de la API
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
@@ -34,7 +43,17 @@ class UpdateDataViewModel : ViewModel() {
         retrofit.create(UpdateUserApi::class.java)
     }
 
-    // Función para actualizar los datos del usuario
+    /**
+     * Función para actualizar los datos del usuario.
+     * Envía una solicitud a la API con los nuevos datos del usuario y actualiza el resultado.
+     *
+     * @param uid UID del usuario cuya información se desea actualizar.
+     * @param nombres Nombres del usuario.
+     * @param apellidos Apellidos del usuario.
+     * @param email Correo electrónico del usuario.
+     * @param telefono Número de teléfono del usuario.
+     * @param password Contraseña del usuario.
+     */
     fun updateUserData(uid: String, nombres: String, apellidos: String, email: String, telefono: String, password: String) {
         val request = UpdateUserRequest(
             uid = uid,

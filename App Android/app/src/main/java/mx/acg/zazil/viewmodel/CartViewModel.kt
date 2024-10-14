@@ -1,4 +1,3 @@
-
 package mx.acg.zazil.viewmodel
 
 import android.util.Log
@@ -14,7 +13,16 @@ import mx.acg.zazil.model.CartUpdate
 import okhttp3.ResponseBody
 import retrofit2.Response
 
-
+/**
+ * ViewModel para gestionar la lógica relacionada con el carrito de compras.
+ *
+ * Este ViewModel interactúa con la API del carrito y maneja el estado del carrito
+ * en la aplicación. Permite cargar el carrito de un usuario, agregar y quitar productos
+ * del carrito, y notificar a la interfaz de usuario sobre los cambios en el estado del carrito.
+ *
+ * @author Alberto Cebreros González
+ * @author Melissa Mireles Rendón
+ */
 class CartViewModel : ViewModel() {
     private val _cart = MutableLiveData<Cart?>()
     val cart: LiveData<Cart?> get() = _cart
@@ -22,12 +30,16 @@ class CartViewModel : ViewModel() {
     private val _cartUpdated = MutableLiveData<Boolean>()
     val cartUpdated: LiveData<Boolean> get() = _cartUpdated
 
-    //cartState
+    // Estado del carrito
     private val _cartState = MutableLiveData<Cart?>()
     val cartState: LiveData<Cart?> get() = _cartState
 
-
-    // Método para cargar el carrito
+    /**
+     * Carga el carrito de compras del usuario utilizando su UID.
+     * Se realiza una llamada a la API para obtener el carrito y actualizar el estado.
+     *
+     * @param uid El ID único del usuario.
+     */
     fun loadCartByUid(uid: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -40,7 +52,12 @@ class CartViewModel : ViewModel() {
         }
     }
 
-    // Método para agregar un producto al carrito
+    /**
+     * Agrega un producto al carrito de compras.
+     *
+     * @param productId El ID del producto a agregar.
+     * @param uid El ID único del usuario.
+     */
     fun addToCart(productId: Int, uid: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -65,7 +82,12 @@ class CartViewModel : ViewModel() {
         }
     }
 
-    // Método para quitar un producto del carrito
+    /**
+     * Quita un producto del carrito de compras.
+     *
+     * @param productId El ID del producto a quitar.
+     * @param uid El ID único del usuario.
+     */
     fun removeFromCart(productId: Int, uid: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -86,6 +108,4 @@ class CartViewModel : ViewModel() {
             }
         }
     }
-
-
 }

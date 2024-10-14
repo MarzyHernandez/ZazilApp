@@ -18,45 +18,54 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import mx.acg.zazil.ui.theme.Typography
 
-
-
+/**
+ * Composable que muestra la pantalla de Términos y Condiciones de la aplicación.
+ * Incluye un encabezado, un botón para regresar y secciones de contenido que describen
+ * los términos y condiciones del uso de la aplicación.
+ *
+ * @param navController Controlador de navegación para manejar la navegación entre pantallas.
+ * @param modifier Modificador opcional para personalizar el componente.
+ *
+ * @author Alberto Cebreros González
+ * @author Melissa Mireles Rendón
+ */
 @Composable
 fun TyC(navController: NavHostController, modifier: Modifier = Modifier) {
 
-        Column(
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
+            .verticalScroll(rememberScrollState())
+            .padding(0.dp)
+    ) {
+        // Encabezado del carrito
+        Box(
             modifier = Modifier
-                .fillMaxSize()
-                .background(Color.White)
-                .verticalScroll(rememberScrollState())
-                .padding(0.dp)
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(bottomEnd = 18.dp, bottomStart = 18.dp))
+                .background(Color(0xFFFEE1D6))
+                .padding(vertical = 24.dp)
         ) {
-            // Encabezado del carrito
-            Box(
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clip(RoundedCornerShape(bottomEnd = 18.dp, bottomStart = 18.dp))
-                    .background(Color(0xFFFEE1D6))
-                    .padding(vertical = 24.dp)
+                    .padding(start = 8.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Row(
+                Text(
+                    text = "Términos y condiciones",
+                    fontSize = 28.sp,
+                    color = Color(0xFF191919),
+                    fontWeight = FontWeight.Bold,
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 8.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = "Términos y condiciones",
-                        fontSize = 28.sp,
-                        color = Color(0xFF191919),
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier
-                            .fillMaxWidth() // Ocupa el ancho completo disponible
-                            .wrapContentWidth(Alignment.CenterHorizontally) // Centra el texto horizontalmente
-                    )
-                }
+                        .fillMaxWidth() // Ocupa el ancho completo disponible
+                        .wrapContentWidth(Alignment.CenterHorizontally) // Centra el texto horizontalmente
+                )
             }
+        }
 
-            // Botón "Regresar"
+        // Botón "Regresar"
         TextButton(
             onClick = { navController.navigate("configuracion") },
             modifier = Modifier.padding(top = 16.dp)
@@ -97,6 +106,12 @@ fun TyC(navController: NavHostController, modifier: Modifier = Modifier) {
     }
 }
 
+/**
+ * Composable que representa una tarjeta para mostrar secciones individuales de Términos y Condiciones.
+ *
+ * @param title Título de la sección.
+ * @param content Contenido de la sección.
+ */
 @Composable
 fun TyCCard(title: String, content: String) {
     Box(
