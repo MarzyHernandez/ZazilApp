@@ -61,7 +61,7 @@ fun MyShoppingDetailsScreen(
 
     // Mostrar el mensaje de error si está presente
     if (errorMessage != null) {
-        Text(errorMessage ?: "", color = Color.Red)
+        Text(errorMessage ?: "", color = Color.Red, fontFamily = gabaritoFontFamily)
     } else {
         // Buscar la orden correspondiente al ID recibido
         val order = orders.find { it.id == orderId }
@@ -78,7 +78,7 @@ fun MyShoppingDetailsScreen(
                 Spacer(modifier = Modifier.height(8.dp))
             }
         } else {
-            Text("Orden no encontrada.", color = Color.Red)
+            Text("Orden no encontrada.", color = Color.Red, fontFamily = gabaritoFontFamily)
         }
     }
 
@@ -102,6 +102,7 @@ fun MyShoppingDetailsScreen(
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color(0xFF191919),
+                fontFamily = gabaritoFontFamily,
                 modifier = Modifier.padding(start = 20.dp)
             )
         }
@@ -114,6 +115,7 @@ fun MyShoppingDetailsScreen(
                 text = "< Regresar",
                 fontSize = 14.sp,
                 color = Color.Gray,
+                fontFamily = gabaritoFontFamily,
                 fontWeight = FontWeight.Bold
             )
         }
@@ -139,6 +141,7 @@ fun MyShoppingDetailsScreen(
                 text = "${order.productos.size} PRODUCTOS",
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
+                fontFamily = gabaritoFontFamily,
                 modifier = Modifier.padding(horizontal = 16.dp),
                 color = Color(0xFF191919)
             )
@@ -151,11 +154,20 @@ fun MyShoppingDetailsScreen(
                 Spacer(modifier = Modifier.height(8.dp))
             }
         } ?: run {
-            Text("Orden no encontrada.", color = Color.Red)
+            Text("Orden no encontrada.", color = Color.Red, fontFamily = gabaritoFontFamily)
         }
     }
 }
 
+
+/**
+ * Composable que muestra un resumen del pedido.
+ *
+ * @param order Orden cuyo resumen se va a mostrar.
+ *
+ * @author Melissa Mireles Rendón
+ * @author Alberto Cebreros González
+ */
 @Composable
 fun OrderSummary(order: Order) {
     Box(
@@ -170,12 +182,14 @@ fun OrderSummary(order: Order) {
                 text = "RESUMEN DEL PEDIDO   #${order.id}",
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
+                fontFamily = gabaritoFontFamily,
                 color = Color(0xFF191919)
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = "FECHA: ${order.fecha_pedido.split("T").first()}",
                 fontSize = 14.sp,
+                fontFamily = gabaritoFontFamily,
                 color = Color.Gray
             )
             Spacer(modifier = Modifier.height(4.dp))
@@ -186,12 +200,14 @@ fun OrderSummary(order: Order) {
                 Text(
                     text = "ESTATUS:",
                     fontSize = 14.sp,
+                    fontFamily = gabaritoFontFamily,
                     fontWeight = FontWeight.Bold,
                     color = Color(0xFF191919)
                 )
                 Text(
                     text = order.estado,
                     fontSize = 14.sp,
+                    fontFamily = gabaritoFontFamily,
                     color = Color(0xFF4CAF50), // Verde para entregado
                     fontWeight = FontWeight.Bold
                 )
@@ -204,12 +220,14 @@ fun OrderSummary(order: Order) {
                 Text(
                     text = "TOTAL:",
                     fontSize = 14.sp,
+                    fontFamily = gabaritoFontFamily,
                     fontWeight = FontWeight.Bold,
                     color = Color(0xFF191919)
                 )
                 Text(
-                    text = "$${order.monto_total}",
+                    text = "$${String.format("%.2f", order.monto_total)}",
                     fontSize = 14.sp,
+                    fontFamily = gabaritoFontFamily,
                     fontWeight = FontWeight.Bold,
                     color = Color(0xFF191919)
                 )
@@ -218,6 +236,14 @@ fun OrderSummary(order: Order) {
     }
 }
 
+/**
+ * Composable que muestra los detalles de un producto en la orden.
+ *
+ * @param product Producto cuyos detalles se van a mostrar.
+ *
+ * @author Melissa Mireles Rendón
+ * @author Alberto Cebreros González
+ */
 @Composable
 fun ProductDetailCard(product: mx.acg.zazil.model.ProductDetails) {
     Row(
@@ -245,12 +271,14 @@ fun ProductDetailCard(product: mx.acg.zazil.model.ProductDetails) {
             Text(
                 text = product.nombre,
                 fontSize = 16.sp,
+                fontFamily = gabaritoFontFamily,
                 fontWeight = FontWeight.Bold,
                 color = Color(0xFFE17F61)
             )
             Text(
                 text = "Cantidad: ${product.cantidad}",
                 fontSize = 14.sp,
+                fontFamily = gabaritoFontFamily,
                 color = Color(0xFF191919)
             )
         }
@@ -262,12 +290,14 @@ fun ProductDetailCard(product: mx.acg.zazil.model.ProductDetails) {
             Text(
                 text = "PRECIO",
                 fontSize = 14.sp,
+                fontFamily = gabaritoFontFamily,
                 color = Color(0xFF191919),
                 fontWeight = FontWeight.Bold
             )
             Text(
-                text = "$${product.precio}",
+                text = "$${String.format("%.2f", product.precio)}",
                 fontSize = 16.sp,
+                fontFamily = gabaritoFontFamily,
                 fontWeight = FontWeight.Bold,
                 color = Color(0xFF191919)
             )
