@@ -19,11 +19,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import mx.acg.zazil.model.MakeOrder
 import mx.acg.zazil.viewmodel.MakeOrderViewModel
-
 import android.util.Log
 import androidx.compose.ui.draw.clip
 import com.google.firebase.auth.FirebaseAuth
-import com.stripe.android.paymentsheet.PaymentSheet
 import com.stripe.android.paymentsheet.PaymentSheetResult
 import com.stripe.android.paymentsheet.rememberPaymentSheet
 import androidx.compose.ui.platform.LocalContext

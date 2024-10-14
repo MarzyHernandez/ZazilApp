@@ -301,6 +301,7 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel = vi
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
+                // Mensaje de inicio de sesión con Google
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center,
@@ -326,6 +327,7 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel = vi
 
                 Spacer(modifier = Modifier.height(8.dp))
 
+                // Mensaje de inicio de sesión con Google
                 Text(
                     text = "o regístrate vía",
                     fontFamily = gabaritoFontFamily,

@@ -4,7 +4,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
@@ -21,6 +20,19 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import mx.acg.zazil.R
 
+/**
+ * Pantalla que muestra los créditos de la aplicación.
+ *
+ * Esta pantalla incluye los nombres y las imágenes de los colaboradores
+ * que participaron en el desarrollo del proyecto. También permite regresar
+ * a la pantalla anterior.
+ *
+ * @param navController Controlador de navegación para moverse entre pantallas.
+ *
+ * @author Alberto Cebreros González
+ * @author Melissa Mireles Rendón
+ * @author Carlos Herrera
+ */
 @Composable
 fun CreditsScreen(navController: NavHostController) {
     Column(
@@ -31,7 +43,7 @@ fun CreditsScreen(navController: NavHostController) {
                 rememberScrollState()
             )
     ) {
-        // Encabezado del carrito
+        // Encabezado de la pantalla de créditos
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -57,8 +69,8 @@ fun CreditsScreen(navController: NavHostController) {
             }
         }
 
-
         Spacer(modifier = Modifier.height(16.dp))
+
         // Botón de regresar
         TextButton(onClick = { navController.popBackStack() }) {
             Text(
@@ -78,6 +90,7 @@ fun CreditsScreen(navController: NavHostController) {
 
         ) {
 
+            // Filas de créditos con imágenes y nombres
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
@@ -119,9 +132,9 @@ fun CreditsScreen(navController: NavHostController) {
                 )
             }
 
-
             Spacer(modifier = Modifier.height(24.dp))
 
+            // Mensaje de agradecimiento
             Text(
                 text = "Elaborado por alumnos del programa Ingeniería en Tecnologías Computacionales del Tecnológico de Monterrey",
                 fontSize = 16.sp,
@@ -135,25 +148,33 @@ fun CreditsScreen(navController: NavHostController) {
     }
 }
 
-
+/**
+ * Composable que muestra una tarjeta con la imagen y el nombre de un colaborador.
+ *
+ * @param imageRes Recurso de imagen a mostrar.
+ * @param name Nombre del colaborador.
+ *
+ * @author Alberto Cebreros González
+ * @author Melissa Mireles Rendón
+ */
 @Composable
 fun CreditCard(imageRes: Int, name: String) {
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.padding(horizontal = 16.dp)
+        horizontalAlignment = Alignment.CenterHorizontally,  // Centra el contenido horizontalmente
+        modifier = Modifier.padding(horizontal = 16.dp)  // Espaciado horizontal
     ) {
         Image(
-            painter = painterResource(id = imageRes),
-            contentDescription = name,
+            painter = painterResource(id = imageRes),  // Carga la imagen del recurso
+            contentDescription = name,  // Descripción de la imagen
             modifier = Modifier
-                .size(100.dp)
+                .size(100.dp)  // Tamaño de la imagen
         )
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(8.dp))  // Espacio entre la imagen y el nombre
         Text(
-            text = name,
-            fontWeight = FontWeight.Bold,
-            fontSize = 14.sp,
-            color = Color(0xFF191919)
+            text = name,  // Nombre del colaborador
+            fontWeight = FontWeight.Bold,  // Negrita
+            fontSize = 14.sp,  // Tamaño de fuente
+            color = Color(0xFF191919)  // Color del texto
         )
     }
 }

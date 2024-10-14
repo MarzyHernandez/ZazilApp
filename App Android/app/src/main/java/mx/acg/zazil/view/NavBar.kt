@@ -16,6 +16,17 @@ import mx.acg.zazil.R
 
 /**
  * Composable que representa una barra de navegación fija en la parte inferior de la pantalla.
+ *
+ * Esta barra de navegación proporciona acceso a diferentes pantallas de la aplicación, como
+ * el carrito, chat, catálogo, perfil y configuración. Cada botón de la barra utiliza el
+ * controlador de navegación para cambiar entre las distintas pantallas.
+ *
+ * @param navController Controlador de navegación para manejar la navegación entre pantallas.
+ * @param modifier Modificador opcional para personalizar el diseño de la barra de navegación.
+ *
+ * @author Alberto Cebreros González
+ * @author Melissa Mireles Rendón
+ *
  */
 @Composable
 fun NavBar(navController: NavHostController, modifier: Modifier = Modifier) {
@@ -32,6 +43,7 @@ fun NavBar(navController: NavHostController, modifier: Modifier = Modifier) {
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
+        // Botón para navegar al carrito
         IconButton(onClick = { navController.navigate("cart") }) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_cart_w),
@@ -39,6 +51,7 @@ fun NavBar(navController: NavHostController, modifier: Modifier = Modifier) {
                 tint = Color.White
             )
         }
+        // Botón para navegar al chat
         IconButton(onClick = { navController.navigate("chat") }) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_chat_w),
@@ -46,6 +59,7 @@ fun NavBar(navController: NavHostController, modifier: Modifier = Modifier) {
                 tint = Color.White
             )
         }
+        // Botón para navegar al catálogo
         IconButton(onClick = { navController.navigate("catalog") }) { // Home ahora lleva a CatalogScreen
             Icon(
                 painter = painterResource(id = R.drawable.ic_home_w),
@@ -53,6 +67,7 @@ fun NavBar(navController: NavHostController, modifier: Modifier = Modifier) {
                 tint = Color.White
             )
         }
+        // Botón para navegar al perfil
         IconButton(onClick = { navController.navigate("profile") }) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_profile_w),
@@ -60,6 +75,7 @@ fun NavBar(navController: NavHostController, modifier: Modifier = Modifier) {
                 tint = Color.White
             )
         }
+        // Botón para navegar a la configuración
         IconButton(onClick = { navController.navigate("configuracion") }) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_settings_w),

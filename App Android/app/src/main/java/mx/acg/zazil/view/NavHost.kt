@@ -13,6 +13,17 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.google.firebase.auth.FirebaseAuth
 
+/**
+ * Composable que configura la navegación de la aplicación utilizando un controlador de navegación
+ * y un ViewModel para manejar la autenticación.
+ *
+ * @param auth FirebaseAuth utilizado para la autenticación de usuarios.
+ * @param signInWithGoogle Función que maneja el inicio de sesión con Google.
+ * @param navController Controlador de navegación que permite navegar entre pantallas.
+ *
+ * @author Alberto Cebreros González
+ * @author Melissa Mireles Rendón
+ */
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AppNavHost(
@@ -20,12 +31,14 @@ fun AppNavHost(
     signInWithGoogle: () -> Unit,
     navController: NavHostController
 ) {
+    // Obtiene la entrada actual de la pila de navegación
     val currentBackStackEntry = navController.currentBackStackEntryAsState()
 
     // Condiciona la visibilidad de la NavBar dependiendo de la ruta actual
     val currentRoute = currentBackStackEntry.value?.destination?.route
     val showNavBar = currentRoute != "login" && currentRoute != "register" && currentRoute != "recuperarContrasena"
 
+    // Scaffold con NavBar si es necesario
     Scaffold(
         bottomBar = {
             if (showNavBar) {
@@ -33,24 +46,29 @@ fun AppNavHost(
             }
         }
     ) { innerPadding ->
+        // Configuración de las rutas de navegación
         NavHost(
             navController = navController,
             startDestination = "login",
             modifier = Modifier.padding(innerPadding)
         ) {
             composable("login") {
+                // Pantalla de inicio de sesión
                 LoginScreen(navController = navController, signInWithGoogle = signInWithGoogle)
             }
 
             composable("recuperarContrasena") {
+                // Pantalla de recuperación de contraseña
                 RecuperarContrasenaScreen(navController = navController)
             }
 
             composable("register") {
+                // Pantalla de registro de usuario
                 RegisterScreen(navController = navController)
             }
 
             composable("productDetail/{productId}") { backStackEntry ->
+                // Pantalla de detalles del producto
                 val productId = backStackEntry.arguments?.getString("productId")?.toIntOrNull()
                 if (productId != null) {
                     ProductDetailScreen(productId = productId, navController = navController)
@@ -60,15 +78,18 @@ fun AppNavHost(
             }
 
             composable("chat") {
+                // Pantalla de chat
                 BlogScreen()
             }
 
             composable("catalog") {
+                // Pantalla de catálogo
                 CatalogScreen(navController = navController)
             }
 
 
             composable("profile") {
+                // Pantalla de perfil
                 val currentUser = auth.currentUser
                 val uid = currentUser?.uid
 
@@ -81,14 +102,17 @@ fun AppNavHost(
 
 
             composable("configuracion") {
+                // Pantalla de configuración
                 SettingsScreen(navController = navController)
             }
 
             composable("update") {
+                // Pantalla de actualización de datos
                 UpdateDataScreen(navController = navController)
             }
 
             composable("cart") {
+                // Pantalla de carrito de compras
                 // Obtener el uid del usuario autenticado en Firebase
                 val currentUser = auth.currentUser
                 val uid = currentUser?.uid
@@ -103,6 +127,7 @@ fun AppNavHost(
 
 
             composable("FAQs") {
+                // Pantalla de preguntas frecuentes
                 FAQs(navController = navController)
             }
 
@@ -127,14 +152,26 @@ fun AppNavHost(
 
             composable("endShopping/{total}/{calle}/{numeroInterior}/{colonia}/{codigoPostal}/{ciudad}/{estado}/{pais}") { backStackEntry ->
                 val total = backStackEntry.arguments?.getString("total") ?: "0.00"
+                val calle = backStackEntry.arguments?.getString("calle") ?: ""
+                val numeroInterior = backStackEntry.arguments?.getString("numeroInterior") ?: ""
+                val colonia = backStackEntry.arguments?.getString("colonia") ?: ""
+                val codigoPostal = backStackEntry.arguments?.getString("codigoPostal") ?: ""
+                val ciudad = backStackEntry.arguments?.getString("ciudad") ?: ""
+                val estado = backStackEntry.arguments?.getString("estado") ?: ""
+                val pais = backStackEntry.arguments?.getString("pais") ?: ""
 
                 EndShoppingScreen(
                     navController = navController,
                     total = total,
+                    calle = calle,
+                    numeroInterior = numeroInterior,
+                    colonia = colonia,
+                    codigoPostal = codigoPostal,
+                    ciudad = ciudad,
+                    estado = estado,
+                    pais = pais
                 )
             }
-
-
 
             composable("payment/{total}/{calle}/{numeroInterior}/{colonia}/{codigoPostal}/{ciudad}/{estado}/{pais}") { backStackEntry ->
                 val total = backStackEntry.arguments?.getString("total") ?: "0.00"
@@ -160,19 +197,34 @@ fun AppNavHost(
             }
 
 
-            composable("settings") { SettingsScreen(navController) }
+            composable("settings") {
+                // Pantalla de configuración
+                SettingsScreen(navController)
+            }
 
             composable("updateData") {
+                // Pantalla de actualización de datos
                 UpdateDataScreen(navController = navController)  // Aquí llamamos a la pantalla de ActualizarDatos
             }
 
-            composable("privacyPolicy") { PrivacyPolicyScreen(navController) }
+            composable("privacyPolicy") {
+                // Pantalla de política de privacidad
+                PrivacyPolicyScreen(navController)
+            }
 
-            composable("TyC") { TyC(navController) }
+            composable("TyC") {
+                // Pantalla de términos y condiciones
+                TyC(navController) }
 
-            composable("aboutUs") { AboutUsScreen(navController) }
+            composable("aboutUs") {
+                // Pantalla de información de la empresa
+                AboutUsScreen(navController)
+            }
 
-            composable("credits") { CreditsScreen(navController) }
+            composable("credits") {
+                // Pantalla de créditos
+                CreditsScreen(navController)
+            }
         }
     }
 }
