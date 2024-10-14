@@ -412,7 +412,7 @@ fun RegisterScreen(navController: NavHostController) {
                 text = {
                     Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                         Text(
-                            text = "Al utilizar nuestra aplicación...",
+                            text = "Al utilizar nuestra aplicación de tienda en línea, usted acepta cumplir con los siguientes términos y condiciones. Nuestra plataforma proporciona un espacio para la compra de productos a través de su dispositivo Android. Los precios, la disponibilidad de productos, y las ofertas especiales están sujetos a cambios sin previo aviso. Nos reservamos el derecho de modificar o descontinuar la aplicación en cualquier momento sin responsabilidad alguna hacia usted. Es su responsabilidad asegurarse de que la información de su cuenta y los datos proporcionados para la compra sean precisos y estén actualizados. El uso indebido de nuestra aplicación, como el intento de fraude o cualquier otra actividad ilegal, resultará en la cancelación de su cuenta y podría ser reportado a las autoridades competentes.",
                             fontSize = 14.sp,
                             lineHeight = 22.sp,
                             textAlign = TextAlign.Justify
