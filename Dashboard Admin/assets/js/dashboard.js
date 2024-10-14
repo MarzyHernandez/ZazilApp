@@ -1,6 +1,12 @@
-// dashboard.js
+//dashboard.js
+//Este archivo contiene el código JavaScript para las gráficas de la página de dashboard del administrador.
+//Autor: Carlos Herrera
+
 
 // Función para obtener los datos del endpoint
+// Autor: Carlos Herrera
+// Parámetros: Ninguno
+// Retorna: Un arreglo con los datos de las órdenes
 async function fetchOrderData() {
     const response = await fetch('https://getallorders-dztx2pd2na-uc.a.run.app/');
     const data = await response.json();
@@ -8,6 +14,9 @@ async function fetchOrderData() {
 }
 
 // Función principal para procesar y actualizar los datos en las gráficas y totales
+// Autor: Carlos Herrera
+// Parámetros: Ninguno
+// Retorna: Ninguno
 fetchOrderData().then(orders => {
     const monthlySales = Array(12).fill(0);    // Ventas por mes
     const monthlyOrders = Array(12).fill(0);   // Órdenes por mes
@@ -20,7 +29,7 @@ fetchOrderData().then(orders => {
     let totalOrders = 0;                       // Total de órdenes
     let pendingOrders = 0;                     // Órdenes pendientes
     let shippedOrders = 0;                     // Órdenes enviadas
-
+    let deliveredOrders = 0;                   // Órdenes entregadas
     orders.forEach(order => {
         const orderDate = new Date(order.fecha_pedido);
         const month = orderDate.getMonth();
@@ -40,6 +49,8 @@ fetchOrderData().then(orders => {
             pendingOrders += 1;
         } else if (order.estado === "Enviado") {
             shippedOrders += 1;
+        } else if (order.estado === "Entregado") {
+            deliveredOrders += 1;
         }
     
         // Estado de origen del usuario
@@ -77,12 +88,15 @@ fetchOrderData().then(orders => {
 
     // Actualizar los valores en la página
     document.getElementById('totalSales').textContent = totalSales.toFixed(2);  // Mostrar total de ventas con dos decimales
-    document.getElementById('totalOrders').textContent = totalOrders;
+    document.getElementById('delieveredOrders').textContent = deliveredOrders;
     document.getElementById('pendingOrders').textContent = pendingOrders;
     document.getElementById('shippedOrders').textContent = shippedOrders;
 });
 
-// Funciones para crear cada gráfica
+// FunciON para actualizar las gráfica DE ventas totales por mes
+// Autor: Carlos Herrera
+// Parámetros: Un arreglo con los datos de las órdenes
+// Retorna: Ninguno
 
 // 1. Ventas Totales por Mes
 function updateSalesGraph(monthlySales) {
@@ -99,21 +113,21 @@ function updateSalesGraph(monthlySales) {
             categories: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
             labels: {
                 style: {
-                    fontFamily: 'Gabarito, sans-serif'  // Fuente en los números de los ejes
+                    fontFamily: 'Gabarito, sans-serif'  
                 }
             }
         },
         yaxis: {
             labels: {
                 style: {
-                    fontFamily: 'Gabarito, sans-serif'  // Fuente en los números de los ejes
+                    fontFamily: 'Gabarito, sans-serif' 
                 }
             }
         },
         colors: ['#E17F61'],
         plotOptions: {
             bar: {
-                borderRadius: 10 // Bordes redondeados
+                borderRadius: 10 
             }
         },
         
@@ -128,6 +142,11 @@ function updateSalesGraph(monthlySales) {
 }
 
 // 2. Órdenes por Mes
+
+// Función para actualizar la gráfica de órdenes por mes
+// Autor: Carlos Herrera
+// Parámetros: Un arreglo con los datos de las órdenes
+// Retorna: Ninguno
 function updateOrdersGraph(monthlyOrders) {
     var options = {
         chart: {
@@ -142,14 +161,14 @@ function updateOrdersGraph(monthlyOrders) {
             categories: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
             labels: {
                 style: {
-                    fontFamily: 'Gabarito, sans-serif'  // Fuente en los números de los ejes
+                    fontFamily: 'Gabarito, sans-serif'  
                 }
             }
         },
         yaxis: {
             labels: {
                 style: {
-                    fontFamily: 'Gabarito, sans-serif'  // Fuente en los números de los ejes
+                    fontFamily: 'Gabarito, sans-serif'  
                 }
             }
         },
@@ -162,6 +181,11 @@ function updateOrdersGraph(monthlyOrders) {
 }
 
 // 3. Productos más Vendidos
+
+// Función para actualizar la gráfica de productos más vendidos
+// Autor: Carlos Herrera
+// Parámetros: Un objeto con los datos de las órdenes
+// Retorna: Ninguno
 function updateProductSalesGraph(productSales) {
     var productNames = Object.keys(productSales);
     var productQuantities = productNames.map(name => productSales[name].quantity);
@@ -204,6 +228,11 @@ function updateProductSalesGraph(productSales) {
 }
 
 // 4. Ingresos por Producto
+
+// Función para actualizar la gráfica de ingresos por producto
+// Autor: Carlos Herrera
+// Parámetros: Un objeto con los datos de las órdenes
+// Retorna: Ninguno
 function updateProductRevenueGraph(productSales) {
     var productNames = Object.keys(productSales);
     var productRevenues = productNames.map(name => productSales[name].sales);
@@ -246,6 +275,11 @@ function updateProductRevenueGraph(productSales) {
 }
 
 // 5. Usuarios Nuevos por Mes
+
+// Función para actualizar la gráfica de usuarios nuevos por mes
+// Autor: Carlos Herrera
+// Parámetros: Un arreglo con los datos de las órdenes
+// Retorna: Ninguno
 function updateUsersGraph(usersPerMonth) {
     var options = {
         chart: {
@@ -280,6 +314,12 @@ function updateUsersGraph(usersPerMonth) {
 }
 
 // 6. Distribución de Métodos de Pago
+
+// Función para actualizar la gráfica de distribución de métodos de pago
+// Autor: Carlos Herrera
+// Parámetros: Un objeto con los datos de las órdenes
+// Retorna: Ninguno
+
 function updatePaymentMethodGraph(paymentMethods) {
     var paymentNames = Object.keys(paymentMethods);
     var paymentCounts = paymentNames.map(name => paymentMethods[name]);
@@ -311,6 +351,12 @@ function updatePaymentMethodGraph(paymentMethods) {
 }
 
 // 7. Distribución de Pedidos por Estado
+
+// Función para actualizar la gráfica de distribución de pedidos por estado
+// Autor: Carlos Herrera
+// Parámetros: Un objeto con los datos de las órdenes
+// Retorna: Ninguno
+
 function updateStateOrdersGraph(stateOrders) {
     var stateNames = Object.keys(stateOrders);
     var stateQuantities = stateNames.map(name => stateOrders[name]);
