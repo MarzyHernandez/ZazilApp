@@ -209,8 +209,6 @@ fun ProductItem(
         )
 
         Spacer(modifier = Modifier.height(8.dp))
-
-        // Título del producto
         Text(
             text = title,
             fontSize = 18.sp,
