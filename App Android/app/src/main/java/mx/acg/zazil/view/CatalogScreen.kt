@@ -35,12 +35,24 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.text.input.TextFieldValue
 import mx.acg.zazil.R
 
+/**
+ * Pantalla de catálogo que muestra los productos disponibles.
+ * Permite al usuario buscar productos por nombre y navegar a los detalles de cada producto.
+ *
+ * @param modifier Modificador para aplicar estilos y personalización.
+ * @param navController Controlador de navegación para moverse entre pantallas.
+ * @param catalogViewModel ViewModel que maneja los datos del catálogo de productos.
+ *
+ * @author Melissa Mireles Rendón
+ * @author Alberto Cebreros González
+ */
 @Composable
 fun CatalogScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController,
     catalogViewModel: CatalogViewModel = viewModel()
 ) {
+    // Observa la lista de productos desde el ViewModel
     val products = catalogViewModel.products.observeAsState(initial = emptyList())
     val isLoading = catalogViewModel.isLoading.observeAsState(initial = false)
 
@@ -56,10 +68,12 @@ fun CatalogScreen(
         }
     }
 
+    // Llama al ViewModel para obtener los productos cuando se monta la composición
     LaunchedEffect(Unit) {
         catalogViewModel.getProducts()
     }
 
+    // Estructura principal de la pantalla
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -101,7 +115,7 @@ fun CatalogScreen(
                     }
                 }
 
-                // Aquí aplicamos el fondo blanco para la sección de productos
+                // Sección principal que contiene la barra de búsqueda y el grid de productos
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
@@ -152,6 +166,20 @@ fun CatalogScreen(
     }
 }
 
+/**
+ * Componente individual que representa un producto dentro del catálogo.
+ * Muestra la imagen, el nombre y el precio del producto, y permite hacer clic para ver más detalles.
+ *
+ * @param title El nombre del producto.
+ * @param price El precio del producto.
+ * @param imageUrl URL de la imagen del producto.
+ * @param productId ID único del producto.
+ * @param onClick Función que se ejecuta cuando el usuario hace clic en el producto.
+ * @param modifier Modificador para aplicar estilos y personalización.
+ *
+ * @author Melissa Mireles Rendón
+ * @author Alberto Cebreros González
+ */
 @Composable
 fun ProductItem(
     title: String,

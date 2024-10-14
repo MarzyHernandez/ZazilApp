@@ -217,6 +217,9 @@ fun CartScreen(
  * @param price Precio del producto.
  * @param onAddClicked Acción cuando se aumenta la cantidad.
  * @param onRemoveClicked Acción cuando se disminuye la cantidad.
+ *
+ * @author Alberto Cebreros González
+ * @author Melissa Mireles Rendón
  */
 @Composable
 fun CartItemRow(
@@ -324,6 +327,9 @@ fun CartItemRow(
  *
  * @param navController Controlador de navegación para redirigir a otras pantallas.
  * @param total Total del monto en el carrito.
+ *
+ * @author Alberto Cebreros González
+ * @author Melissa Mireles Rendón
  */
 @Composable
 fun CartTotal(navController: NavHostController, total: Double) {
