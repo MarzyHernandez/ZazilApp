@@ -14,11 +14,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil.compose.rememberImagePainter
+import mx.acg.zazil.R
 import mx.acg.zazil.model.Order
 import mx.acg.zazil.viewmodel.OrderViewModel
 
@@ -41,6 +44,9 @@ fun MyShoppingDetailsScreen(
     uid: String,
     viewModel: OrderViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
 ) {
+    // Fuente personalizada utilizada en toda la pantalla
+    val gabaritoFontFamily = FontFamily(Font(R.font.gabarito_regular))
+
     // Llamar al ViewModel para obtener las órdenes
     LaunchedEffect(Unit) {
         println("UID enviado desde la pantalla: $uid")

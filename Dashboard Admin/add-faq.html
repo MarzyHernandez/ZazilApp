@@ -1,3 +1,8 @@
+<!--
+  add-faq.html
+  Este archivo HTML es la página para agregar y ver preguntas frecuentes a la app.
+  Autor: Carlos Herrera
+-->
 <!doctype html>
 <html lang="en">
 
@@ -274,6 +279,9 @@
     <!-- Custom Script for FAQ -->
     <script>
       // Función para obtener las FAQs
+      //Autor: Carlos Herrera
+      // Parametros: Ninguno
+      // Retorno: Obtiene preguntas y muestra errores si los hay.
       function getFAQs() {
         fetch('https://getallfaq-dztx2pd2na-uc.a.run.app/')
           .then(response => {
@@ -292,6 +300,10 @@
       }
     
       // Función para mostrar las preguntas en tarjetas
+      // Autor: Carlos Herrera
+      // Parámetros: preguntas (array de objetos pregunta)
+      // Retorno: Tarhjetas con preguntas frecuentes
+
       function mostrarPreguntas(preguntas) {
         const contenedorPreguntas = document.querySelector('.faq-container');
         contenedorPreguntas.innerHTML = '';
@@ -324,8 +336,11 @@
         });
       }
     
+// Función para eliminar una pregunta frecuente mediante DELETE
+// Autor: Carlos Herrera
+// Parámetros: ID de la pregunta a eliminar
+// Retorno: Elimina la pregunta y muestra un mensaje de éxito o error
 
-  // Función para eliminar una pregunta frecuente mediante DELETE
 function deleteFAQ(id) {
   const idInt = parseInt(id, 10); // Convertir el ID a entero
 
@@ -359,6 +374,9 @@ function deleteFAQ(id) {
 
 
       // Función para agregar una nueva pregunta frecuente mediante POST
+      // Autor: Carlos Herrera
+      // Parámetros: Ninguno
+      // Retorno: Agrega una nueva pregunta y muestra un mensaje de éxito o error
       function agregarPreguntaFrecuente() {
         const pregunta = document.getElementById('inputPregunta').value;
         const respuesta = document.getElementById('inputRespuesta').value;
@@ -409,6 +427,14 @@ function deleteFAQ(id) {
     </script>
     
     
+
+  <!--
+  Script Conexión a Firebase
+  Este archivo HTML es la página principal del Zazil Admin Dashboard, donde se despliegan las estadísticas y gráficas de ventas y productos. 
+  Incluye metaetiquetas para la configuración de la página, enlaces a hojas de estilo CSS y JS.
+  Autor: Carlos Herrera
+-->
+
     <!-- Firebase SDK -->
   <script type="module">
     // Firebase SDK imports

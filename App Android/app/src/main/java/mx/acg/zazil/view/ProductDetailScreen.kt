@@ -28,6 +28,8 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.navigation.NavHostController
 import com.google.firebase.auth.FirebaseAuth
 import mx.acg.zazil.R
@@ -53,6 +55,9 @@ fun ProductDetailScreen(
     navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
+    // Fuente personalizada utilizada en toda la pantalla
+    val gabaritoFontFamily = FontFamily(Font(R.font.gabarito_regular))
+
     // Observar el producto seleccionado
     val selectedProduct by productDetailViewModel.selectedProduct.observeAsState()
     val cartViewModel = viewModel<CartViewModel>()
@@ -160,7 +165,7 @@ fun ProductDetailScreen(
                         .fillMaxWidth(),
                     contentAlignment = Alignment.CenterEnd // Alinea el texto a la derecha
                 ) {
-                    TextButton(onClick = { navController.navigate("carrito") }) {
+                    TextButton(onClick = { navController.navigate("cart") }) {
                         Text(
                             text = "Ir al carrito",
                             fontSize = 13.sp,

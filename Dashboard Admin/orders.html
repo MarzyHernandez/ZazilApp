@@ -1,3 +1,9 @@
+<!--
+  orders.html
+  Este archivo contiene la página de historial de compras, donde se muestran las órdenes de los usuarios.
+  Se utiliza JavaScript para obtener los datos de las órdenes y de los usuarios, y se llenan las filas de la tabla con la información correspondiente.
+  Autor: Carlos Herrera
+-->
 <!doctype html>
 <html lang="en">
 
@@ -11,10 +17,6 @@
     <meta name="author" content="Bootstrap Gallery" />
     <link rel="canonical" href="https://www.bootstrap.gallery/">
     <meta property="og:url" content="https://www.bootstrap.gallery">
-    <meta property="og:title" content="Admin Templates - Dashboard Templates | Bootstrap Gallery">
-    <meta property="og:description" content="Marketplace for Bootstrap Admin Dashboards">
-    <meta property="og:type" content="Website">
-    <meta property="og:site_name" content="Bootstrap Gallery">
     <link rel="shortcut icon" href="assets/images/logo_zazil.png">
 
     <!-- Title -->
@@ -89,24 +91,26 @@
             color: white;
         }
 
+        #loader {
+          top: 50%;
+          left: 50%;
+          z-index: 9999;
+          color: #ff2075;
+          font-size: 150%;
+          width: 100%;
+          padding: 0;
+          margin: 0;
+          justify-content: center;  /* Centrado horizontal del contenido */
+          align-items: center;      /* Centrado vertical del contenido */
+      }
 
     </style>
   </head>
 
   <body>
 
-    <!-- Loading wrapper start -->
-    <!-- <div id="loading-wrapper">
-			<div class="spinner">
-                <div class="line1"></div>
-				<div class="line2"></div>
-				<div class="line3"></div>
-				<div class="line4"></div>
-				<div class="line5"></div>
-				<div class="line6"></div>
-            </div>
-		</div> -->
-    <!-- Loading wrapper end -->
+  
+    
 
     <!-- Page wrapper start -->
     <div class="page-wrapper">
@@ -223,23 +227,59 @@
 
         </div>
         <!-- Page header ends -->
-
+        
         <!-- Content wrapper scroll start -->
         <div class="content-wrapper-scroll">
-
+          
           <!-- Content wrapper start -->
           <div class="content-wrapper">
 
             <!-- Row start -->
             <div class="row gx-3">
-              <div class="col-sm-12 col-12">
+              <div class="col-sm-12 col-12" >
                 <div class="card">
+                  
                   <div class="card-header">
-                    <div class="card-title">Order History</div>
+                    <div class="card-title">Historial de Compras</div>
                   </div>
                   <div class="card-body">
+                  <!-- Controles para filtrar -->
+                  
+                  <div class="row gx-3">
+                    <div class="col-xxl-3 col-sm-6 col-12">
+                      <label for="filter-numero" class="form-label">Filtrar por Número de Pedido:</label>
+                      <input type="text" id="filter-numero" class="filter-input form-control" placeholder="No. Pedido">
+                    </div>
+                    
+                      <div class="col-xxl-3 col-sm-6 col-12">
+                        <label for="filter-fecha" class="filter-input form-label">Filtrar por Fecha de Pedido:</label>
+                        <input type="text" id="filter-fecha" class="filter-input form-control" placeholder="Fecha pedido (dd/mm/yyyy)">
+                      </div>
+                     
 
+                      <div class="col-xxl-3 col-sm-6 col-12">
+                      <label for="filter-estado" class="form-label">Filtrar por Estado:</label>
+                      <select id="filter-estado" class="filter-input form-select">
+                        <option value="">Todos</option>
+                        <option value="Pendiente">Pendiente</option>
+                        <option value="Enviado">Enviado</option>
+                        <option value="Entregado">Entregado</option>
+                      </select>
+                      </div>
+                      <div class="col-xxl-3 col-sm-6 col-12">
+                      <div id="loader" style="display:none;">
+                        <div class="d-flex justify-content-center" >
+                            <div class="spinner-border" style="width: 3rem; height: 3rem;"  role="status">
+                            </div>
+                        </div>
+                      </div>
+                      </div>
+
+                  </div>
+                  <br>
+                  
                     <div class="table-responsive">
+                      
                       <table class="table v-middle">
                         <thead>
                           <tr>
@@ -303,6 +343,13 @@
     <!-- Main Js Required -->
     <script src="assets/js/main.js"></script>
 
+  <!--
+  Script Conexión a Firebase
+  Este archivo HTML es la página principal del Zazil Admin Dashboard, donde se despliegan las estadísticas y gráficas de ventas y productos. 
+  Incluye metaetiquetas para la configuración de la página, enlaces a hojas de estilo CSS y JS.
+  Autor: Carlos Herrera
+-->
+
     <!-- Firebase SDK -->
   <script type="module">
     // Firebase SDK imports
@@ -351,8 +398,15 @@
 
     // Aquí puedes agregar tu lógica adicional para usuarios autenticados
   </script>
+
+
+
 <script>
-  // Función para obtener datos del primer endpoint (órdenes)
+  // Función para obtener los datos de los pedidos y mostrarlos en la tabla
+  //  autor: Carlos Herrera
+  //  param: none
+  //  regresa: void para llenar la tabla con los datos obtenidos
+
   async function fetchOrders() {
     try {
       // Primer endpoint que obtiene las órdenes
@@ -376,6 +430,9 @@
   }
 
   // Función para obtener datos del segundo endpoint (información del usuario)
+  // autor: Carlos Herrera
+  //param uidUsuario: string con el id del usuario
+  // regresa: Promise con los datos del usuario
   async function fetchUserData(uidUsuario) {
     try {
       const response = await fetch(`https://getuserdata-dztx2pd2na-uc.a.run.app/?uid=${uidUsuario}`);
@@ -389,6 +446,10 @@
 
   
     // Función para mostrar los productos
+    //autor: Carlos Herrera
+    //param iconElement: elemento del ícono que se ha hecho click
+    //regresa: void para mostrar los productos
+
     function toggleProductos(iconElement) {
       const productosDetalle = iconElement.nextElementSibling;
       productosDetalle.style.display = productosDetalle.style.display === 'none' ? 'block' : 'none';
@@ -396,6 +457,10 @@
 
     
   // Función para llenar una fila de la tabla con los datos obtenidos
+  // autor: Carlos Herrera
+  // param order: objeto con los datos de la orden
+  // param userData: objeto con los datos del usuario
+  // regresa: void para llenar la fila con los datos
   function fillOrderRow(order, userData) {
     const tableBody = document.getElementById('orders-table-body');
     const row = document.createElement('tr');
@@ -508,7 +573,11 @@
       }
     });
 
-    // Actualizar el estilo del select según el estado
+    // Función para actualizar el estilo del select según el estado
+    // autor: Carlos Herrera
+    // param selectElement: elemento select
+    // regresa: void para actualizar el estilo del select
+
     function updateEstadoSelect(selectElement) {
       const estado = selectElement.value;
       selectElement.classList.remove('pendiente', 'enviado', 'entregado');
@@ -525,9 +594,133 @@
   document.addEventListener('DOMContentLoaded', fetchOrders);
 </script>
 
-  
-  
-  
+<script>
+  // Obtener el parámetro de la URL
+  //autor: Carlos Herrera
+  //param param: string con el nombre del parámetro
+  //regresa: string con el valor del parámetro
+
+  function getQueryParam(param) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(param);
+  }
+
+  // Función para mostrar y ocultar el loader
+  //autor: Carlos Herrera
+  //param none
+  //regresa: void para mostrar y ocultar el loader
+
+  function showLoader() {
+    const loader = document.getElementById('loader');
+    if (loader) {
+      loader.style.display = 'block';
+    }
+  }
+
+  // Función para ocultar el loader
+  //autor: Carlos Herrera
+  //param none
+  //regresa: void para ocultar el loader
+
+  function hideLoader() {
+    const loader = document.getElementById('loader');
+    if (loader) {
+      loader.style.display = 'none';
+    }
+  }
+
+  // Función para filtrar la tabla
+  //autor: Carlos Herrera
+  //param none
+  //regresa: void para filtrar la tabla
+
+  function filterTable() {
+    showLoader(); // Muestra el loader antes de empezar el filtro
+
+    setTimeout(() => {
+      const filterFecha = document.getElementById('filter-fecha').value.toLowerCase();
+      const filterNumero = document.getElementById('filter-numero').value.toLowerCase();
+      const filterEstado = document.getElementById('filter-estado').value;
+
+      const rows = document.querySelectorAll('#orders-table-body tr');
+
+      rows.forEach(row => {
+        const detallesPedido = row.querySelector('td:nth-child(1)').textContent.toLowerCase();
+        const estadoSelect = row.querySelector('td:nth-child(5) select');
+        const estado = estadoSelect.options[estadoSelect.selectedIndex].text;
+
+        const matchFecha = detallesPedido.includes(`fecha pedido: ${filterFecha}`);
+        const matchNumero = detallesPedido.includes(`no. pedido: ${filterNumero}`);
+        const matchEstado = filterEstado === '' || estado === filterEstado;
+
+        if ((filterFecha === '' || matchFecha) &&
+            (filterNumero === '' || matchNumero) &&
+            matchEstado) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+
+      hideLoader(); // Oculta el loader cuando termine el filtro
+    }, 0); // Ejecutar sin retraso, pero dentro del setTimeout para asegurarse de que el loader se muestre
+  }
+
+  // Aplicar el filtro cuando la tabla esté lista
+  window.onload = function() {
+    const estadoParam = getQueryParam('estado');
+
+    if (estadoParam) {
+      const filterEstadoElement = document.getElementById('filter-estado');
+      if (filterEstadoElement) {
+        filterEstadoElement.value = estadoParam;
+        // Mostrar el loader y aplicar el filtro
+        showLoader();
+        setTimeout(() => {
+          filterTable();
+          hideLoader();
+        }, 5000); // 5000 milisegundos = 5 segundos
+      }
+    }
+
+    // Asegurarse de que los elementos existen antes de añadir eventos
+    const filterFechaElement = document.getElementById('filter-fecha');
+    const filterNumeroElement = document.getElementById('filter-numero');
+    const filterEstadoElement = document.getElementById('filter-estado');
+
+    if (filterFechaElement) {
+      filterFechaElement.addEventListener('input', function() {
+        showLoader();
+        setTimeout(() => {
+          filterTable();
+          hideLoader();
+        }, 2500); // 2.5 segundos de espera al aplicar filtro de fecha
+      });
+    }
+
+    if (filterNumeroElement) {
+      filterNumeroElement.addEventListener('input', function() {
+        showLoader();
+        setTimeout(() => {
+          filterTable();
+          hideLoader();
+        }, 2500); // 2.5 segundos de espera al aplicar filtro de número
+      });
+    }
+
+    if (filterEstadoElement) {
+      filterEstadoElement.addEventListener('change', function() {
+        showLoader();
+        setTimeout(() => {
+          filterTable();
+          hideLoader();
+        }, 2500); // 2.5 segundos de espera al aplicar filtro de estado
+      });
+    }
+  };
+</script>
+
+
   </body>
 
 </html>

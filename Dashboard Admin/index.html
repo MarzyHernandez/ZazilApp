@@ -1,25 +1,26 @@
+<!--
+  index.html
+  Este archivo HTML es la página principal del Zazil Admin Dashboard, donde se despliegan las estadísticas y gráficas de ventas y productos. 
+  Incluye metaetiquetas para la configuración de la página, enlaces a hojas de estilo CSS y JS.
+  Autor: Carlos Herrera
+-->
+
 <!doctype html>
 <html lang="en">
 
 <head>
-  <!-- Required meta tags -->
+
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-  <!-- Meta -->
   <meta name="description" content="Responsive Bootstrap Admin Dashboards">
   <meta name="author" content="Bootstrap Gallery" />
   <link rel="canonical" href="https://www.bootstrap.gallery/">
   <meta property="og:url" content="https://www.bootstrap.gallery">
-  <meta property="og:title" content="Admin Templates - Dashboard Templates | Bootstrap Gallery">
-  <meta property="og:description" content="Marketplace for Bootstrap Admin Dashboards">
-  <meta property="og:type" content="Website">
   <meta property="og:site_name" content="Bootstrap Gallery">
   <link rel="shortcut icon" href="assets/images/logo_zazil.png">
 
   <!-- Titulo -->
   <title>Zazil Admin Dashboard</title>
-
 
   <!-- CSS -->
   <link rel="stylesheet" href="assets/css/animate.css">
@@ -172,8 +173,6 @@
 
 
 <div class="row gx-3">
-
-
           
   <div class="row gx-3">
 
@@ -190,21 +189,21 @@
     </div>
   
   
-    <div class="col-xxl-3 col-sm-6 col-12">
+    <div class="col-xxl-3 col-sm-6 col-12" id="btn-entregado">
       <div class="stats-tile">
         <div class="sale-icon shade-blue">
           <i class="bi bi-handbag"></i>
         </div>
         <div class="sale-details">
-          <h3 class="text-blue"><span id="totalOrders"></span></h3>
-          <p>Órdenes</p>
+          <h3 class="text-blue"><span id="delieveredOrders"></span></h3>
+          <p>Entregadas</p>
         </div>
         
       </div>
     </div>
   
     
-    <div class="col-xxl-3 col-sm-6 col-12">
+    <div class="col-xxl-3 col-sm-6 col-12"  id="btn-enviado">
       <div class="stats-tile">
         <div class="sale-icon shade-yellow">
           <i class="bi bi-box-seam"></i>
@@ -217,7 +216,7 @@
     </div>
   
     
-    <div class="col-xxl-3 col-sm-6 col-12">
+    <div class="col-xxl-3 col-sm-6 col-12" id="btn-pendiente">
       <div class="stats-tile">
         <div class="sale-icon shade-red">
           <i class="bi bi-box-seam"></i>
@@ -232,8 +231,6 @@
   </div>
 
   
-
-
 
   <div class="row gx-3">
     <div class="col-xxl-9  col-sm-12 col-12">
@@ -332,50 +329,8 @@
 
   <div class="col-xxl-12  col-sm-12 col-12">
     
-
-    <!-- <div class="col-xxl-9  col-sm-12 col-12">
-      <div class="card">
-        <div class="card-body">
-          <div class="row gx-3">
-                <div class="col-12">
-                  <div id="ordersGraph"></div>
-                </div>
-          </div>
-        </div>
+ </div>
       </div>
-    </div>
-
-
-    <div class="col-xxl-3  col-sm-12 col-12">
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title">Estatus Pedidos</div>
-        </div>
-        <div class="card-body">
-          <div id="stateOrdersGraph"></div>
-        </div>
-      </div>
-    </div> -->
-
-    
-        
-
-
-
-
-
-      
-    
-      </div>
-      
-
-     
-        
-        
-
-      </div>
-
-
 
       <div class="app-footer">
         <span>© Todas Brillamos 2024</span>
@@ -417,7 +372,13 @@
   <!-- Main Js Required -->
   <script src="assets/js/main.js"></script>
 
-  <!-- Firebase SDK -->
+  <!--
+  Script Conexión a Firebase
+  Este archivo HTML es la página principal del Zazil Admin Dashboard, donde se despliegan las estadísticas y gráficas de ventas y productos. 
+  Incluye metaetiquetas para la configuración de la página, enlaces a hojas de estilo CSS y JS.
+  Autor: Carlos Herrera
+-->
+
   <script type="module">
     // Firebase SDK imports
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js';
@@ -466,7 +427,19 @@
     // Aquí puedes agregar tu lógica adicional para usuarios autenticados
   </script>
 
+<script>
+  document.getElementById('btn-entregado').addEventListener('click', function () {
+    window.location.href = 'orders.html?estado=Entregado';
+  });
 
+  document.getElementById('btn-enviado').addEventListener('click', function () {
+    window.location.href = 'orders.html?estado=Enviado';
+  });
+
+  document.getElementById('btn-pendiente').addEventListener('click', function () {
+    window.location.href = 'orders.html?estado=Pendiente';
+  });
+</script>
 </body>
 
 </html>

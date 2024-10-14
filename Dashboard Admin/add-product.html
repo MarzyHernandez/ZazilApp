@@ -1,3 +1,10 @@
+<!--
+  add-product.html
+  Este archivo HTML es la página para añadir un nuevo producto al catálogo de la tienda en la app.
+  Contiene un formulario para ingresar los detalles del producto, incluyendo nombre, descripción, categoría, precios y cantidad.
+  Autor: Carlos Herrera
+-->
+
 <!doctype html>
 <html lang="en">
 
@@ -11,10 +18,6 @@
     <meta name="author" content="Bootstrap Gallery" />
     <link rel="canonical" href="https://www.bootstrap.gallery/">
     <meta property="og:url" content="https://www.bootstrap.gallery">
-    <meta property="og:title" content="Admin Templates - Dashboard Templates | Bootstrap Gallery">
-    <meta property="og:description" content="Marketplace for Bootstrap Admin Dashboards">
-    <meta property="og:type" content="Website">
-    <meta property="og:site_name" content="Bootstrap Gallery">
     <link rel="shortcut icon" href="assets/images/logo_zazil.png">
 
     <!-- Title -->
@@ -48,18 +51,7 @@
 
   <body>
 
-    <!-- Loading wrapper start -->
-    <!-- <div id="loading-wrapper">
-			<div class="spinner">
-                <div class="line1"></div>
-				<div class="line2"></div>
-				<div class="line3"></div>
-				<div class="line4"></div>
-				<div class="line5"></div>
-				<div class="line6"></div>
-            </div>
-		</div> -->
-    <!-- Loading wrapper end -->
+
 
     <!-- Page wrapper start -->
     <div class="page-wrapper">
@@ -320,7 +312,9 @@
       <script src="https://upload.cloudinary.com/global/all.js"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js"></script>
   
-      <!-- Script personalizado -->
+      <!-- Script para manejo de publicación de productos
+          Autor: Carlos Herrera
+       -->
       <script>
       // Deshabilitar el descubrimiento automático de Dropzone
       Dropzone.autoDiscover = false;
@@ -439,6 +433,12 @@
 
 </script>
 
+  <!--
+  Script Conexión a Firebase
+  Este archivo HTML es la página principal del Zazil Admin Dashboard, donde se despliegan las estadísticas y gráficas de ventas y productos. 
+  Incluye metaetiquetas para la configuración de la página, enlaces a hojas de estilo CSS y JS.
+  Autor: Carlos Herrera
+-->
 
 <!-- Firebase SDK -->
 <script type="module">

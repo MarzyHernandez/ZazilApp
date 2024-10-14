@@ -22,19 +22,55 @@ import androidx.navigation.NavHostController
 import com.google.firebase.auth.FirebaseAuth
 import mx.acg.zazil.R
 
+/**
+ * Pantalla de recuperación de contraseña que permite al usuario solicitar un correo
+ * para restablecer su contraseña en la aplicación de Zazil.
+ *
+ * El usuario puede ingresar su correo electrónico, y al presionar el botón "CAMBIAR CONTRASEÑA",
+ * se envía un correo de recuperación a través del servicio de Firebase Authentication.
+ *
+ * En caso de que el correo sea válido, se notifica al usuario mediante un Toast.
+ * Si ocurre un error o el correo está vacío, también se muestra un mensaje.
+ *
+ * @param navController Controlador de navegación para cambiar entre pantallas.
+ *
+ * @author Alberto Cebreros González
+ * @author Melissa Mireles Rendón
+ */
 @Composable
 fun RecuperarContrasenaScreen(navController: NavHostController) {
+    // Fuente personalizada utilizada en toda la pantalla
     val gabaritoFontFamily = FontFamily(Font(R.font.gabarito_regular))
     val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
+    // Estados mutables para almacenar los valores ingresados y los mensajes de error
     var email by remember { mutableStateOf("") }
     var nuevaContrasena by remember { mutableStateOf("") }
     var confirmarContrasena by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf<String?>(null) }
 
+    // Obtener el contexto actual de la aplicación, necesario para mostrar Toasts
     val context = LocalContext.current
 
-    // Función para enviar el correo de recuperación
+    // Botón "Regresar"
+    TextButton(onClick = { navController.navigate("login") }) {
+        Text(
+            text = "< Regresar",
+            fontSize = 14.sp,
+            color = Color.Gray,
+            fontFamily = mx.acg.zazil.view.gabaritoFontFamily,
+            fontWeight = FontWeight.Bold
+        )
+    }
+
+    /**
+     * Función que envía un correo de recuperación de contraseña utilizando Firebase.
+     *
+     * Si el correo es válido, se muestra un Toast indicando que el correo ha sido enviado.
+     * Si ocurre un error, se muestra el mensaje de error en un Toast.
+     *
+     * @param email El correo electrónico al que se enviará el enlace de recuperación.
+     */
     fun enviarCorreoDeRecuperacion(email: String) {
         auth.sendPasswordResetEmail(email)
             .addOnCompleteListener { task ->
@@ -46,8 +82,9 @@ fun RecuperarContrasenaScreen(navController: NavHostController) {
             }
     }
 
+    // Contenido de la pantalla
     Box(modifier = Modifier.fillMaxSize()) {
-        // Imagen decorativa
+        // Imagen logo
         Image(
             painter = painterResource(id = R.drawable.logo),
             contentDescription = "Logo",

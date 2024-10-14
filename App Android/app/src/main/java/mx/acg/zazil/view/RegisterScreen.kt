@@ -55,8 +55,10 @@ import mx.acg.zazil.viewmodel.RegisterViewModel
  */
 @Composable
 fun RegisterScreen(navController: NavHostController) {
+    // Fuente personalizada utilizada en toda la pantalla
     val gabaritoFontFamily = FontFamily(Font(R.font.gabarito_regular))
 
+    // Variables para almacenar los valores ingresados por el usuario
     var nombre by remember { mutableStateOf("") }
     var apellido by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
@@ -65,25 +67,28 @@ fun RegisterScreen(navController: NavHostController) {
     var termsAccepted by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
 
+    // Variables para manejar la visualización de diálogos
     var showDialog by remember { mutableStateOf(false) }
     var showTermsDialog by remember { mutableStateOf(false) }
 
+    // ViewModel para manejar la lógica de registro
     val viewModel: RegisterViewModel = viewModel()
     val registerResult by viewModel.registerResult.observeAsState()
 
     /**
-     * Función para validar la contraseña.
-     *
-     * La contraseña debe tener al menos 6 caracteres e incluir al menos un número.
+     * Valida la contraseña ingresada por el usuario.
+     * La contraseña debe tener al menos 6 caracteres y contener al menos un número.
      *
      * @param password Contraseña a validar.
-     * @return Verdadero si la contraseña es válida, falso en caso contrario.
+     * @return `true` si la contraseña es válida, `false` de lo contrario.
      */
     fun isPasswordValid(password: String): Boolean {
         return password.length >= 6 && password.any { it.isDigit() }
     }
 
+    // Contenido de la pantalla
     Box(modifier = Modifier.fillMaxSize()) {
+        // Logo de la aplicación
         Image(
             painter = painterResource(id = R.drawable.mid_logo),
             contentDescription = "Logo",
@@ -93,6 +98,7 @@ fun RegisterScreen(navController: NavHostController) {
             contentScale = ContentScale.Fit
         )
 
+        // Columna que contiene el formulario de registro
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -100,6 +106,7 @@ fun RegisterScreen(navController: NavHostController) {
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.Center
         ) {
+            // Título principal de la pantalla
             Text(
                 text = "Regístrate",
                 fontSize = 42.sp,
@@ -107,6 +114,7 @@ fun RegisterScreen(navController: NavHostController) {
                 fontFamily = gabaritoFontFamily,
                 color = Color.Black
             )
+            // Subtítulo que da la bienvenida al usuario
             Text(
                 text = "Te damos la bienvenida a Zazil",
                 fontSize = 18.sp,
@@ -122,6 +130,7 @@ fun RegisterScreen(navController: NavHostController) {
                     .fillMaxSize()
                     .padding(16.dp)
             ) {
+                // Instrucción al usuario para completar los campos
                 Text(
                     text = "Completa tus datos",
                     fontSize = 16.sp,
@@ -154,6 +163,8 @@ fun RegisterScreen(navController: NavHostController) {
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
+
+                // Campo de texto para el apellido
                 BasicTextField(
                     value = apellido,
                     onValueChange = { apellido = it },
@@ -176,6 +187,8 @@ fun RegisterScreen(navController: NavHostController) {
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
+
+                // Campo de texto para el correo
                 BasicTextField(
                     value = email,
                     onValueChange = { email = it },
@@ -198,6 +211,8 @@ fun RegisterScreen(navController: NavHostController) {
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
+
+                // Campo de texto para el teléfono
                 BasicTextField(
                     value = telefono,
                     onValueChange = { telefono = it },
@@ -220,12 +235,15 @@ fun RegisterScreen(navController: NavHostController) {
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
+
+                // Campo de texto para la contraseña
                 BasicTextField(
                     value = password,
                     onValueChange = {
                         password = it
                         if (!isPasswordValid(it)) {
-                            errorMessage = "La contraseña debe tener al menos 6 caracteres e incluir al menos un número."
+                            errorMessage =
+                                "La contraseña debe tener al menos 6 caracteres e incluir al menos un número."
                         } else {
                             errorMessage = null
                         }
@@ -251,15 +269,28 @@ fun RegisterScreen(navController: NavHostController) {
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                Row(verticalAlignment = Alignment.CenterVertically) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
                     Checkbox(
                         checked = termsAccepted,
                         onCheckedChange = { termsAccepted = it },
                         colors = CheckboxDefaults.colors(checkedColor = Color(0xFFE27F61))
                     )
-                    Text(text = "Acepto", fontSize = 14.sp, fontFamily = gabaritoFontFamily, color = Color.Black)
+                    Text(
+                        text = "Acepto",
+                        fontSize = 14.sp,
+                        fontFamily = gabaritoFontFamily,
+                        color = Color.Black
+                    )
                     TextButton(onClick = { showTermsDialog = true }) {
-                        Text(text = "términos y condiciones", color = Color(0xFFE27F61), fontSize = 14.sp)
+                        Text(
+                            text = "términos y condiciones",
+                            color = Color(0xFFE27F61),
+                            fontSize = 14.sp
+                        )
                     }
                 }
 
@@ -280,74 +311,123 @@ fun RegisterScreen(navController: NavHostController) {
 
                 Spacer(modifier = Modifier.height(16.dp))
 
+                // Botón de registro
                 Button(
                     onClick = {
                         if (!termsAccepted) {
                             errorMessage = "Debes aceptar los términos y condiciones"
                         } else if (!isPasswordValid(password)) {
-                            errorMessage = "La contraseña debe tener al menos 6 caracteres y un número"
+                            errorMessage =
+                                "La contraseña debe tener al menos 6 caracteres y un número"
                         } else {
                             errorMessage = null
                             viewModel.registerUser(
-                                User(email = email, password = password, nombres = nombre, apellidos = apellido, telefono = telefono)
+                                User(
+                                    email = email,
+                                    password = password,
+                                    nombres = nombre,
+                                    apellidos = apellido,
+                                    telefono = telefono
+                                )
                             )
                         }
                     },
                     modifier = Modifier.fillMaxWidth(),
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFEBB7A7))
                 ) {
-                    Text(text = "REGISTRAR", fontFamily = gabaritoFontFamily, fontWeight = FontWeight.Bold)
+                    Text(
+                        text = "REGISTRAR",
+                        fontFamily = gabaritoFontFamily,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+                Spacer(modifier = Modifier.height(16.dp)) // Agregar espacio para separar del texto inferior
+
+                // Texto para los usuarios que ya tienen cuenta
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "¿Ya tienes cuenta?",
+                        fontSize = 16.sp,
+                        fontFamily = gabaritoFontFamily
+                    )
+                    TextButton(onClick = { navController.navigate("login") }) {
+                        Text(
+                            text = "Inicia sesión",
+                            color = Color(0xFFE27F61),
+                            fontSize = 16.sp,
+                            fontFamily = gabaritoFontFamily
+                        )
+                    }
                 }
             }
         }
-    }
 
-    // Diálogo de registro exitoso
-    if (showDialog) {
-        AlertDialog(
-            onDismissRequest = { showDialog = false },
-            title = { Text(text = "Registro Exitoso", color = Color(0xFFE17F61)) },
-            text = { Text(text = "Tu cuenta ha sido creada exitosamente.", color = Color(0xFF191919)) },
-            confirmButton = {
-                Box(
-                    modifier = Modifier.fillMaxWidth(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Button(
-                        onClick = {
-                            navController.navigate("login")
-                            showDialog = false
-                        },
-                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFE17F61))
+        // Diálogo de registro exitoso
+        if (showDialog) {
+            AlertDialog(
+                onDismissRequest = { showDialog = false },
+                title = { Text(text = "Registro Exitoso", color = Color(0xFFE17F61)) },
+                text = {
+                    Text(
+                        text = "Tu cuenta ha sido creada exitosamente.",
+                        color = Color(0xFF191919)
+                    )
+                },
+                confirmButton = {
+                    Box(
+                        modifier = Modifier.fillMaxWidth(),
+                        contentAlignment = Alignment.Center
                     ) {
-                        Text(text = "Iniciar sesión", color = Color.White)
+                        Button(
+                            onClick = {
+                                navController.navigate("login")
+                                showDialog = false
+                            },
+                            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFE17F61))
+                        ) {
+                            Text(text = "Iniciar sesión", color = Color.White)
+                        }
+                    }
+                },
+                containerColor = Color.White
+            )
+        }
+
+
+        // Diálogo de términos y condiciones
+        if (showTermsDialog) {
+            AlertDialog(
+                onDismissRequest = { showTermsDialog = false },
+                title = {
+                    Text(
+                        text = "Términos y Condiciones",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                },
+                text = {
+                    Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                        Text(
+                            text = "Al utilizar nuestra aplicación...",
+                            fontSize = 14.sp,
+                            lineHeight = 22.sp,
+                            textAlign = TextAlign.Justify
+                        )
+                    }
+                },
+                confirmButton = {
+                    TextButton(onClick = { showTermsDialog = false }) {
+                        Text("Cerrar", color = Color(0xFFE27F61))
                     }
                 }
-            },
-            containerColor = Color.White
-        )
-    }
-
-    // Diálogo de términos y condiciones
-    if (showTermsDialog) {
-        AlertDialog(
-            onDismissRequest = { showTermsDialog = false },
-            title = { Text(text = "Términos y Condiciones", fontSize = 18.sp, fontWeight = FontWeight.Bold) },
-            text = {
-                Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-                    Text(
-                        text = "Al utilizar nuestra aplicación...",
-                        fontSize = 14.sp,
-                        lineHeight = 22.sp,
-                        textAlign = TextAlign.Justify
-                    )
-                }
-            },
-            confirmButton = {
-                TextButton(onClick = { showTermsDialog = false }) {
-                    Text("Cerrar", color = Color(0xFFE27F61))
-                }
-            }
-        )
+            )
+        }
     }
 }
+
+
+

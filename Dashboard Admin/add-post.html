@@ -1,3 +1,9 @@
+<!--
+  add-post.html
+  Este archivo HTML es la página donde se añaden y ven las publicaciones al blog de Zazil.
+  Autor: Carlos Herrera
+-->
+
 <!doctype html>
 <html lang="en">
 
@@ -11,10 +17,6 @@
     <meta name="author" content="Bootstrap Gallery" />
     <link rel="canonical" href="https://www.bootstrap.gallery/">
     <meta property="og:url" content="https://www.bootstrap.gallery">
-    <meta property="og:title" content="Admin Templates - Dashboard Templates | Bootstrap Gallery">
-    <meta property="og:description" content="Marketplace for Bootstrap Admin Dashboards">
-    <meta property="og:type" content="Website">
-    <meta property="og:site_name" content="Bootstrap Gallery">
     <link rel="shortcut icon" href="assets/images/logo_zazil.png">
 
     <!-- Title -->
@@ -48,18 +50,6 @@
 
   <body>
 
-    <!-- Loading wrapper start -->
-    <!-- <div id="loading-wrapper">
-			<div class="spinner">
-                <div class="line1"></div>
-				<div class="line2"></div>
-				<div class="line3"></div>
-				<div class="line4"></div>
-				<div class="line5"></div>
-				<div class="line6"></div>
-            </div>
-		</div> -->
-    <!-- Loading wrapper end -->
 
     <!-- Page wrapper start -->
     <div class="page-wrapper">
@@ -316,6 +306,9 @@
         });
     
         // Función para mostrar las publicaciones en tarjetas
+        // Autor: Carlos Herrera
+        // Parametros: publicaciones (array de objetos publicaciones)
+        // Retorno: Tarhjetas con publicaciones
         function mostrarPublicaciones(posts) {
             const contenedorPublicaciones = document.querySelector('.faq-container');
             contenedorPublicaciones.innerHTML = '';
@@ -329,25 +322,25 @@
                 card.id = `post-${post.id}`;
     
                 card.innerHTML = `
-    <div class="row">
-        <div class="col-md-8 col-12" style="padding: 3%;">
-            <h5>${post.titulo}</h5>
-            <p>${post.contenido}</p>
-            <p><strong>Autor:</strong> ${post.autor}</p>
-            <p><strong>Categoría:</strong> ${post.categoria}</p>
-            <p><strong>Fecha:</strong> ${formattedDate}</p>
-            <p><strong>Me gusta:</strong> ${post.meGusta}</p>
-        </div>
-        <div class="col-md-4 col-12 d-flex justify-content-center">
-            <img src="${post.imagen}" alt="Imagen" class="img-fluid img-responsive" style="max-width: 100%; margin-top: 20px; margin-right:20%; border-radius: 1.5rem;" />
-        </div>
-    </div>
-    <button type="button" class="btn btn-danger delete-button" style="margin:3%" data-id="${post.id}">
-        <span class="icon">
-            <i class="bi bi-trash"></i>
-        </span>
-    </button>
-`;
+                                    <div class="row">
+                                        <div class="col-md-8 col-12" style="padding: 3%;">
+                                            <h5>${post.titulo}</h5>
+                                            <p>${post.contenido}</p>
+                                            <p><strong>Autor:</strong> ${post.autor}</p>
+                                            <p><strong>Categoría:</strong> ${post.categoria}</p>
+                                            <p><strong>Fecha:</strong> ${formattedDate}</p>
+                                            <p><strong>Me gusta:</strong> ${post.meGusta}</p>
+                                        </div>
+                                        <div class="col-md-4 col-12 d-flex justify-content-center">
+                                            <img src="${post.imagen}" alt="Imagen" class="img-fluid img-responsive" style="max-width: 100%; margin-top: 20px; margin-right:20%; border-radius: 1.5rem;" />
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn btn-danger delete-button" style="margin:3%" data-id="${post.id}">
+                                        <span class="icon">
+                                            <i class="bi bi-trash"></i>
+                                        </span>
+                                    </button>
+                                `;
 
 
     
@@ -362,6 +355,9 @@
         }
     
         // Función GET para obtener las publicaciones
+        //Autor: Carlos Herrera
+        // Parametros: Ninguno
+        // Retorno: Obtiene publicaciones y muestra errores si los hay.
         async function getPublicaciones() {
             try {
                 const response = await fetch('https://getallpost-dztx2pd2na-uc.a.run.app/');
@@ -373,6 +369,9 @@
         }
     
         // Función DELETE para eliminar una publicación
+        // Autor: Carlos Herrera
+        // Parámetros: ID de la publicación a eliminar
+        // Retorno: Elimina la publicación y muestra un mensaje de éxito o error
         async function deletePost(id) {
             const data = { id: parseInt(id) }; // Convertir el id a número
     
@@ -402,6 +401,9 @@
         document.addEventListener('DOMContentLoaded', getPublicaciones);
     
         // Función para publicar la publicación
+        // Autor: Carlos Herrera
+        // Parámetros: Ninguno
+        // Retorno: Publica la publicación y muestra un mensaje de éxito o error
         async function postPublicacion() {
             const titulo = document.getElementById('inputTitulo').value;
             const contenido = document.getElementById('inputContenido').value;
@@ -471,7 +473,13 @@
         }
     </script>
     
-    
+      <!--
+  Script Conexión a Firebase
+  Este archivo HTML es la página principal del Zazil Admin Dashboard, donde se despliegan las estadísticas y gráficas de ventas y productos. 
+  Incluye metaetiquetas para la configuración de la página, enlaces a hojas de estilo CSS y JS.
+  Autor: Carlos Herrera
+-->
+
     <!-- Firebase SDK -->
   <script type="module">
     // Firebase SDK imports
