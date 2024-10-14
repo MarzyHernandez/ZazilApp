@@ -12,7 +12,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 // ViewModel para manejar la lógica de obtención de datos
-class FAQViewModel : ViewModel() {
+class   FAQViewModel : ViewModel() {
     private val _faqItems = mutableStateOf<List<FAQItem>>(emptyList())
     val faqItems: State<List<FAQItem>> = _faqItems
 
