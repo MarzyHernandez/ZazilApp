@@ -102,7 +102,7 @@ fun ProfileScreen(
                     modifier = Modifier.padding(horizontal = 16.dp)
                 )
             } ?: run {
-                CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
+                CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally), color = Color(0xFFE17F61))
             }
 
             Spacer(modifier = Modifier.height(16.dp))

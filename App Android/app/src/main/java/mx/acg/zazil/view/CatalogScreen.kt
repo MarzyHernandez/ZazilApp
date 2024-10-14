@@ -34,6 +34,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.*
 import androidx.compose.ui.text.input.TextFieldValue
 import mx.acg.zazil.R
+import java.util.Locale
 
 /**
  * Pantalla de catálogo que muestra los productos disponibles.
@@ -152,7 +153,7 @@ fun CatalogScreen(
                             items(filteredProducts) { product ->
                                 ProductItem(
                                     title = product.nombre,
-                                    price = "$${product.precio_rebajado}",
+                                    price = "$${String.format(Locale.US, "%.2f", product.precio_rebajado)}",
                                     imageUrl = product.imagen,
                                     productId = product.id,
                                     onClick = { navController.navigate("productDetail/${product.id}") }

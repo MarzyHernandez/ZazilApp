@@ -320,7 +320,7 @@ fun ProductDetailScreen(
     } ?: run {
         // Muestra un indicador de "Cargando producto..." mientras se obtiene el producto
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            CircularProgressIndicator()
+            CircularProgressIndicator(color = Color(0xFFE17F61))
         }
     }
 }

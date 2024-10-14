@@ -1,5 +1,7 @@
 package mx.acg.zazil.view
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -25,6 +27,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
 import mx.acg.zazil.R
 import mx.acg.zazil.viewmodel.PostViewModel
+import java.time.LocalDate
 
 /**
  * Pantalla principal del blog que muestra una lista de publicaciones.
@@ -37,6 +40,7 @@ import mx.acg.zazil.viewmodel.PostViewModel
  * @author Alberto Cebreros González
  * @author Melissa Mireles Rendón
  */
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun BlogScreen(
     postViewModel: PostViewModel = viewModel()  // Usamos el ViewModel para cargar los posts
@@ -49,12 +53,22 @@ fun BlogScreen(
         postViewModel.loadPosts()
     }
 
+    // Ordenamos las publicaciones por fecha, de la más reciente a la menos reciente
+    val sortedPosts = posts.sortedByDescending { post ->
+        // Convierte la fecha de la publicación a un formato de fecha para ordenar
+        try {
+            LocalDate.parse(post.fecha.substring(0, 10)) // Suponiendo que el formato de fecha sea YYYY-MM-DD
+        } catch (e: Exception) {
+            LocalDate.MIN // En caso de error en la conversión, colocar una fecha mínima
+        }
+    }
+
     // Pantalla desplazable con encabezado
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
-            .verticalScroll(rememberScrollState())  // Hacer la pantalla desplazable
+            .verticalScroll(rememberScrollState())
     ) {
         Column(
             modifier = Modifier
@@ -86,7 +100,7 @@ fun BlogScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            if (posts.isEmpty()) {
+            if (sortedPosts.isEmpty()) {
                 // Mostrar el loader debajo del título "Publicaciones" mientras las publicaciones están cargando
                 Box(
                     modifier = Modifier
@@ -101,7 +115,7 @@ fun BlogScreen(
                 }
             } else {
                 // Mostrar los posts obtenidos de la API
-                posts.forEach { post ->
+                sortedPosts.forEach { post ->
                     BlogPost(
                         title = post.titulo,
                         author = post.autor,
