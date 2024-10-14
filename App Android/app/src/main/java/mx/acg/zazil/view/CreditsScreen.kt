@@ -43,10 +43,20 @@ fun CreditsScreen(navController: NavHostController) {
         // Sección superior con el logo de Zazil y fondo degradado
         HeaderWithGradientLogo()
 
-        Spacer(modifier = Modifier.height(16.dp))
+        // Título de la sección Créditos
+        Text(
+            text = "Créditos",
+            fontSize = 28.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color(0xFFEBB7A6),
+            modifier = Modifier
+                .fillMaxWidth() // Ocupa el ancho completo disponible
+                .wrapContentWidth(Alignment.CenterHorizontally) // Centra el texto horizontalmente
+        )
+
         // Botón "Regresar"
         TextButton(
-            onClick = { navController.navigate("profile") },
+            onClick = { navController.navigate("configuracion") },
             modifier = Modifier.padding(top = 16.dp)
         ) {
             Text(text = "< Regresar", color = Color.Gray, fontWeight = FontWeight.Bold)

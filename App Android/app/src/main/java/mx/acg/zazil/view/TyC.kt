@@ -49,7 +49,9 @@ fun TyC(navController: NavHostController, modifier: Modifier = Modifier) {
                         fontSize = 28.sp,
                         color = Color(0xFF191919),
                         fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(start = 12.dp) // Espacio a la izquierda
+                        modifier = Modifier
+                            .fillMaxWidth() // Ocupa el ancho completo disponible
+                            .wrapContentWidth(Alignment.CenterHorizontally) // Centra el texto horizontalmente
                     )
                 }
             }
