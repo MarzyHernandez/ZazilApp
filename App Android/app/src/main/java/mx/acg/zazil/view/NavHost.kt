@@ -177,6 +177,8 @@ fun AppNavHost(
                 UpdateDataScreen(navController = navController)  // Aquí llamamos a la pantalla de ActualizarDatos
             }
 
+            composable("privacyPolicy") { PrivacyPolicyScreen(navController) }
+
             composable("TyC") { TyC(navController) }
 
             composable("aboutUs") { AboutUsScreen(navController) }

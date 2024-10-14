@@ -150,7 +150,9 @@ fun SettingsScreen(
                     navController.navigate("TyC")
                 }
 
-                SettingOption(title = "Aviso de Privacidad", iconResId = R.drawable.ic_privacy)
+                SettingOption(title = "Política de Privacidad", iconResId = R.drawable.ic_privacy){
+                    navController.navigate("privacyPolicy")
+                }
 
                 SettingOption(title = "Créditos", iconResId = R.drawable.ic_credits) {
                     navController.navigate("credits")
