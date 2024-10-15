@@ -7,8 +7,12 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBackIos
+import androidx.compose.material.icons.filled.ArrowForwardIos
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -21,7 +25,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import kotlinx.coroutines.launch
 import mx.acg.zazil.R
+import mx.acg.zazil.model.TeamMember
 
 /**
  * Pantalla de créditos que muestra el logo de Zazil,
@@ -29,8 +35,9 @@ import mx.acg.zazil.R
  * y la mención a la universidad.
  *
  * @param navController Controlador de navegación para moverse entre pantallas.
- * @author Melissa Mireles Rendón
+ *
  * @author Alberto Cebreros González
+ * @author Melissa Mireles Rendón
  */
 @Composable
 fun CreditsScreen(navController: NavHostController) {
@@ -74,6 +81,9 @@ fun CreditsScreen(navController: NavHostController) {
 /**
  * Sección superior que contiene el logo de Zazil y un fondo degradado suave.
  * Utiliza un degradado que va de un color rosa claro hacia un gris suave.
+ *
+ * @author Alberto Cebreros González
+ * @author Melissa Mireles Rendón
  */
 @Composable
 fun HeaderWithGradientLogo() {
@@ -102,28 +112,99 @@ fun HeaderWithGradientLogo() {
  * Sección que muestra los integrantes del equipo en tarjetas tipo "story"
  * que pueden ser deslizadas horizontalmente. Cada tarjeta incluye la imagen
  * del integrante, su nombre y su correo electrónico.
+ *
+ * @author Melissa Mireles Rendón
+ * @author Alberto Cebreros González
  */
 @Composable
 fun StoryTeamSection() {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp) // Añade espacio horizontal
-            .horizontalScroll(rememberScrollState()), // Habilita el desplazamiento horizontal
-        horizontalArrangement = Arrangement.spacedBy(16.dp) // Espacio entre las tarjetas
-    ) {
-        // Lista de integrantes del equipo
-        val teamMembers = listOf(
-            TeamMember("ALMA CARPIO", "A01798523@tec.mx", R.drawable.alma),
-            TeamMember("ALBERTO CEBREROS", "A01798671@tec.mx", R.drawable.alberto),
-            TeamMember("MARIANA HERNÁNDEZ", "A01799263@tec.mx", R.drawable.mariana),
-            TeamMember("CARLOS HERRERA", "A01798203@tec.mx", R.drawable.carlos),
-            TeamMember("MELISSA MIRELES", "A01379736@tec.mx", R.drawable.melissa)
-        )
+    val scrollState = rememberScrollState()
+    val coroutineScope = rememberCoroutineScope()
 
-        // Crear las tarjetas estilo "story" para cada integrante
-        teamMembers.forEach { member ->
-            TeamMemberStoryCard(member)
+    Column(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp) // Añade espacio horizontal
+                .horizontalScroll(scrollState), // Habilita el desplazamiento horizontal
+            horizontalArrangement = Arrangement.spacedBy(16.dp), // Espacio entre las tarjetas
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            // Lista de integrantes del equipo
+            val teamMembers = listOf(
+                TeamMember("ALMA CARPIO", "A01798523@tec.mx", R.drawable.alma),
+                TeamMember("ALBERTO CEBREROS", "A01798671@tec.mx", R.drawable.alberto),
+                TeamMember("MARIANA HERNÁNDEZ", "A01799263@tec.mx", R.drawable.mariana),
+                TeamMember("CARLOS HERRERA", "A01798203@tec.mx", R.drawable.carlos),
+                TeamMember("MELISSA MIRELES", "A01379736@tec.mx", R.drawable.melissa)
+            )
+
+            // Crear las tarjetas estilo "story" para cada integrante
+            teamMembers.forEach { member ->
+                TeamMemberStoryCard(member)
+            }
+        }
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        // Flechas indicadoras de scroll y barra debajo de las tarjetas
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            // Flecha izquierda indicadora de scroll
+            IconButton(
+                onClick = {
+                    coroutineScope.launch {
+                        val newValue = (scrollState.value - 300).coerceAtLeast(0)
+                        scrollState.animateScrollTo(newValue)
+                    }
+                }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.ArrowBackIos,
+                    contentDescription = "Scroll Left",
+                    tint = Color.Gray,
+                    modifier = Modifier.size(24.dp).padding(start = 8.dp)
+                )
+            }
+
+            // Barra indicadora del desplazamiento horizontal
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .height(8.dp)
+                    .background(Color(0xFFE0E0E0)) // Color de fondo de la barra
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth(fraction = (scrollState.value.toFloat() / scrollState.maxValue.toFloat()).coerceIn(0f, 1f))
+                        .height(8.dp)
+                        .background(Color(0xFFEBB7A6)) // Color del indicador
+                )
+            }
+
+            // Flecha derecha indicadora de scroll
+            IconButton(
+                onClick = {
+                    coroutineScope.launch {
+                        val newValue = (scrollState.value + 300).coerceAtMost(scrollState.maxValue)
+                        scrollState.animateScrollTo(newValue)
+                    }
+                }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.ArrowForwardIos,
+                    contentDescription = "Scroll Right",
+                    tint = Color.Gray,
+                    modifier = Modifier.size(24.dp).padding(end = 8.dp)
+                )
+            }
         }
     }
 }
@@ -131,7 +212,11 @@ fun StoryTeamSection() {
 /**
  * Tarjeta individual tipo "story" para cada integrante del equipo.
  * Muestra la imagen, nombre y correo del integrante.
+ *
  * @param member Datos del integrante (nombre, correo, imagen).
+ *
+ * @author Melissa Mireles Rendón
+ * @author Alberto Cebreros González
  */
 @Composable
 fun TeamMemberStoryCard(member: TeamMember) {
@@ -184,17 +269,10 @@ fun TeamMemberStoryCard(member: TeamMember) {
 }
 
 /**
- * Modelo de datos que representa a un miembro del equipo.
- * Incluye el nombre del integrante, su correo electrónico y el recurso de imagen.
- */
-data class TeamMember(
-    val name: String, // Nombre del integrante
-    val email: String, // Correo del integrante
-    val imageRes: Int // Recurso de la imagen
-)
-
-/**
  * Sección inferior que contiene el texto de agradecimiento y mención a Campus Edo Mex.
+ *
+ * @author Alberto Cebreros González
+ * @author Melissa Mireles Rendón
  */
 @Composable
 fun FooterSection() {
@@ -204,9 +282,8 @@ fun FooterSection() {
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally // Alineación centrada
     ) {
-        Spacer(modifier = Modifier.height(30.dp)) // Espacio adicional antes del texto
 
-        // Texto de agradecimiento
+        // Texto de créditos
         Text(
             text = "Desarrollado por estudiantes del programa de Ingeniería en Tecnologías Computacionales del Instituto Tecnológico y de Estudios Superiores de Monterrey®, Campus Estado de México.",
             fontSize = 12.sp, // Tamaño de fuente
