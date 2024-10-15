@@ -169,7 +169,7 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel = vi
                     decorationBox = { innerTextField ->
                         Column {
                             Text(
-                                text = "Email",
+                                text = "Correo",
                                 fontSize = 14.sp,
                                 color = Color.Gray
                             )
