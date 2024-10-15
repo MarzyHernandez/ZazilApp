@@ -10,7 +10,6 @@ import kotlinx.coroutines.launch
 import mx.acg.zazil.model.Cart
 import mx.acg.zazil.model.CartRetrofitInstance
 import mx.acg.zazil.model.CartUpdate
-import okhttp3.ResponseBody
 import retrofit2.Response
 
 /**
@@ -108,4 +107,45 @@ class CartViewModel : ViewModel() {
             }
         }
     }
+
+    /**
+     * Elimina un producto del carrito estableciendo su cantidad a 0.
+     *
+     * @param productId El ID del producto a eliminar.
+     * @param uid El ID único del usuario.
+     */
+    fun deleteFromCart(productId: Int, uid: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                // Cargar el carrito para obtener la cantidad actual del producto
+                val currentCart = CartRetrofitInstance.cartApi.getCartByUid(uid)
+
+                // Encuentra el producto en el carrito
+                val productToRemove = currentCart.productos.find { it.id_producto == productId }
+                val currentQuantity = productToRemove?.cantidad ?: 0
+
+                // Si la cantidad es mayor a 0, se puede eliminar
+                if (currentQuantity > 0) {
+                    val cartUpdate = CartUpdate(
+                        uid = uid,
+                        id_producto = productId,
+                        cantidad = -currentQuantity // Usar cantidad negativa para eliminar el producto
+                    )
+                    val response = CartRetrofitInstance.cartApi.updateCart(cartUpdate)
+                    if (response.isSuccessful) {
+                        Log.d("CartViewModel", "Producto eliminado del carrito: $productId")
+                    } else {
+                        Log.e("CartViewModel", "Error en la respuesta: ${response.errorBody()?.string()}")
+                    }
+                } else {
+                    Log.d("CartViewModel", "No hay cantidad del producto $productId para eliminar.")
+                }
+
+                loadCartByUid(uid) // Recargar el carrito después de la eliminación
+            } catch (e: Exception) {
+                Log.e("CartViewModel", "Error eliminando producto del carrito", e)
+            }
+        }
+    }
+
 }

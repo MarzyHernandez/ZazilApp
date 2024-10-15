@@ -126,6 +126,7 @@ fun PaymentScreen(
                 text = "Finalizar compra",
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
+                fontFamily = gabaritoFontFamily,
                 color = Color(0xFF191919),
                 modifier = Modifier
                     .align(Alignment.CenterStart)
@@ -148,6 +149,7 @@ fun PaymentScreen(
                     text = "DIRECCIÓN DE ENVÍO",
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
+                    fontFamily = gabaritoFontFamily,
                     color = Color.Gray
                 )
 
@@ -158,6 +160,7 @@ fun PaymentScreen(
                     text = "$calle, $numeroInterior, $colonia, $codigoPostal, $ciudad, $estado, $pais",
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
+                    fontFamily = gabaritoFontFamily,
                     color = Color(0xFF191919)
                 )
 
@@ -181,6 +184,7 @@ fun PaymentScreen(
                         Text(
                             text = "EDITAR",
                             fontSize = 12.sp,
+                            fontFamily = gabaritoFontFamily,
                             color = Color(0xFFE17F61),
                             textDecoration = TextDecoration.Underline
                         )
@@ -202,6 +206,7 @@ fun PaymentScreen(
                 text = "TOTAL DEL PEDIDO",
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
+                fontFamily = gabaritoFontFamily,
                 color = Color(0xFF191919)
             )
 
@@ -209,6 +214,7 @@ fun PaymentScreen(
                 text = "$$total",
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
+                fontFamily = gabaritoFontFamily,
                 color = Color(0xFF191919)
             )
         }
@@ -234,6 +240,7 @@ fun PaymentScreen(
                 fontSize = 18.sp,
                 color = Color.White,
                 textAlign = TextAlign.Center,
+                fontFamily = gabaritoFontFamily,
                 modifier = Modifier.fillMaxWidth()
             )
         }
@@ -252,8 +259,8 @@ fun PaymentScreen(
     if (showDialog) {
         AlertDialog(
             onDismissRequest = { showDialog = false },
-            title = { Text(text = "Compra realizada con éxito", fontWeight = FontWeight.Bold) },
-            text = { Text(text = "Tu compra ha sido completada correctamente.") },
+            title = { Text(text = "Compra realizada con éxito", fontWeight = FontWeight.Bold, fontFamily = gabaritoFontFamily) },
+            text = { Text(text = "Tu compra ha sido completada correctamente.", fontFamily = gabaritoFontFamily) },
             confirmButton = {
                 Button(
                     onClick = {
@@ -266,7 +273,7 @@ fun PaymentScreen(
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFE17F61))
                 ) {
-                    Text(text = "Ir a mis compras", color = Color.White)
+                    Text(text = "Ir a mis compras", color = Color.White, fontFamily = gabaritoFontFamily)
                 }
             },
             containerColor = Color.White

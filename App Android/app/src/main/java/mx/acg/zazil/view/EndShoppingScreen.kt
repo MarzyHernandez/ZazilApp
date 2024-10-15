@@ -79,6 +79,7 @@ fun EndShoppingScreen(
                 text = "Finalizar compra",
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
+                fontFamily = gabaritoFontFamily,
                 color = Color(0xFF191919),
                 modifier = Modifier
                     .align(Alignment.CenterStart)
@@ -94,7 +95,8 @@ fun EndShoppingScreen(
                 text = "< Regresar",
                 fontSize = 14.sp,
                 color = Color.Gray,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                fontFamily = gabaritoFontFamily
             )
         }
 
@@ -104,6 +106,7 @@ fun EndShoppingScreen(
                 text = "Datos del cliente",
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
+                fontFamily = gabaritoFontFamily,
                 color = Color(0xFF191919),
                 modifier = Modifier.padding(8.dp)
             )
@@ -128,7 +131,7 @@ fun EndShoppingScreen(
                     .padding(vertical = 8.dp, horizontal = 16.dp),
                 decorationBox = { innerTextField ->
                     Column {
-                        Text("Calle", fontSize = 14.sp, color = Color.Gray)
+                        Text("Calle y número", fontSize = 14.sp, color = Color.Gray, fontFamily = gabaritoFontFamily)
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -150,7 +153,7 @@ fun EndShoppingScreen(
                     .padding(vertical = 8.dp, horizontal = 16.dp),
                 decorationBox = { innerTextField ->
                     Column {
-                        Text("Número Interior (Opcional)", fontSize = 14.sp, color = Color.Gray)
+                        Text("Número Interior (Opcional)", fontSize = 14.sp, color = Color.Gray, fontFamily = gabaritoFontFamily)
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -172,7 +175,7 @@ fun EndShoppingScreen(
                     .padding(vertical = 8.dp, horizontal = 16.dp),
                 decorationBox = { innerTextField ->
                     Column {
-                        Text("Colonia", fontSize = 14.sp, color = Color.Gray)
+                        Text("Colonia", fontSize = 14.sp, color = Color.Gray, fontFamily = gabaritoFontFamily)
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -194,7 +197,7 @@ fun EndShoppingScreen(
                     .padding(vertical = 8.dp, horizontal = 16.dp),
                 decorationBox = { innerTextField ->
                     Column {
-                        Text("Código Postal", fontSize = 14.sp, color = Color.Gray)
+                        Text("Código Postal", fontSize = 14.sp, color = Color.Gray, fontFamily = gabaritoFontFamily)
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -217,7 +220,7 @@ fun EndShoppingScreen(
                     .padding(vertical = 8.dp, horizontal = 16.dp),
                 decorationBox = { innerTextField ->
                     Column {
-                        Text("Ciudad", fontSize = 14.sp, color = Color.Gray)
+                        Text("Ciudad", fontSize = 14.sp, color = Color.Gray, fontFamily = gabaritoFontFamily)
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -239,7 +242,7 @@ fun EndShoppingScreen(
                     .padding(vertical = 8.dp, horizontal = 16.dp),
                 decorationBox = { innerTextField ->
                     Column {
-                        Text("Estado", fontSize = 14.sp, color = Color.Gray)
+                        Text("Estado", fontSize = 14.sp, color = Color.Gray, fontFamily = gabaritoFontFamily)
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -261,7 +264,7 @@ fun EndShoppingScreen(
                     .padding(vertical = 8.dp, horizontal = 16.dp),
                 decorationBox = { innerTextField ->
                     Column {
-                        Text("País", fontSize = 14.sp, color = Color.Gray)
+                        Text("País", fontSize = 14.sp, color = Color.Gray, fontFamily = gabaritoFontFamily)
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -281,7 +284,8 @@ fun EndShoppingScreen(
                 Text(
                     text = it,
                     color = Color.Red,
-                    modifier = Modifier.padding(horizontal = 16.dp)
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    fontFamily = gabaritoFontFamily
                 )
             }
 
@@ -321,6 +325,7 @@ fun EndShoppingScreen(
                     fontSize = 18.sp,
                     color = Color.White,
                     textAlign = TextAlign.Center,
+                    fontFamily = gabaritoFontFamily,
                     modifier = Modifier.fillMaxWidth()
                 )
             }
