@@ -169,6 +169,7 @@ fun CartScreen(
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color.Gray,
+                        fontFamily = gabaritoFontFamily,
                         modifier = Modifier.align(Alignment.CenterHorizontally)
                     )
                 } else {
@@ -318,6 +319,27 @@ fun CartItemRow(
                     modifier = Modifier.size(48.dp)
                 )
             }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // Botón borrar producto
+            IconButton(
+                onClick = {
+                    if (uid != null) {
+                        cartViewModel.deleteFromCart(productId, uid)
+                    } else {
+                        Log.e("CartItemRow", "Error: No se pudo obtener el UID del usuario.")
+                    }
+                },
+                modifier = Modifier.size(36.dp)
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_delete_product),
+                    contentDescription = "Borrar",
+                    modifier = Modifier.size(28.dp)
+                )
+            }
+
         }
     }
 }
@@ -387,7 +409,7 @@ fun CartTotal(navController: NavHostController, total: Double) {
                     .height(52.dp)
             ) {
                 Text(
-                    text = "CONTINUAR",
+                    text = "COMPRAR",
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
                     fontFamily = gabaritoFontFamily,
