@@ -58,6 +58,7 @@ fun TyC(navController: NavHostController, modifier: Modifier = Modifier) {
                     fontSize = 28.sp,
                     color = Color(0xFF191919),
                     fontWeight = FontWeight.Bold,
+                    fontFamily = gabaritoFontFamily,
                     modifier = Modifier
                         .fillMaxWidth() // Ocupa el ancho completo disponible
                         .wrapContentWidth(Alignment.CenterHorizontally) // Centra el texto horizontalmente
@@ -70,7 +71,7 @@ fun TyC(navController: NavHostController, modifier: Modifier = Modifier) {
             onClick = { navController.navigate("configuracion") },
             modifier = Modifier.padding(top = 16.dp)
         ) {
-            Text(text = "< Regresar", color = Color.Gray, fontWeight = FontWeight.Bold)
+            Text(text = "< Regresar", color = Color.Gray, fontWeight = FontWeight.Bold, fontFamily = gabaritoFontFamily)
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -125,6 +126,7 @@ fun TyCCard(title: String, content: String) {
                 text = title,
                 style = Typography.bodyLarge.copy(
                     fontWeight = FontWeight.Medium,
+                    fontFamily = gabaritoFontFamily,
                     color = Color(0xFFE17F61)
                 ),
                 fontSize = 18.sp
@@ -134,6 +136,7 @@ fun TyCCard(title: String, content: String) {
                 text = content,
                 style = Typography.bodyMedium,
                 fontSize = 14.sp,
+                fontFamily = gabaritoFontFamily,
                 lineHeight = 20.sp,
                 color = Color(0xFF333333),
                 textAlign = TextAlign.Justify  // Justificación del texto

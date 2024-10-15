@@ -59,6 +59,7 @@ fun PrivacyPolicyScreen(navController: NavHostController, modifier: Modifier = M
                     fontSize = 28.sp,
                     color = Color(0xFF191919),
                     fontWeight = FontWeight.Bold,
+                    fontFamily = gabaritoFontFamily,
                     modifier = Modifier
                         .fillMaxWidth() // Ocupa el ancho completo disponible
                         .wrapContentWidth(Alignment.CenterHorizontally) // Centra el texto horizontalmente
@@ -71,7 +72,7 @@ fun PrivacyPolicyScreen(navController: NavHostController, modifier: Modifier = M
             onClick = { navController.navigate("configuracion") },
             modifier = Modifier.padding(top = 16.dp)
         ) {
-            Text(text = "< Regresar", color = Color.Gray, fontWeight = FontWeight.Bold)
+            Text(text = "< Regresar", color = Color.Gray, fontWeight = FontWeight.Bold, fontFamily = gabaritoFontFamily)
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -301,6 +302,7 @@ fun PrivacyPolicyCard(title: String, content: String) {
         Column {
             Text(
                 text = title,
+                fontFamily = gabaritoFontFamily,
                 style = Typography.bodyLarge.copy(
                     fontWeight = FontWeight.Medium,
                     color = Color(0xFFE17F61)
@@ -312,6 +314,7 @@ fun PrivacyPolicyCard(title: String, content: String) {
                 text = content,
                 style = Typography.bodyMedium,
                 fontSize = 14.sp,
+                fontFamily = gabaritoFontFamily,
                 lineHeight = 20.sp,
                 color = Color(0xFF333333),
                 textAlign = TextAlign.Justify

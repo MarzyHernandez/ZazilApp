@@ -68,19 +68,18 @@ fun FAQs(navController: NavHostController, modifier: Modifier = Modifier, faqVie
                 text = "FAQs",
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
+                fontFamily = gabaritoFontFamily,
+                modifier = Modifier.align(Alignment.Center),
                 color = Color(0xFF191919),
-                modifier = Modifier
-                    .align(Alignment.CenterStart)
-                    .padding(start = 16.dp)
             )
         }
 
         // Botón "Regresar"
         TextButton(
-            onClick = { navController.navigate("profile") },
+            onClick = { navController.popBackStack() },
             modifier = Modifier.padding(top = 16.dp)
         ) {
-            Text(text = "< Regresar", color = Color.Gray, fontWeight = FontWeight.Bold)
+            Text(text = "< Regresar", color = Color.Gray, fontWeight = FontWeight.Bold, fontFamily = gabaritoFontFamily,)
         }
 
         // Título "Preguntas Frecuentes" alineado a la izquierda

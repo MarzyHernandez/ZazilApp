@@ -76,6 +76,7 @@ fun ProfileScreen(
             Text(
                 text = "Mi perfil",
                 fontSize = 36.sp,
+                fontFamily = gabaritoFontFamily,
                 color = Color.Black,
                 fontWeight = FontWeight.Bold,
                 modifier = modifier.align(Alignment.CenterHorizontally)
@@ -128,25 +129,8 @@ fun ProfileScreen(
                     .height(50.dp),
                 shape = RoundedCornerShape(8.dp)
             ) {
-                Text(text = "HISTORIAL DE COMPRA", fontSize = 16.sp, color = Color(0xFFE17F61), fontWeight = FontWeight.Bold)
+                Text(text = "HISTORIAL DE COMPRA", fontSize = 16.sp, color = Color(0xFFE17F61), fontWeight = FontWeight.Bold, fontFamily = gabaritoFontFamily)
             }
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            // Botón para navegar a la sección de preguntas frecuentes
-            Button(
-                onClick = { navController.navigate("FAQs") },
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFEE1D6)),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
-                    .height(50.dp),
-                shape = RoundedCornerShape(8.dp)
-            ) {
-                Text(text = "PREGUNTAS FRECUENTES", color = Color(0xFF293392), fontSize = 16.sp, fontWeight = FontWeight.Bold)
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
         }
     }
 }

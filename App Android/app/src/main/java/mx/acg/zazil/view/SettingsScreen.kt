@@ -19,6 +19,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -47,16 +49,21 @@ fun SettingsScreen(
     modifier: Modifier = Modifier,
     settingsViewModel: SettingsViewModel = viewModel()
 ) {
+    // Fuente personalizada utilizada en toda la pantalla
+    val gabaritoFontFamily = FontFamily(Font(R.font.gabarito_regular))
+
     val auth = FirebaseAuth.getInstance()
     val currentUser = auth.currentUser
     val uid = currentUser?.uid
     var showDialog by remember { mutableStateOf(false) }
 
+    // Variable para controlar la visibilidad del diálogo de cierre de sesión
+    var showSignOutDialog by remember { mutableStateOf(false) }
+
     Box(
         modifier = modifier
             .fillMaxSize()
             .background(Color.White)
-            .padding(0.dp)
     ) {
         Column(
             modifier = Modifier
@@ -94,13 +101,10 @@ fun SettingsScreen(
                         .fillMaxWidth()
                         .padding(vertical = 8.dp)
                         .clickable {
-                            Log.d("SettingsScreen", "Cerrando sesión...")
-                            auth.signOut()
-                            navController.navigate("login")
+                            showSignOutDialog = true
                         },
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Spacer(modifier = Modifier.width(24.dp))
                     Icon(
                         painter = painterResource(id = R.drawable.ic_logout),
                         contentDescription = "Cerrar sesión",
@@ -110,6 +114,7 @@ fun SettingsScreen(
                     Text(
                         text = "Cerrar sesión",
                         fontSize = 16.sp,
+                        fontFamily = gabaritoFontFamily,
                         color = Color(0xFF191919)
                     )
                 }
@@ -117,9 +122,11 @@ fun SettingsScreen(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 // Sección "Mi Cuenta"
+
                 Text(
                     text = "MI CUENTA",
                     fontSize = 16.sp,
+                    fontFamily = gabaritoFontFamily,
                     color = Color(0xFF545454),
                     modifier = Modifier.padding(vertical = 8.dp)
                 )
@@ -138,12 +145,17 @@ fun SettingsScreen(
                 Text(
                     text = "ACERCA DE",
                     fontSize = 16.sp,
+                    fontFamily = gabaritoFontFamily,
                     color = Color(0xFF545454),
                     modifier = Modifier.padding(vertical = 8.dp)
                 )
 
                 SettingOption(title = "Sobre Nosotros", iconResId = R.drawable.ic_about) {
                     navController.navigate("aboutUs")
+                }
+
+                SettingOption(title = "FAQs", iconResId = R.drawable.ic_faq) {
+                    navController.navigate("FAQs")
                 }
 
                 SettingOption(title = "Términos y Condiciones", iconResId = R.drawable.ic_terms) {
@@ -175,8 +187,9 @@ fun SettingsScreen(
 
                 // Versión de la aplicación
                 Text(
-                    text = "v1.0.1",
+                    text = "v1.0.0",
                     fontSize = 12.sp,
+                    fontFamily = gabaritoFontFamily,
                     color = Color.Gray,
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
@@ -189,7 +202,7 @@ fun SettingsScreen(
         AlertDialog(
             onDismissRequest = { showDialog = false },
             title = { Text(text = "Confirmación", color = Color(0xFFE17F61)) },
-            text = { Text(text = "¿Estás seguro que deseas eliminar tu cuenta?", color = Color(0xFF191919)) },
+            text = { Text(text = "¿Estás seguro que deseas eliminar tu cuenta?", color = Color(0xFF191919), fontFamily = gabaritoFontFamily)},
             confirmButton = {
                 Button(
                     onClick = {
@@ -209,12 +222,47 @@ fun SettingsScreen(
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFE17F61))
                 ) {
-                    Text(text = "Eliminar", color = Color.White)
+                    Text(text = "Eliminar", color = Color.White, fontFamily = gabaritoFontFamily)
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showDialog = false }) {
-                    Text(text = "Cancelar", color = Color(0xFFE17F61))
+                    Text(text = "Cancelar", color = Color(0xFFE17F61), fontFamily = gabaritoFontFamily)
+                }
+            },
+            containerColor = Color.White
+        )
+    }
+
+    // Diálogo de confirmación para cerrar sesión
+    if (showSignOutDialog) {
+        AlertDialog(
+            onDismissRequest = { showSignOutDialog = false },
+            title = { Text(text = "Cerrar sesión", color = Color(0xFFE17F61), fontFamily = gabaritoFontFamily) },
+            text = {
+                Text(
+                    text = "¿Estás seguro que deseas cerrar sesión?",
+                    color = Color(0xFF191919),
+                    fontFamily = gabaritoFontFamily
+                )
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        // Cerrar sesión y navegar a la pantalla de inicio de sesión
+                        Log.d("SettingsScreen", "Cerrando sesión...")
+                        auth.signOut()
+                        navController.navigate("login")
+                        showSignOutDialog = false
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFE17F61))
+                ) {
+                    Text(text = "Cerrar sesión", color = Color.White, fontFamily = gabaritoFontFamily)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showSignOutDialog = false }) {
+                    Text(text = "Cancelar", color = Color(0xFFE17F61), fontFamily = gabaritoFontFamily)
                 }
             },
             containerColor = Color.White
@@ -228,6 +276,9 @@ fun SettingsScreen(
  * @param title Título de la opción.
  * @param iconResId Identificador de recurso del icono.
  * @param onClick Callback a ejecutar al hacer clic en la opción.
+ *
+ * @author Alberto Cebreros González
+ * @author Melissa Mireles Rendón
  */
 @Composable
 fun SettingOption(title: String, iconResId: Int, onClick: () -> Unit = {}) {
@@ -248,7 +299,7 @@ fun SettingOption(title: String, iconResId: Int, onClick: () -> Unit = {}) {
             modifier = Modifier.size(24.dp)
         )
         Spacer(modifier = Modifier.width(16.dp))
-        Text(text = title, fontSize = 16.sp, color = Color(0xFF191919))
+        Text(text = title, fontSize = 16.sp, color = Color(0xFF191919), fontFamily = gabaritoFontFamily)
     }
 }
 
@@ -257,6 +308,9 @@ fun SettingOption(title: String, iconResId: Int, onClick: () -> Unit = {}) {
  *
  * @param iconResId Identificador de recurso del icono.
  * @param url Enlace a la red social.
+ *
+ * @author Alberto Cebreros González
+ * @author Melissa Mireles Rendón
  */
 @Composable
 fun SocialMediaIcon(iconResId: Int, url: String) {

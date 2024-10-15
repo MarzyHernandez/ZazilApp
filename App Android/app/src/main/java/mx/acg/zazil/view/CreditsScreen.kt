@@ -54,6 +54,7 @@ fun CreditsScreen(navController: NavHostController) {
         Text(
             text = "Créditos",
             fontSize = 28.sp,
+            fontFamily = gabaritoFontFamily,
             fontWeight = FontWeight.Bold,
             color = Color(0xFFEBB7A6),
             modifier = Modifier
@@ -66,12 +67,10 @@ fun CreditsScreen(navController: NavHostController) {
             onClick = { navController.navigate("configuracion") },
             modifier = Modifier.padding(top = 16.dp)
         ) {
-            Text(text = "< Regresar", color = Color.Gray, fontWeight = FontWeight.Bold)
+            Text(text = "< Regresar", color = Color.Gray, fontWeight = FontWeight.Bold, fontFamily = gabaritoFontFamily,)
         }
         // Sección central con tarjetas deslizable tipo "story" para los integrantes del equipo
         StoryTeamSection()
-
-        Spacer(modifier = Modifier.height(16.dp))
 
         // Sección inferior con agradecimientos y mención a Campus Edo Mex
         FooterSection()
@@ -254,12 +253,14 @@ fun TeamMemberStoryCard(member: TeamMember) {
                 Text(
                     text = member.name, // Nombre del integrante
                     fontWeight = FontWeight.Bold,
+                    fontFamily = gabaritoFontFamily,
                     fontSize = 18.sp,
                     color = Color.Black // Texto en color negro
                 )
                 Text(
                     text = member.email, // Correo del integrante
                     fontSize = 14.sp,
+                    fontFamily = gabaritoFontFamily,
                     color = Color.Black, // Texto en color negro
                     textAlign = TextAlign.Center // Alineación centrada del texto
                 )
@@ -287,6 +288,7 @@ fun FooterSection() {
         Text(
             text = "Desarrollado por estudiantes del programa de Ingeniería en Tecnologías Computacionales del Instituto Tecnológico y de Estudios Superiores de Monterrey®, Campus Estado de México.",
             fontSize = 12.sp, // Tamaño de fuente
+            fontFamily = gabaritoFontFamily,
             color = Color.Gray, // Color gris del texto
             textAlign = TextAlign.Center // Alineación centrada
         )
