@@ -16,6 +16,7 @@ import retrofit2.converter.gson.GsonConverterFactory
  *
  * @property shoppingHistory LiveData que contiene la lista de compras del usuario.
  * @property errorMessage LiveData que maneja los mensajes de error.
+ * @property isLoading LiveData que indica si los datos están siendo cargados.
  *
  * @author Alberto Cebreros González
  * @author Melissa Mireles Rendón
@@ -27,6 +28,9 @@ class ShoppingHistoryViewModel : ViewModel() {
 
     private val _errorMessage = MutableLiveData<String>()
     val errorMessage: LiveData<String> = _errorMessage
+
+    private val _isLoading = MutableLiveData<Boolean>(false) // Estado de carga inicializado en falso
+    val isLoading: LiveData<Boolean> get() = _isLoading // Exponer el estado de carga
 
     // Instancia de Retrofit y API
     private val retrofit = Retrofit.Builder()
@@ -44,6 +48,7 @@ class ShoppingHistoryViewModel : ViewModel() {
      */
     fun getShoppingHistory(uid: String) {
         viewModelScope.launch {
+            _isLoading.value = true // Indicar que se está cargando
             try {
                 val response = api.getShoppingHistoryByUid(uid)
                 if (response.isSuccessful && response.body() != null) {
@@ -53,6 +58,8 @@ class ShoppingHistoryViewModel : ViewModel() {
                 }
             } catch (e: Exception) {
                 _errorMessage.value = "Error al obtener el historial de compras: ${e.message}" // Maneja excepciones
+            } finally {
+                _isLoading.value = false // Finalizar la carga
             }
         }
     }

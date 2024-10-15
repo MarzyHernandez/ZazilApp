@@ -55,25 +55,22 @@ fun MyShoppingScreen(
     viewModel: ShoppingHistoryViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
     uid: String
 ) {
-    // Fuente personalizada utilizada en toda la pantalla
     val gabaritoFontFamily = FontFamily(Font(R.font.gabarito_regular))
-
-    // Estado para gestionar el indicador de carga
-    var isLoading by remember { mutableStateOf(false) }
+    var isLoading by remember { mutableStateOf(true) }
 
     // Obteniendo el historial de compras desde el ViewModel
     val shoppingHistory by viewModel.shoppingHistory.observeAsState(initial = emptyList())
     val errorMessage by viewModel.errorMessage.observeAsState()
 
     // Ejecuta el request para obtener las compras
-    LaunchedEffect(Unit) {
-        viewModel.getShoppingHistory(uid)
+    LaunchedEffect(uid) {
+        viewModel.getShoppingHistory(uid) // Asegúrate de manejar el estado de carga aquí
+        isLoading = false // Detener el indicador de carga
     }
 
-    // Ordena el historial de compras por fecha en orden descendente (más reciente primero)
+    // Ordena el historial de compras por fecha en orden descendente
     val sortedShoppingHistory = shoppingHistory.sortedByDescending { it.fecha_pedido.toDate() }
 
-    // Diseño de la pantalla
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -85,7 +82,7 @@ fun MyShoppingScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(bottomEnd = 16.dp, bottomStart = 16.dp))
-                .background(Color(0xFFFEE1D6))  // Fondo rosa
+                .background(Color(0xFFFEE1D6))
                 .padding(vertical = 16.dp)
         ) {
             Row(
@@ -104,17 +101,8 @@ fun MyShoppingScreen(
             }
         }
 
-        // Botón "Regresar"
-        TextButton(
-            onClick = { navController.navigate("profile") },
-        ) {
-            Text(
-                text = "< Regresar",
-                fontSize = 14.sp,
-                color = Color.Gray,
-                fontFamily = gabaritoFontFamily,
-                fontWeight = FontWeight.Bold
-            )
+        TextButton(onClick = { navController.popBackStack() }) {
+            Text(text = "< Regresar", fontSize = 14.sp, color = Color.Gray, fontWeight = FontWeight.Bold)
         }
 
         // Mostrar mensaje de error si hay alguno
@@ -128,7 +116,7 @@ fun MyShoppingScreen(
         }
 
         // Mostrar el loader si está en estado de carga
-        if (isLoading) {
+        if (viewModel.isLoading.observeAsState().value == true) {
             Box(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
@@ -146,6 +134,7 @@ fun MyShoppingScreen(
                 )
             }
         }
+
     }
 }
 
