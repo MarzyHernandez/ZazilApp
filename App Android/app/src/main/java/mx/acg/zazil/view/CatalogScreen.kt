@@ -2,6 +2,7 @@ package mx.acg.zazil.view
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -9,6 +10,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Help
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,7 +34,9 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.*
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.style.TextAlign
 import java.util.Locale
 
 /**
@@ -91,7 +95,7 @@ fun CatalogScreen(
         } else {
             // Muestra el contenido cuando los productos ya han cargado
             Column {
-                // Encabezado con logo y texto "ZAZIL"
+                // Encabezado
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -151,10 +155,22 @@ fun CatalogScreen(
                     modifier = Modifier
                         .fillMaxSize()
                         .background(Color.White)
-                        .padding(16.dp)
+                        .padding(4.dp)
                         .clip(RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp))
                 ) {
                     Column {
+                        // Mensaje antes del buscador
+                        Text(
+                            text = "Por cada toalla adquirida, una toalla es donada.",
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Bold,
+                            fontFamily = gabaritoFontFamily,
+                            color = Color.Gray,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 1.dp)
+                        )
                         // Barra de búsqueda
                         OutlinedTextField(
                             value = searchQuery,
@@ -162,7 +178,7 @@ fun CatalogScreen(
                             label = { Text("Buscar productos") },
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(bottom = 16.dp),
+                                .padding(bottom = 14.dp),
                             singleLine = true,
                             leadingIcon = {
                                 Icon(
