@@ -46,10 +46,7 @@ fun RecuperarContrasenaScreen(navController: NavHostController) {
 
     // Estados mutables para almacenar los valores ingresados y los mensajes de error
     var email by remember { mutableStateOf("") }
-    var nuevaContrasena by remember { mutableStateOf("") }
-    var confirmarContrasena by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf<String?>(null) }
-
     // Obtener el contexto actual de la aplicación, necesario para mostrar Toasts
     val context = LocalContext.current
 

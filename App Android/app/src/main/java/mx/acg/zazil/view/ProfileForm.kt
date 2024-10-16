@@ -80,7 +80,7 @@ fun ProfileForm(profile: UserProfile, modifier: Modifier = Modifier) {
                 label = "Teléfono",
                 value = telefono.value,
                 modifier = Modifier
-                    .weight(0.5f)
+                    .weight(1f)
                     .fillMaxWidth(),
                 onValueChange = { telefono.value = it } // Actualiza el estado de teléfono
             )

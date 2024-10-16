@@ -29,6 +29,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import mx.acg.zazil.CheckoutViewModel
+import java.util.Locale
 
 /**
  * Pantalla para el proceso de pago. Permite al usuario finalizar su compra,
@@ -210,8 +211,10 @@ fun PaymentScreen(
                 color = Color(0xFF191919)
             )
 
+            val totalDouble = total.toDoubleOrNull() ?: 0.0
+
             Text(
-                text = "$$total",
+                text = "$${String.format(Locale.US, "%.2f", totalDouble)}",
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
                 fontFamily = gabaritoFontFamily,
