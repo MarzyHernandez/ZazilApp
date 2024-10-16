@@ -408,26 +408,29 @@
   //  regresa: void para llenar la tabla con los datos obtenidos
 
   async function fetchOrders() {
-    try {
-      // Primer endpoint que obtiene las órdenes
-      const response = await fetch('https://getallorders-dztx2pd2na-uc.a.run.app/');
-      const orders = await response.json();
+  try {
+    // Primer endpoint que obtiene las órdenes
+    const response = await fetch('https://getallorders-dztx2pd2na-uc.a.run.app/');
+    let orders = await response.json();
 
-      // Recorre cada orden para procesar los datos
-      for (let order of orders) {
-        // Obtener el id_usuario de la orden
-        const uidUsuario = order.uid;
+    // Ordenar las órdenes por 'fecha_pedido' de más reciente a más antigua
+    orders.sort((a, b) => new Date(b.fecha_pedido) - new Date(a.fecha_pedido));
 
-        // Llamar al segundo endpoint con el id_usuario para obtener más información del usuario
-        const userData = await fetchUserData(uidUsuario);
+    // Recorre cada orden para procesar los datos ya ordenados
+    for (let order of orders) {
+      const uidUsuario = order.uid;
 
-        // Llenar la tabla con la información obtenida
-        fillOrderRow(order, userData);
-      }
-    } catch (error) {
-      console.error('Error fetching orders:', error);
+      // Obtener más información del usuario
+      const userData = await fetchUserData(uidUsuario);
+
+      // Llenar la tabla con los datos obtenidos
+      fillOrderRow(order, userData);
     }
+  } catch (error) {
+    console.error('Error fetching orders:', error);
   }
+}
+
 
   // Función para obtener datos del segundo endpoint (información del usuario)
   // autor: Carlos Herrera
