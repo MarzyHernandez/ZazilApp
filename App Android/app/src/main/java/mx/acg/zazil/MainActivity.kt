@@ -24,7 +24,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import mx.acg.zazil.ui.theme.ZazilTheme
 import mx.acg.zazil.view.AppNavHost
-import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.ViewModelProvider
@@ -48,12 +47,11 @@ class MainActivity : ComponentActivity() {
     private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var auth: FirebaseAuth
     private lateinit var signInLauncher: ActivityResultLauncher<Intent>
-
-    // Variable global del NavController
-    private lateinit var navController: NavHostController
-
     // Inicializamos el LoginViewModel usando ViewModelProvider
     private lateinit var loginViewModel: LoginViewModel
+
+    // Inicializamos el NavController de manera temprana
+    private lateinit var navController: NavHostController
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -97,18 +95,30 @@ class MainActivity : ComponentActivity() {
             }
         }
 
+        // Configurar el contenido de la actividad
         setContent {
             ZazilTheme {
                 // Inicializa el NavController y asigna a la variable global
                 navController = rememberNavController()
+
+                // Verificar si el usuario ya está autenticado y establecer la pantalla inicial
+                val startDestination = if (auth.currentUser != null) {
+                    "catalog"
+                } else {
+                    "login"
+                }
+
+                // Configura la navegación basada en la autenticación del usuario
                 AppNavHost(
                     auth = auth,
                     signInWithGoogle = { signInWithGoogle() },
-                    navController = navController
+                    navController = navController,
+                    startDestination = startDestination
                 )
             }
         }
     }
+
 
     // Iniciar el flujo de Google Sign-In
     private fun signInWithGoogle() {

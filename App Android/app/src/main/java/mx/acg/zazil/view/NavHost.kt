@@ -29,7 +29,8 @@ import com.google.firebase.auth.FirebaseAuth
 fun AppNavHost(
     auth: FirebaseAuth,
     signInWithGoogle: () -> Unit,
-    navController: NavHostController
+    navController: NavHostController,
+    startDestination: String
 ) {
     // Obtiene la entrada actual de la pila de navegación
     val currentBackStackEntry = navController.currentBackStackEntryAsState()
@@ -49,7 +50,7 @@ fun AppNavHost(
         // Configuración de las rutas de navegación
         NavHost(
             navController = navController,
-            startDestination = "login",
+            startDestination = startDestination,
             modifier = Modifier.padding(innerPadding)
         ) {
             composable("login") {
