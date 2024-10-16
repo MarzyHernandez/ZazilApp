@@ -10,6 +10,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -57,11 +58,12 @@ fun UpdateDataScreen(viewModel: UpdateDataViewModel = viewModel(), navController
     Box(modifier = Modifier.fillMaxSize()) {
         // Imagen decorativa en la parte superior derecha
         Image(
-            painter = painterResource(id = R.drawable.logo),
-            contentDescription = "Decoración",
+            painter = painterResource(id = R.drawable.mid_logo),
+            contentDescription = "Logo",
             modifier = Modifier
-                .size(150.dp)
-                .align(Alignment.TopEnd)
+                .size(height = 200.dp, width = 100.dp)
+                .align(Alignment.TopEnd),
+            contentScale = ContentScale.Fit
         )
 
         // Columna que contiene el formulario de actualización de datos
@@ -72,6 +74,17 @@ fun UpdateDataScreen(viewModel: UpdateDataViewModel = viewModel(), navController
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.Center
         ) {
+            // Botón "Regresar"
+            TextButton(onClick = { navController.popBackStack() }) {
+                Text(
+                    text = "< Regresar",
+                    fontSize = 14.sp,
+                    color = Color.Gray,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+
+            Spacer(modifier = Modifier.height(0.dp))
             // Título de la pantalla
             Text(
                 text = "Actualizar",
@@ -89,18 +102,6 @@ fun UpdateDataScreen(viewModel: UpdateDataViewModel = viewModel(), navController
                 color = Color(0xFFE27F61),
                 modifier = Modifier.padding(top = 8.dp)
             )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Botón "Regresar"
-            TextButton(onClick = { navController.popBackStack() }) {
-                Text(
-                    text = "< Regresar",
-                    fontSize = 14.sp,
-                    color = Color.Gray,
-                    fontWeight = FontWeight.Bold
-                )
-            }
 
             Spacer(modifier = Modifier.height(16.dp))
 
