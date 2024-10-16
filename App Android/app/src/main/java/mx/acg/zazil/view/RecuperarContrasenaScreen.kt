@@ -2,6 +2,7 @@ package mx.acg.zazil.view
 
 import android.widget.Toast
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -52,16 +53,7 @@ fun RecuperarContrasenaScreen(navController: NavHostController) {
     // Obtener el contexto actual de la aplicación, necesario para mostrar Toasts
     val context = LocalContext.current
 
-    // Botón "Regresar"
-    TextButton(onClick = { navController.navigate("login") }) {
-        Text(
-            text = "< Regresar",
-            fontSize = 14.sp,
-            color = Color.Gray,
-            fontFamily = mx.acg.zazil.view.gabaritoFontFamily,
-            fontWeight = FontWeight.Bold
-        )
-    }
+
 
     /**
      * Función que envía un correo de recuperación de contraseña utilizando Firebase.
@@ -86,12 +78,12 @@ fun RecuperarContrasenaScreen(navController: NavHostController) {
     Box(modifier = Modifier.fillMaxSize()) {
         // Imagen logo
         Image(
-            painter = painterResource(id = R.drawable.logo),
+            painter = painterResource(id = R.drawable.mid_logo),
             contentDescription = "Logo",
             modifier = Modifier
-                .size(200.dp)
+                .size(height = 300.dp, width = 150.dp)
                 .align(Alignment.TopEnd),
-            contentScale = ContentScale.Crop
+            contentScale = ContentScale.Fit
         )
 
         // Contenido del formulario
@@ -102,13 +94,36 @@ fun RecuperarContrasenaScreen(navController: NavHostController) {
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.Center
         ) {
+            // Botón "Regresar"
+            TextButton(
+                onClick = { navController.navigate("login") }
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = "<",
+                        fontSize = 14.sp,
+                        color = Color.Gray,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Spacer(modifier = Modifier.width(4.dp)) // Espacio entre la flecha y el texto
+                    Text(
+                        text = "Regresar",
+                        fontSize = 14.sp,
+                        color = Color.Gray,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            }
+
+
             // Título de la pantalla
             Text(
                 text = "Recuperar",
                 fontSize = 32.sp,
                 fontWeight = FontWeight.Bold,
                 fontFamily = gabaritoFontFamily,
-                color = Color.Black
+                color = Color.Black,
+                modifier = Modifier.padding(start = 6.dp)
             )
 
             // Subtítulo
@@ -117,7 +132,7 @@ fun RecuperarContrasenaScreen(navController: NavHostController) {
                 fontSize = 16.sp,
                 fontFamily = gabaritoFontFamily,
                 color = Color(0xFFE27F61),
-                modifier = Modifier.padding(top = 8.dp)
+                modifier = Modifier.padding(start = 8.dp)
             )
 
             Spacer(modifier = Modifier.height(16.dp))
