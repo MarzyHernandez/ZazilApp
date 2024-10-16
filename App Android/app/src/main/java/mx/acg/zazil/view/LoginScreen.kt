@@ -9,6 +9,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
@@ -31,12 +34,13 @@ import mx.acg.zazil.viewmodel.LoginViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 
 /**
- * Composable para mostrar un campo de entrada de texto simple.
+ * Composable que representa un campo de entrada de texto simple.
+ * Permite gestionar tanto texto como contraseñas y visualiza una línea divisoria.
  *
  * @param value El valor actual del campo de texto.
  * @param onValueChange Función que se invoca cuando el valor del campo cambia.
- * @param label Texto que se muestra como etiqueta dentro del campo.
- * @param isPassword Indica si el campo es para una contraseña y debe ocultar los caracteres.
+ * @param label Etiqueta del campo de texto.
+ * @param isPassword Indica si el campo es para contraseñas (true) o texto normal (false).
  *
  * @author Alberto Cebreros González
  * @author Melissa Mireles Rendón
@@ -81,10 +85,14 @@ fun SimpleTextInput(
 
 /**
  * Composable que representa la pantalla de inicio de sesión.
+ * Contiene los campos para email, contraseña, y botones para iniciar sesión o registrarse.
  *
  * @param navController Controlador de navegación para moverse entre pantallas.
  * @param signInWithGoogle Función que maneja la autenticación con Google.
+ * @param viewModel ViewModel utilizado para manejar el estado del login.
  *
+ * @author Alberto Cebreros González
+ * @author Melissa Mireles Rendón
  */
 @Composable
 fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel = viewModel(), signInWithGoogle: () -> Unit) {
@@ -96,11 +104,13 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel = vi
     // Variables que almacenan el email y contraseña ingresados por el usuario
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var passwordVisible by remember { mutableStateOf(false) }
 
     // Observa el ID del usuario y los mensajes de error desde el ViewModel
     val userId by viewModel.userId.observeAsState()
     val errorMessage by viewModel.errorMessage.observeAsState()
 
+    // Contenedor principal
     Box(modifier = Modifier.fillMaxSize().background(Color.White)) {
         // Imagen de logo
         Image(
@@ -159,7 +169,7 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel = vi
                     decorationBox = { innerTextField ->
                         Column {
                             Text(
-                                text = "Email",
+                                text = "Correo",
                                 fontSize = 14.sp,
                                 color = Color.Gray
                             )
@@ -168,6 +178,7 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel = vi
                                     .fillMaxWidth()
                                     .padding(top = 4.dp, bottom = 8.dp)
                             ) {
+                                // Campo para escribir email
                                 innerTextField()
                             }
                             Divider(color = Color.Gray, thickness = 1.dp)
@@ -184,7 +195,8 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel = vi
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 8.dp),
-                    visualTransformation = PasswordVisualTransformation(),
+                    // Cambiamos entre ocultar y mostrar la contraseña según el valor de passwordVisible
+                    visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                     decorationBox = { innerTextField ->
                         Column {
                             Text(
@@ -197,13 +209,34 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel = vi
                                     .fillMaxWidth()
                                     .padding(top = 4.dp, bottom = 8.dp)
                             ) {
-                                innerTextField()
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.SpaceBetween
+                                ) {
+                                    // Campo de texto para la contraseña
+                                    Box(Modifier.weight(1f)) {
+                                        innerTextField()
+                                    }
+                                    // Icono de "ojito" para mostrar/ocultar la contraseña
+                                    IconButton(
+                                        onClick = { passwordVisible = !passwordVisible }, // Cambia el estado
+                                        modifier = Modifier
+                                            .size(24.dp) // Ajusta el tamaño del botón para hacerlo más pequeño
+                                            .align(Alignment.CenterVertically) // Alinea el icono verticalmente con el texto
+                                    ) {
+                                        Icon(
+                                            imageVector = if (passwordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
+                                            contentDescription = if (passwordVisible) "Ocultar contraseña" else "Mostrar contraseña",
+                                            tint = Color.Gray
+                                        )
+                                    }
+                                }
                             }
+                            // Línea debajo del campo de contraseña
                             Divider(color = Color.Gray, thickness = 1.dp)
                         }
                     }
                 )
-
 
                 Spacer(modifier = Modifier.height(16.dp))
 
@@ -248,7 +281,7 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel = vi
                     modifier = Modifier.fillMaxWidth(),
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFEBB7A7))
                 ) {
-                    Text(text = "INICIAR SESIÓN", fontFamily = gabaritoFontFamily, fontWeight = FontWeight.Bold)
+                    Text(text = "INICIAR SESIÓN", fontFamily = gabaritoFontFamily, fontWeight = FontWeight.Bold, color = Color.White)
                 }
 
                 // Muestra el id del usuario o error
@@ -268,6 +301,7 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel = vi
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
+                // Mensaje de inicio de sesión con Google
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center,
@@ -293,6 +327,7 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel = vi
 
                 Spacer(modifier = Modifier.height(8.dp))
 
+                // Mensaje de inicio de sesión con Google
                 Text(
                     text = "o regístrate vía",
                     fontFamily = gabaritoFontFamily,

@@ -25,7 +25,7 @@ import mx.acg.zazil.R
 import mx.acg.zazil.model.FAQItem
 import mx.acg.zazil.viewmodel.FAQViewModel
 
-
+// Fuente personalizada utilizada en toda la pantalla
 val gabaritoFontFamily = FontFamily(Font(R.font.gabarito_regular))
 
 /**
@@ -42,7 +42,9 @@ val gabaritoFontFamily = FontFamily(Font(R.font.gabarito_regular))
  */
 @Composable
 fun FAQs(navController: NavHostController, modifier: Modifier = Modifier, faqViewModel: FAQViewModel = viewModel()) {
+    // Observa los elementos de la lista de preguntas frecuentes desde el ViewModel
     val faqItems by faqViewModel.faqItems // Observa los datos obtenidos del ViewModel
+    // Observa el estado de carga desde el ViewModel
     val isLoading by faqViewModel.isLoading // Observa el estado de carga desde el ViewModel
 
     Column(
@@ -66,19 +68,18 @@ fun FAQs(navController: NavHostController, modifier: Modifier = Modifier, faqVie
                 text = "FAQs",
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
+                fontFamily = gabaritoFontFamily,
+                modifier = Modifier.align(Alignment.Center),
                 color = Color(0xFF191919),
-                modifier = Modifier
-                    .align(Alignment.CenterStart)
-                    .padding(start = 16.dp)
             )
         }
 
         // Botón "Regresar"
         TextButton(
-            onClick = { navController.navigate("profile") },
+            onClick = { navController.popBackStack() },
             modifier = Modifier.padding(top = 16.dp)
         ) {
-            Text(text = "< Regresar", color = Color.Gray, fontWeight = FontWeight.Bold)
+            Text(text = "< Regresar", color = Color.Gray, fontWeight = FontWeight.Bold, fontFamily = gabaritoFontFamily,)
         }
 
         // Título "Preguntas Frecuentes" alineado a la izquierda
@@ -126,6 +127,7 @@ fun FAQs(navController: NavHostController, modifier: Modifier = Modifier, faqVie
 fun FAQCard(faq: FAQItem) {
     var expanded by remember { mutableStateOf(false) }
 
+    // Tarjeta con contenido expandido
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -139,6 +141,7 @@ fun FAQCard(faq: FAQItem) {
                 .fillMaxWidth()
                 .padding(16.dp)
         ) {
+            // Encabezado de la tarjeta con el botón de expansión
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -149,6 +152,7 @@ fun FAQCard(faq: FAQItem) {
                     fontSize = 18.sp,
                     modifier = Modifier.weight(1f)
                 )
+                // Botón de expansión para expandir/contraer la respuesta
                 IconButton(onClick = { expanded = !expanded }) {
                     Icon(
                         imageVector = if (expanded) Icons.Filled.ExpandLess else Icons.Filled.ExpandMore,

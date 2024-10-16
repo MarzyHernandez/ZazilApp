@@ -165,7 +165,21 @@ fun ProductDetailScreen(
                         .fillMaxWidth(),
                     contentAlignment = Alignment.CenterEnd // Alinea el texto a la derecha
                 ) {
-                    TextButton(onClick = { navController.navigate("cart") }) {
+                    TextButton(onClick = {
+                        // Obtener el uid del usuario actual
+                        val user = FirebaseAuth.getInstance().currentUser
+                        val uid = user?.uid
+
+                        if (uid != null) {
+                            // Llama a la función para cargar el carrito utilizando el uid actual
+                            cartViewModel.loadCartByUid(uid)
+
+                            // Navega al carrito después de asegurarse que se ha actualizado
+                            navController.navigate("cart")
+                        } else {
+                            Log.e("ProductDetailScreen", "Error: No se pudo obtener el UID del usuario.")
+                        }
+                    }) {
                         Text(
                             text = "Ir al carrito",
                             fontSize = 13.sp,
@@ -320,7 +334,7 @@ fun ProductDetailScreen(
     } ?: run {
         // Muestra un indicador de "Cargando producto..." mientras se obtiene el producto
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            CircularProgressIndicator()
+            CircularProgressIndicator(color = Color(0xFFE17F61))
         }
     }
 }

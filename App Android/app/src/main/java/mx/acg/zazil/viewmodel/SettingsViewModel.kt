@@ -10,6 +10,16 @@ import retrofit2.converter.gson.GsonConverterFactory
 import android.util.Log
 import mx.acg.zazil.model.DeleteAccountApiService
 
+/**
+ * ViewModel para manejar la configuración de la cuenta del usuario.
+ * Proporciona funciones para eliminar la cuenta del usuario.
+ *
+ * @property retrofit Instancia de Retrofit configurada para realizar llamadas a la API.
+ * @property apiService Interfaz para acceder a los servicios de eliminación de cuenta.
+ *
+ * @author Alberto Cebreros González
+ * @author Melissa Mireles Rendón
+ */
 class SettingsViewModel : ViewModel() {
 
     private val retrofit = Retrofit.Builder()
@@ -19,6 +29,14 @@ class SettingsViewModel : ViewModel() {
 
     private val apiService: DeleteAccountApiService = retrofit.create(DeleteAccountApiService::class.java)
 
+    /**
+     * Elimina la cuenta del usuario dado su UID.
+     * Realiza la llamada a la API y maneja el resultado.
+     *
+     * @param uid UID de la cuenta a eliminar.
+     * @param onSuccess Callback que se ejecuta si la eliminación es exitosa.
+     * @param onError Callback que se ejecuta si ocurre un error durante la eliminación.
+     */
     fun deleteAccount(uid: String, onSuccess: () -> Unit, onError: (String) -> Unit) {
         viewModelScope.launch {
             try {

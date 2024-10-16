@@ -7,8 +7,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Help
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -18,7 +19,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -26,14 +26,14 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberImagePainter
 import mx.acg.zazil.viewmodel.CatalogViewModel
 import androidx.navigation.NavHostController
-
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.runtime.*
 import androidx.compose.ui.text.input.TextFieldValue
-import mx.acg.zazil.R
+import java.util.Locale
 
 /**
  * Pantalla de catálogo que muestra los productos disponibles.
@@ -103,15 +103,46 @@ fun CatalogScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(start = 16.dp),
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Text(
-                            text = "Productos",
+                            text = "Catálogo",
                             fontSize = 36.sp,
                             fontWeight = FontWeight.Bold,
                             fontFamily = gabaritoFontFamily,
                             color = Color(0xFF191919)
                         )
+                        // Botón de acceso rápido a FAQs con diseño creativo
+                        Box(
+                            modifier = Modifier
+                                .padding(end = 16.dp, bottom = 2.dp)
+                                .clip(RoundedCornerShape(50))
+                                .background(Color(0xFFE17F61))
+                                .clickable { navController.navigate("FAQs") }
+                                .padding(horizontal = 12.dp, vertical = 8.dp)
+                        ) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.Center
+
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Help,
+                                    contentDescription = "FAQs",
+                                    tint = Color.White,
+                                    modifier = Modifier.size(20.dp)
+                                )
+                                Spacer(modifier = Modifier.width(4.dp))
+                                Text(
+                                    text = "FAQs",
+                                    fontSize = 16.sp,
+                                    fontFamily = gabaritoFontFamily,
+                                    color = Color.White,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
+                        }
                     }
                 }
 
@@ -152,7 +183,7 @@ fun CatalogScreen(
                             items(filteredProducts) { product ->
                                 ProductItem(
                                     title = product.nombre,
-                                    price = "$${product.precio_rebajado}",
+                                    price = "$${String.format(Locale.US, "%.2f", product.precio_rebajado)}",
                                     imageUrl = product.imagen,
                                     productId = product.id,
                                     onClick = { navController.navigate("productDetail/${product.id}") }
@@ -209,8 +240,6 @@ fun ProductItem(
         )
 
         Spacer(modifier = Modifier.height(8.dp))
-
-        // Título del producto
         Text(
             text = title,
             fontSize = 18.sp,

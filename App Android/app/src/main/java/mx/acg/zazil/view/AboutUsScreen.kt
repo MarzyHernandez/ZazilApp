@@ -49,6 +49,7 @@ fun AboutUsScreen(navController: NavHostController) {
                 text = "Sobre Nosotros",
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
+                fontFamily = gabaritoFontFamily,
                 modifier = Modifier.align(Alignment.Center),
                 color = Color(0xFF191919)
             )
@@ -59,6 +60,7 @@ fun AboutUsScreen(navController: NavHostController) {
             Text(
                 text = "< Regresar",
                 fontSize = 14.sp,
+                fontFamily = gabaritoFontFamily,
                 color = Color.Gray,
                 fontWeight = FontWeight.Bold
             )
@@ -70,6 +72,7 @@ fun AboutUsScreen(navController: NavHostController) {
             // Sección de "¿Quiénes Somos?"
             Text(
                 text = "¿QUIÉNES SOMOS?",
+                fontFamily = gabaritoFontFamily,
                 style = Typography.titleMedium.copy(
                     fontWeight = FontWeight.Bold,
                     color = Color(0xFFE17F61)
@@ -78,7 +81,9 @@ fun AboutUsScreen(navController: NavHostController) {
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = "Zazil es una marca comprometida con el bienestar de las mujeres y el cuidado del medio ambiente. Su misión es proporcionar soluciones innovadoras y sostenibles para el período menstrual. ¿Cómo lo hacen? A través de la creación de toallas femeninas reutilizables.",
-                style = Typography.bodyMedium,
+                style = Typography.bodyMedium.copy(
+                    fontFamily = gabaritoFontFamily),
+                fontFamily = gabaritoFontFamily,
                 lineHeight = 24.sp
             )
             Spacer(modifier = Modifier.height(8.dp))
@@ -86,6 +91,7 @@ fun AboutUsScreen(navController: NavHostController) {
                 text = "“Cambiando el mundo, un ciclo a la vez.”",
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
+                fontFamily = gabaritoFontFamily,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth(),
                 color = Color.Gray
@@ -96,8 +102,10 @@ fun AboutUsScreen(navController: NavHostController) {
             // Sección de "Empoderamiento Económico"
             Text(
                 text = "EMPODERAMIENTO ECONÓMICO",
+                fontFamily = gabaritoFontFamily,
                 style = Typography.titleMedium.copy(
                     fontWeight = FontWeight.Bold,
+                    fontFamily = gabaritoFontFamily,
                     color = Color(0xFFE17F61)
                 )
             )
@@ -140,15 +148,19 @@ fun AboutUsCard(title: String, content: String) {
         Column {
             Text(
                 text = title,
+                fontFamily = gabaritoFontFamily,
                 style = Typography.bodyLarge.copy(
                     fontWeight = FontWeight.Bold,
+                    fontFamily = gabaritoFontFamily,
                     color = Color(0xFFE17F61)
                 )
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = content,
-                style = Typography.bodyMedium,
+                fontFamily = gabaritoFontFamily,
+                style = Typography.bodyMedium.copy(
+                    fontFamily = gabaritoFontFamily),
                 lineHeight = 20.sp
             )
         }

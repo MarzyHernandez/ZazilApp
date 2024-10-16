@@ -1,10 +1,13 @@
 package mx.acg.zazil.view
 
+import UserProfile
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -13,29 +16,28 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.ui.res.painterResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberImagePainter
 import com.google.firebase.auth.FirebaseAuth
 import mx.acg.zazil.R
-import mx.acg.zazil.view.NavBar
-import mx.acg.zazil.view.ProfileForm
 import mx.acg.zazil.viewmodel.ProfileViewModel
 
 /**
  * Composable que representa la pantalla de perfil del usuario.
+ * Incluye la imagen de fondo, la foto de perfil, los datos del usuario y la barra de navegación.
+ *
+ * @param navController Controlador de navegación para cambiar entre pantallas.
+ * @param uid ID único del usuario.
+ * @param modifier Modificador para personalizar la disposición y el estilo del Composable.
+ * @param profileViewModel Instancia del ViewModel para gestionar la lógica del perfil.
+ *
  * @author Melissa Mireles Rendón
  * @author Alberto Cebreros González
- * Incluye la imagen de fondo, la foto de perfil, los datos del usuario y la barra de navegación.
- * @param [modifier] Modificador para personalizar la disposición y el estilo del Composable.
  */
 @Composable
 fun ProfileScreen(
@@ -46,6 +48,7 @@ fun ProfileScreen(
 ) {
     val profileData = profileViewModel.profileData.collectAsState().value
 
+    // Carga el perfil del usuario cuando se proporciona un UID
     LaunchedEffect(uid) {
         profileViewModel.fetchUserProfile(uid)
     }
@@ -53,6 +56,7 @@ fun ProfileScreen(
     Box(
         modifier = modifier.fillMaxSize()
     ) {
+        // Imagen de fondo para la pantalla de perfil
         Image(
             painter = painterResource(id = R.drawable.background_profile),
             contentDescription = "Fondo superior",
@@ -68,16 +72,18 @@ fun ProfileScreen(
         ) {
             Spacer(modifier = Modifier.height(80.dp))
 
+            // Título de la pantalla
             Text(
                 text = "Mi perfil",
                 fontSize = 36.sp,
+                fontFamily = gabaritoFontFamily,
                 color = Color.Black,
                 fontWeight = FontWeight.Bold,
-                fontFamily = gabaritoFontFamily,
                 modifier = modifier.align(Alignment.CenterHorizontally)
             )
             Spacer(modifier = Modifier.height(80.dp))
 
+            // Muestra los datos del perfil del usuario
             profileData?.let { profile ->
                 Box(
                     modifier = Modifier
@@ -97,23 +103,25 @@ fun ProfileScreen(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
+                // Formulario para mostrar y editar los datos del perfil
                 ProfileForm(
                     profile = profile,
                     modifier = Modifier.padding(horizontal = 16.dp)
                 )
             } ?: run {
-                CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
+                // Muestra un indicador de carga mientras se obtienen los datos del perfil
+                CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally), color = Color(0xFFE17F61))
             }
 
             Spacer(modifier = Modifier.height(16.dp))
 
+            // Botón para navegar al historial de compras
             Button(
                 onClick = {
-                    // Obtén el usuario actual desde FirebaseAuth
                     val currentUser = FirebaseAuth.getInstance().currentUser
                     val uid = currentUser?.uid ?: ""
-                    // Navega a MyShoppingScreen con el UID del usuario
-                    navController.navigate("myShopping/$uid")},
+                    navController.navigate("myShopping/$uid")
+                },
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFEFEEEE)),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -121,25 +129,8 @@ fun ProfileScreen(
                     .height(50.dp),
                 shape = RoundedCornerShape(8.dp)
             ) {
-                Text(text = "HISTORIAL DE COMPRA", fontSize = 16.sp, fontFamily = gabaritoFontFamily, color = Color(0xFFE17F61), fontWeight = FontWeight.Bold)
+                Text(text = "HISTORIAL DE COMPRA", fontSize = 16.sp, color = Color(0xFFE17F61), fontWeight = FontWeight.Bold, fontFamily = gabaritoFontFamily)
             }
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Button(
-                onClick = { navController.navigate("FAQs") },
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFEE1D6)),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
-                    .height(50.dp),
-                shape = RoundedCornerShape(8.dp)
-            ) {
-                Text(text = "PREGUNTAS FRECUENTES", color = Color(0xFF293392), fontSize = 16.sp,fontFamily = gabaritoFontFamily, fontWeight = FontWeight.Bold)
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
         }
     }
 }
-

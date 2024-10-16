@@ -1,6 +1,7 @@
 package mx.acg.zazil
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -24,10 +25,24 @@ import kotlinx.coroutines.withContext
 import mx.acg.zazil.ui.theme.ZazilTheme
 import mx.acg.zazil.view.AppNavHost
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.ViewModelProvider
 import mx.acg.zazil.viewmodel.LoginViewModel
 
+/**
+ * MainActivity es la actividad principal de la aplicación, encargada de gestionar la autenticación del usuario
+ * mediante Google Sign-In y de iniciar el flujo de navegación a través de la aplicación.
+ *
+ * @property googleSignInClient Cliente para manejar las solicitudes de Google Sign-In.
+ * @property auth FirebaseAuth utilizado para autenticar usuarios con Google.
+ * @property signInLauncher Launcher para manejar los resultados de la actividad de Sign-In.
+ * @property navController Controlador de navegación para gestionar el flujo de la aplicación.
+ * @property loginViewModel ViewModel para manejar la lógica de inicio de sesión.
+ *
+ * @author Alberto Cebreros González
+ * @author Melissa Mireles Rendón
+ */
 class MainActivity : ComponentActivity() {
 
     private lateinit var googleSignInClient: GoogleSignInClient
@@ -40,6 +55,7 @@ class MainActivity : ComponentActivity() {
     // Inicializamos el LoginViewModel usando ViewModelProvider
     private lateinit var loginViewModel: LoginViewModel
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -55,7 +71,7 @@ class MainActivity : ComponentActivity() {
 
         // Configurar Google Sign-In
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken("3024441242-in4h94s1di0nh0tqppmg4fj9nah9ri6j.apps.googleusercontent.com")  // Este es el correcto
+            .requestIdToken("3024441242-in4h94s1di0nh0tqppmg4fj9nah9ri6j.apps.googleusercontent.com") // Reemplaza con tu ID de cliente
             .requestEmail()
             .build()
 
@@ -101,7 +117,7 @@ class MainActivity : ComponentActivity() {
         Log.d("GoogleSignIn", "Flujo de Sign-In con Google iniciado")
     }
 
-    // Autenticar con Firebase usando el token de Google y redirigir al catalog
+    // Autenticar con Firebase usando el token de Google y redirigir al catálogo
     private fun firebaseAuthWithGoogle(idToken: String, email: String) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         auth.signInWithCredential(credential)
@@ -120,7 +136,7 @@ class MainActivity : ComponentActivity() {
             }
     }
 
-    // Función para navegar al catalog después de un breve retraso
+    // Función para navegar al catálogo después de un breve retraso
     private fun navigateToCatalog() {
         lifecycleScope.launch {
             delay(300)

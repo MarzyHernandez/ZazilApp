@@ -24,6 +24,16 @@ import androidx.navigation.NavHostController
 import mx.acg.zazil.R
 import mx.acg.zazil.model.ShoppingHistory
 import mx.acg.zazil.viewmodel.ShoppingHistoryViewModel
+import java.text.SimpleDateFormat
+import java.util.*
+
+// Función de extensión para convertir una cadena (String) a una fecha (Date)
+fun String.toDate(): Date? {
+    // Definimos el formato de la fecha esperado "yyyy-MM-dd"
+    val format = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+    // Parseamos la cadena a un objeto Date
+    return format.parse(this)
+}
 
 /**
  * Pantalla para mostrar el historial de compras del usuario.
@@ -45,20 +55,22 @@ fun MyShoppingScreen(
     viewModel: ShoppingHistoryViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
     uid: String
 ) {
-    // Fuente personalizada utilizada en toda la pantalla
     val gabaritoFontFamily = FontFamily(Font(R.font.gabarito_regular))
-
+    var isLoading by remember { mutableStateOf(true) }
 
     // Obteniendo el historial de compras desde el ViewModel
     val shoppingHistory by viewModel.shoppingHistory.observeAsState(initial = emptyList())
     val errorMessage by viewModel.errorMessage.observeAsState()
 
     // Ejecuta el request para obtener las compras
-    LaunchedEffect(Unit) {
-        viewModel.getShoppingHistory(uid)
+    LaunchedEffect(uid) {
+        viewModel.getShoppingHistory(uid) // Asegúrate de manejar el estado de carga aquí
+        isLoading = false // Detener el indicador de carga
     }
 
-    // Diseño de la pantalla
+    // Ordena el historial de compras por fecha en orden descendente
+    val sortedShoppingHistory = shoppingHistory.sortedByDescending { it.fecha_pedido.toDate() }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -70,7 +82,7 @@ fun MyShoppingScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(bottomEnd = 16.dp, bottomStart = 16.dp))
-                .background(Color(0xFFFEE1D6))  // Fondo rosa
+                .background(Color(0xFFFEE1D6))
                 .padding(vertical = 16.dp)
         ) {
             Row(
@@ -83,21 +95,14 @@ fun MyShoppingScreen(
                     text = "Mis compras",
                     fontSize = 28.sp,
                     fontWeight = FontWeight.Bold,
+                    fontFamily = gabaritoFontFamily,
                     color = Color(0xFF191919),
                 )
             }
         }
 
-        // Botón "Regresar"
-        TextButton(
-            onClick = { navController.navigate("profile") },
-        ) {
-            Text(
-                text = "< Regresar",
-                fontSize = 14.sp,
-                color = Color.Gray,
-                fontWeight = FontWeight.Bold
-            )
+        TextButton(onClick = { navController.popBackStack() }) {
+            Text(text = "< Regresar", fontSize = 14.sp, color = Color.Gray, fontWeight = FontWeight.Bold)
         }
 
         // Mostrar mensaje de error si hay alguno
@@ -105,21 +110,31 @@ fun MyShoppingScreen(
             Text(
                 text = errorMessage ?: "",
                 color = MaterialTheme.colorScheme.error,
+                fontFamily = gabaritoFontFamily,
                 modifier = Modifier.padding(16.dp)
             )
         }
 
-        // Mostrar un indicador de cargando si el historial está vacío
-        if (shoppingHistory.isEmpty() && errorMessage == null) {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator()
+        // Mostrar el loader si está en estado de carga
+        if (viewModel.isLoading.observeAsState().value == true) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator(color = Color(0xFFE17F61))
             }
         } else {
-            // Lista de compras
-            shoppingHistory.forEach { order ->
-                OrderItemRow(navController = navController, order = order, uid = uid)
+            // Mostrar lista de compras si no está cargando
+            sortedShoppingHistory.forEach { order ->
+                OrderItemRow(
+                    navController = navController,
+                    order = order,
+                    uid = uid,
+                    onLoadingChange = { isLoading = it }  // Pasamos la función para gestionar el estado de carga
+                )
             }
         }
+
     }
 }
 
@@ -132,12 +147,14 @@ fun MyShoppingScreen(
  * @param navController Controlador de navegación para cambiar entre pantallas.
  * @param order Pedido del historial de compras.
  * @param uid ID del usuario autenticado.
+ * @param onLoadingChange Función para gestionar el estado de carga.
  */
 @Composable
 fun OrderItemRow(
     navController: NavHostController,
     order: ShoppingHistory,
-    uid: String
+    uid: String,
+    onLoadingChange: (Boolean) -> Unit
 ) {
     Row(
         modifier = Modifier
@@ -146,6 +163,10 @@ fun OrderItemRow(
             .background(Color(0xFFEBEBEB), shape = RoundedCornerShape(8.dp))
             .clickable {
                 navController.navigate("shoppingDetails/${order.id}/$uid")
+                {
+                    // Desactivar el loader al completar la navegación
+                    onLoadingChange(false)
+                }
             },
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -170,19 +191,21 @@ fun OrderItemRow(
                 text = "Pedido #${order.id}",
                 fontWeight = FontWeight.Bold,
                 fontSize = 18.sp,
+                fontFamily = gabaritoFontFamily,
                 color = Color(0xFFE17F61)
             )
             // Cantidad de productos
-            Text(text = "Productos: ${order.productos.size}")
+            Text(text = "Productos: ${order.productos.size}",fontFamily = gabaritoFontFamily,)
 
             // Fecha del pedido, recortando la hora
             val formattedDate = order.fecha_pedido.substringBefore("T")
-            Text(text = "Fecha: $formattedDate")
+            Text(text = "Fecha: $formattedDate", fontFamily = gabaritoFontFamily,)
 
             // Monto total del pedido
             Text(
-                text = "Total: $${order.monto_total}",
+                text = "Total: $${String.format("%.2f", order.monto_total)}",
                 fontSize = 16.sp,
+                fontFamily = gabaritoFontFamily,
                 fontWeight = FontWeight.Bold
             )
         }

@@ -1,4 +1,3 @@
-
 package mx.acg.zazil.viewmodel
 
 import android.util.Log
@@ -11,10 +10,18 @@ import kotlinx.coroutines.launch
 import mx.acg.zazil.model.Cart
 import mx.acg.zazil.model.CartRetrofitInstance
 import mx.acg.zazil.model.CartUpdate
-import okhttp3.ResponseBody
 import retrofit2.Response
 
-
+/**
+ * ViewModel para gestionar la lógica relacionada con el carrito de compras.
+ *
+ * Este ViewModel interactúa con la API del carrito y maneja el estado del carrito
+ * en la aplicación. Permite cargar el carrito de un usuario, agregar y quitar productos
+ * del carrito, y notificar a la interfaz de usuario sobre los cambios en el estado del carrito.
+ *
+ * @author Alberto Cebreros González
+ * @author Melissa Mireles Rendón
+ */
 class CartViewModel : ViewModel() {
     private val _cart = MutableLiveData<Cart?>()
     val cart: LiveData<Cart?> get() = _cart
@@ -22,12 +29,16 @@ class CartViewModel : ViewModel() {
     private val _cartUpdated = MutableLiveData<Boolean>()
     val cartUpdated: LiveData<Boolean> get() = _cartUpdated
 
-    //cartState
+    // Estado del carrito
     private val _cartState = MutableLiveData<Cart?>()
     val cartState: LiveData<Cart?> get() = _cartState
 
-
-    // Método para cargar el carrito
+    /**
+     * Carga el carrito de compras del usuario utilizando su UID.
+     * Se realiza una llamada a la API para obtener el carrito y actualizar el estado.
+     *
+     * @param uid El ID único del usuario.
+     */
     fun loadCartByUid(uid: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -40,7 +51,12 @@ class CartViewModel : ViewModel() {
         }
     }
 
-    // Método para agregar un producto al carrito
+    /**
+     * Agrega un producto al carrito de compras.
+     *
+     * @param productId El ID del producto a agregar.
+     * @param uid El ID único del usuario.
+     */
     fun addToCart(productId: Int, uid: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -65,7 +81,12 @@ class CartViewModel : ViewModel() {
         }
     }
 
-    // Método para quitar un producto del carrito
+    /**
+     * Quita un producto del carrito de compras.
+     *
+     * @param productId El ID del producto a quitar.
+     * @param uid El ID único del usuario.
+     */
     fun removeFromCart(productId: Int, uid: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -87,5 +108,44 @@ class CartViewModel : ViewModel() {
         }
     }
 
+    /**
+     * Elimina un producto del carrito estableciendo su cantidad a 0.
+     *
+     * @param productId El ID del producto a eliminar.
+     * @param uid El ID único del usuario.
+     */
+    fun deleteFromCart(productId: Int, uid: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                // Cargar el carrito para obtener la cantidad actual del producto
+                val currentCart = CartRetrofitInstance.cartApi.getCartByUid(uid)
+
+                // Encuentra el producto en el carrito
+                val productToRemove = currentCart.productos.find { it.id_producto == productId }
+                val currentQuantity = productToRemove?.cantidad ?: 0
+
+                // Si la cantidad es mayor a 0, se puede eliminar
+                if (currentQuantity > 0) {
+                    val cartUpdate = CartUpdate(
+                        uid = uid,
+                        id_producto = productId,
+                        cantidad = -currentQuantity // Usar cantidad negativa para eliminar el producto
+                    )
+                    val response = CartRetrofitInstance.cartApi.updateCart(cartUpdate)
+                    if (response.isSuccessful) {
+                        Log.d("CartViewModel", "Producto eliminado del carrito: $productId")
+                    } else {
+                        Log.e("CartViewModel", "Error en la respuesta: ${response.errorBody()?.string()}")
+                    }
+                } else {
+                    Log.d("CartViewModel", "No hay cantidad del producto $productId para eliminar.")
+                }
+
+                loadCartByUid(uid) // Recargar el carrito después de la eliminación
+            } catch (e: Exception) {
+                Log.e("CartViewModel", "Error eliminando producto del carrito", e)
+            }
+        }
+    }
 
 }

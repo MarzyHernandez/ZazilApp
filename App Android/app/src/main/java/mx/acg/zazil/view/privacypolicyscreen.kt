@@ -18,9 +18,21 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import mx.acg.zazil.ui.theme.Typography
 
+/**
+ * Composable que representa la pantalla de la Política de Privacidad de la aplicación.
+ *
+ * Esta pantalla muestra el contenido de la política de privacidad, incluyendo secciones sobre la
+ * recopilación y uso de datos personales, derechos de los usuarios y contacto.
+ *
+ * @param navController Controlador de navegación para manejar la navegación entre pantallas.
+ * @param modifier Modificador opcional para personalizar el diseño de la pantalla.
+ *
+ * @author Alberto Cebreros González
+ * @author Melissa Mireles Rendón
+ */
 @Composable
 fun PrivacyPolicyScreen(navController: NavHostController, modifier: Modifier = Modifier) {
-
+    // Contenedor principal de la pantalla
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -47,7 +59,10 @@ fun PrivacyPolicyScreen(navController: NavHostController, modifier: Modifier = M
                     fontSize = 28.sp,
                     color = Color(0xFF191919),
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(start = 12.dp)
+                    fontFamily = gabaritoFontFamily,
+                    modifier = Modifier
+                        .fillMaxWidth() // Ocupa el ancho completo disponible
+                        .wrapContentWidth(Alignment.CenterHorizontally) // Centra el texto horizontalmente
                 )
             }
         }
@@ -57,7 +72,7 @@ fun PrivacyPolicyScreen(navController: NavHostController, modifier: Modifier = M
             onClick = { navController.navigate("configuracion") },
             modifier = Modifier.padding(top = 16.dp)
         ) {
-            Text(text = "< Regresar", color = Color.Gray, fontWeight = FontWeight.Bold)
+            Text(text = "< Regresar", color = Color.Gray, fontWeight = FontWeight.Bold, fontFamily = gabaritoFontFamily)
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -75,6 +90,7 @@ fun PrivacyPolicyScreen(navController: NavHostController, modifier: Modifier = M
 
         Spacer(modifier = Modifier.height(8.dp))
 
+        // Secciones adicionales de la política de privacidad
         PrivacyPolicyCard(
             title = "Interpretación y Definiciones",
             content = """
@@ -264,17 +280,29 @@ fun PrivacyPolicyScreen(navController: NavHostController, modifier: Modifier = M
     }
 }
 
+/**
+ * Composable que representa una tarjeta para mostrar una sección de la Política de Privacidad.
+ *
+ * @param title Título de la sección.
+ * @param content Contenido de la sección, generalmente en forma de texto.
+ *
+ * @author Alberto Cebreros González
+ * @author Melissa Mireles Rendón
+ */
 @Composable
 fun PrivacyPolicyCard(title: String, content: String) {
+    // Tarjeta para mostrar una sección de la política de privacidad
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .background(Color(0xFFF5F5F5), shape = RoundedCornerShape(8.dp))
             .padding(16.dp)
     ) {
+        // Contenido de la tarjeta
         Column {
             Text(
                 text = title,
+                fontFamily = gabaritoFontFamily,
                 style = Typography.bodyLarge.copy(
                     fontWeight = FontWeight.Medium,
                     color = Color(0xFFE17F61)
@@ -286,6 +314,7 @@ fun PrivacyPolicyCard(title: String, content: String) {
                 text = content,
                 style = Typography.bodyMedium,
                 fontSize = 14.sp,
+                fontFamily = gabaritoFontFamily,
                 lineHeight = 20.sp,
                 color = Color(0xFF333333),
                 textAlign = TextAlign.Justify
